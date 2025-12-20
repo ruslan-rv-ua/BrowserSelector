@@ -6,14 +6,14 @@
   },
   "commands": [
     {
-      "name": "Chrome",
-      "command": "chrome.exe",
-      "arguments": "--incognito {url}"
-    },
-    {
       "name": "LibreWolf",
       "command": "librewolf.exe",
       "arguments": "{url}"
+    },
+    {
+      "name": "Chrome",
+      "command": "chrome.exe",
+      "arguments": "--incognito {url}"
     },
     {
       "name": "Edge",
