@@ -1,0 +1,54 @@
+# .gitignore for BrowserSelector (C, MinGW/Makefile)
+
+# Build directories
+/bin/
+/obj/
+/build/
+/out/
+
+# Compiled objects and executables
+*.o
+*.obj
+*.exe
+*.dll
+*.lib
+*.a
+*.res
+*.ilk
+*.pdb
+*.stackdump
+
+# cJSON build artifacts (if built locally)
+cJSON/build/
+lib/libcjson.a
+
+# IDE / editor
+.vscode/
+.vs/
+.idea/
+*.suo
+*.user
+*.sln
+*.vcxproj*
+*.vcxproj.filters
+*.vcxproj.user
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary and backup files
+*~
+*.swp
+*.tmp
+*.log
+
+# Coverage / profiling
+coverage/
+*.gcda
+*.gcno
+
+# Misc generated
+obj/*.res
+obj/*.o
