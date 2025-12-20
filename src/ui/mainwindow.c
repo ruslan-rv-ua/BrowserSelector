@@ -131,7 +131,7 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
     
     // Create window
     HWND hwnd = CreateWindowExA(
-        WS_EX_APPWINDOW | WS_EX_TOPMOST,
+        WS_EX_APPWINDOW,
         MAIN_WINDOW_CLASS,
         "Browser Selector",
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
@@ -245,9 +245,19 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         
         case WM_ACTIVATE: {
             if (LOWORD(wParam) != WA_INACTIVE && mainWin && mainWin->listBox) {
-                SetFocus(mainWin->listBox);
+                // Use PostMessage to set focus after window activation is complete
+                // This ensures keyboard input works correctly after Alt+Tab
+                PostMessage(hwnd, WM_USER + 1, 0, 0);
             }
             break;
+        }
+        
+        case WM_USER + 1: {
+            // Set focus to ListBox (delayed from WM_ACTIVATE)
+            if (mainWin && mainWin->listBox) {
+                SetFocus(mainWin->listBox);
+            }
+            return 0;
         }
         
         case WM_DESTROY: {
