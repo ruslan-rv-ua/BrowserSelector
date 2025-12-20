@@ -3,7 +3,7 @@ CC = gcc
 WINDRES = windres
 CFLAGS = -std=c11 -Wall -Wextra -O2 -Iinclude
 LDFLAGS = -mwindows -static-libgcc -static
-LIBS = -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32 -luuid
+LIBS = -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
 
 # Directories
 SRC_DIR = src

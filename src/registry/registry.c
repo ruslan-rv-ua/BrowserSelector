@@ -1,6 +1,7 @@
 #include "registry.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <shlobj.h>
 #include <windows.h>
 
@@ -196,70 +197,43 @@ BOOL IsDefaultBrowser(void) {
 }
 
 BOOL SetAsDefaultBrowser(void) {
-    // On Windows 10 and later, programmatic setting of default browser is blocked
-    // We need to open Windows Settings for user to select manually
+    // Try IApplicationAssociationRegistrationUI for Windows 8+
+    // This will trigger the Windows dialog to set default browser
     
-    // Check Windows version
-    OSVERSIONINFOW osvi = {0};
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
+    typedef HRESULT (WINAPI *LaunchAdvancedAssociationUIProc)(LPCWSTR);
     
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    GetVersionExW(&osvi);
-    #pragma GCC diagnostic pop
-    
-    BOOL isWindows10OrLater = (osvi.dwMajorVersion >= 10);
-    
-    if (isWindows10OrLater) {
-        // Windows 10+: Must use Settings UI
-        MessageBoxA(NULL,
-            "Due to Windows 10+ security restrictions, you need to manually select Browser Selector.\n\n"
-            "The Windows Settings will open where you can:\n"
-            "1. Scroll down to 'Web browser'\n"
-            "2. Click the current browser name\n"
-            "3. Select 'BrowserSelector' from the list\n\n"
-            "Click OK to open Settings.",
-            "Manual Selection Required",
-            MB_OK | MB_ICONINFORMATION);
+    HMODULE hShell32 = LoadLibraryA("shell32.dll");
+    if (hShell32) {
+        // Try the undocumented API that shows the protocol selection dialog
+        LaunchAdvancedAssociationUIProc pLaunchUI = 
+            (LaunchAdvancedAssociationUIProc)GetProcAddress(hShell32, 
+                (LPCSTR)MAKEINTRESOURCEA(144)); // Ordinal 144
         
-        ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);
-        return FALSE; // User needs to complete manually
+        if (pLaunchUI) {
+            // This shows a mini dialog to set default for HTTP/HTTPS
+            HRESULT hr = pLaunchUI(L"http");
+            FreeLibrary(hShell32);
+            
+            if (SUCCEEDED(hr)) {
+                // Give Windows time to process
+                Sleep(500);
+                return IsDefaultBrowser();
+            }
+        }
+        FreeLibrary(hShell32);
     }
     
-    // Windows 7/8: Try to set programmatically via registry
-    // Set UserChoice for http
-    char keyPath[512];
-    HKEY hKey;
+    // Fallback: Open Windows Settings
+    MessageBoxA(NULL,
+        "Please select Browser Selector as your default browser.\n\n"
+        "Steps in Windows Settings:\n"
+        "1. Scroll to 'Web browser'\n"
+        "2. Click the current browser name\n"
+        "3. Select 'BrowserSelector' from the list",
+        "Set as Default Browser",
+        MB_OK | MB_ICONINFORMATION);
     
-    snprintf(keyPath, sizeof(keyPath), 
-             "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice");
+    ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);
     
-    LONG result = RegCreateKeyExA(HKEY_CURRENT_USER, keyPath, 0, NULL,
-                                  REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
-    
-    if (result == ERROR_SUCCESS) {
-        RegSetValueExA(hKey, "ProgId", 0, REG_SZ, 
-                      (const BYTE*)APP_NAME, (DWORD)(strlen(APP_NAME) + 1));
-        RegCloseKey(hKey);
-    }
-    
-    // Set UserChoice for https
-    snprintf(keyPath, sizeof(keyPath),
-             "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice");
-    
-    result = RegCreateKeyExA(HKEY_CURRENT_USER, keyPath, 0, NULL,
-                            REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
-    
-    if (result == ERROR_SUCCESS) {
-        RegSetValueExA(hKey, "ProgId", 0, REG_SZ,
-                      (const BYTE*)APP_NAME, (DWORD)(strlen(APP_NAME) + 1));
-        RegCloseKey(hKey);
-    }
-    
-    // Notify system of changes
-    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
-    
-    // Verify it worked
-    Sleep(500); // Give system time to update
-    return IsDefaultBrowser();
+    return FALSE;
 }

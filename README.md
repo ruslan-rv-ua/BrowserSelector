@@ -9,7 +9,7 @@ A portable Windows desktop application that acts as a browser selector. When a U
 - **Configurable**: Add, edit, delete, and reorder browsers through the Settings window
 - **Screen Reader Compatible**: Works with NVDA and Windows Narrator
 - **No Console Window**: Clean GUI-only experience
-- **Smart Default Browser Setup**: Automatically registers and sets as default with one click
+- **Easy Setup**: One-click registration with guided Windows Settings integration
 
 ## Building
 
@@ -95,24 +95,26 @@ BrowserSelector.exe "https://example.com"
 
 ### Browser Registration
 
-To use Browser Selector as your default browser in Windows:
+To use Browser Selector as your default browser:
 
-1. Click the **Set as Default** button in the main window
-2. **On Windows 7/8:**
-   - The app will automatically register and set itself as default
-   - You'll see a success message
-3. **On Windows 10/11:**
-   - Due to security restrictions, Windows Settings will open automatically
-   - Scroll down to **Web browser**
-   - Click the current browser name
-   - Select **BrowserSelector** from the list
-   - Return to the app and click "Yes" when prompted to verify
+1. Click the **Set as Default** button
+2. Windows Settings will open automatically
+3. Scroll to **Web browser** section
+4. Click the current browser name
+5. Select **BrowserSelector** from the list
+6. Close Settings and return to the app
+7. Click "Yes" to verify the change
 
-The button automatically detects the current status:
-- Shows **Set as Default** when not registered or not set as default
-- Shows **Unregister** when already registered and set as default browser
+**Why manual selection?**  
+Windows 10/11 requires users to manually confirm default browser changes for security.  
+This applies to ALL browsers including Firefox, Chrome, and Edge when first installed.  
+[Read more about why](WHY_MANUAL_SETUP.md)
 
-To remove Browser Selector from the system, click **Unregister** when the app is set as default.
+**Button states:**
+- **Set as Default** - when not registered or not set as default
+- **Unregister** - when already set as default browser
+
+To remove Browser Selector, click **Unregister**.
 
 ## Configuration
 

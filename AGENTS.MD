@@ -12,6 +12,7 @@
 - **Формат даних:** JSON (бібліотека cJSON)
 - **Білд:** Один портативний .exe файл
 - **Windows Registry:** Native Win32 Registry API
+- **Криптографія:** Windows CryptoAPI (для UserChoice hash на Windows 10+)
 
 ### 2. Встановлення компонентів
 

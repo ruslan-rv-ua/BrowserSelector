@@ -323,22 +323,22 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         }
                         
                         if (success) {
-                            // Try to set as default
+                            // Try to set as default (now with automatic hash method)
                             BOOL setDefault = SetAsDefaultBrowser();
                             
                             if (setDefault) {
                                 MessageBoxA(hwnd, 
-                                    "Browser Selector has been set as your default browser.\n\n"
+                                    "Browser Selector has been set as your default browser!\n\n"
                                     "All web links will now open through Browser Selector.",
                                     "Success", MB_OK | MB_ICONINFORMATION);
                                 SetWindowTextA(mainWin->registerBtn, "Unregister");
                             } else {
-                                // Windows Settings opened or failed - ask user to check again
+                                // Settings opened - user needs to complete manually
                                 int result = MessageBoxA(hwnd,
-                                    "After selecting Browser Selector in Windows Settings,\n"
-                                    "click 'Check Status' to verify the change.\n\n"
-                                    "Did you complete the selection in Windows Settings?",
-                                    "Status Update",
+                                    "Windows Settings has been opened for manual selection.\n\n"
+                                    "After selecting Browser Selector, click 'Yes' to verify.\n\n"
+                                    "Have you completed the selection?",
+                                    "Verification",
                                     MB_YESNO | MB_ICONQUESTION);
                                 
                                 if (result == IDYES) {
