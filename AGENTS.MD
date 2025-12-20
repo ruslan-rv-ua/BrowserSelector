@@ -145,9 +145,7 @@ browserselector/
 ```json
 {
   "settings": {
-    "defaultCommandIndex": 0,
-    "windowWidth": 400,
-    "windowHeight": 300
+    "defaultCommandIndex": 0
   },
   "commands": [
     {
@@ -198,8 +196,6 @@ typedef struct {
 
 typedef struct {
     int defaultCommandIndex;
-    int windowWidth;
-    int windowHeight;
 } Settings;
 
 typedef struct {
@@ -341,12 +337,8 @@ int LoadConfig(const char* exePath, Configuration* config) {
     cJSON* settings = cJSON_GetObjectItem(json, "settings");
     if (settings) {
         cJSON* defaultIndex = cJSON_GetObjectItem(settings, "defaultCommandIndex");
-        cJSON* width = cJSON_GetObjectItem(settings, "windowWidth");
-        cJSON* height = cJSON_GetObjectItem(settings, "windowHeight");
         
         config->settings.defaultCommandIndex = defaultIndex ? defaultIndex->valueint : 0;
-        config->settings.windowWidth = width ? width->valueint : 400;
-        config->settings.windowHeight = height ? height->valueint : 300;
     }
     
     // Зчитати commands
@@ -394,10 +386,6 @@ int SaveConfig(const char* exePath, const Configuration* config) {
     cJSON* settings = cJSON_CreateObject();
     cJSON_AddNumberToObject(settings, "defaultCommandIndex", 
                            config->settings.defaultCommandIndex);
-    cJSON_AddNumberToObject(settings, "windowWidth", 
-                           config->settings.windowWidth);
-    cJSON_AddNumberToObject(settings, "windowHeight", 
-                           config->settings.windowHeight);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Додати commands
@@ -428,8 +416,6 @@ int SaveConfig(const char* exePath, const Configuration* config) {
 int CreateDefaultConfig(const char* configPath) {
     Configuration config;
     config.settings.defaultCommandIndex = 0;
-    config.settings.windowWidth = 400;
-    config.settings.windowHeight = 300;
     config.commandCount = 3;
     
     strcpy(config.commands[0].name, "Chrome");
@@ -481,8 +467,8 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
         "Browser Selector",
         WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME,
         CW_USEDEFAULT, CW_USEDEFAULT,
-        config->settings.windowWidth,
-        config->settings.windowHeight,
+        400,
+        300,
         NULL, NULL, hInstance, mainWin
     );
     
@@ -974,9 +960,7 @@ bin\BrowserSelector.exe "https://example.com/search?q=test query"
 // Тестовий config.json з різними типами шляхів
 {
   "settings": {
-    "defaultCommandIndex": 0,
-    "windowWidth": 400,
-    "windowHeight": 300
+    "defaultCommandIndex": 0
   },
   "commands": [
     {

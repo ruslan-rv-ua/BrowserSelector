@@ -8,6 +8,9 @@
 #define ID_LISTBOX 1001
 #define ID_SETTINGS_BTN 1002
 
+#define MAIN_WINDOW_WIDTH 400
+#define MAIN_WINDOW_HEIGHT 300
+
 static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
 static WNDPROC originalListBoxProc = NULL;
 static WNDPROC originalButtonProc = NULL;
@@ -123,11 +126,11 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
     mainWin->hInstance = hInstance;
     strncpy(mainWin->exePath, exePath, MAX_PATH - 1);
     
-    // Calculate window position (center screen)
+    // Calculate window position (center screen) using hard-coded constants
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-    int winX = (screenWidth - config->settings.windowWidth) / 2;
-    int winY = (screenHeight - config->settings.windowHeight) / 2;
+    int winX = (screenWidth - MAIN_WINDOW_WIDTH) / 2;
+    int winY = (screenHeight - MAIN_WINDOW_HEIGHT) / 2;
     
     // Create window
     HWND hwnd = CreateWindowExA(
@@ -136,8 +139,8 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
         "Browser Selector",
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         winX, winY,
-        config->settings.windowWidth,
-        config->settings.windowHeight,
+        MAIN_WINDOW_WIDTH,
+        MAIN_WINDOW_HEIGHT,
         NULL, NULL, hInstance, mainWin
     );
     

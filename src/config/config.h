@@ -13,8 +13,6 @@ typedef struct {
 
 typedef struct {
     int defaultCommandIndex;
-    int windowWidth;
-    int windowHeight;
 } Settings;
 
 typedef struct {

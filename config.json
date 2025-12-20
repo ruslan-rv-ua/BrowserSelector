@@ -1,8 +1,6 @@
 {
   "settings": {
-    "defaultCommandIndex": 0,
-    "windowWidth": 400,
-    "windowHeight": 300
+    "defaultCommandIndex": 0
   },
   "commands": [
     {

@@ -112,9 +112,7 @@ The `config.json` file is stored in the same directory as the executable.
 ```json
 {
   "settings": {
-    "defaultCommandIndex": 0,
-    "windowWidth": 400,
-    "windowHeight": 300
+    "defaultCommandIndex": 0
   },
   "commands": [
     {

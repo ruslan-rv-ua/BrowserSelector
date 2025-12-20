@@ -21,8 +21,6 @@ int CreateDefaultConfig(const char* configPath) {
     // Add settings
     cJSON* settings = cJSON_CreateObject();
     cJSON_AddNumberToObject(settings, "defaultCommandIndex", 0);
-    cJSON_AddNumberToObject(settings, "windowWidth", 400);
-    cJSON_AddNumberToObject(settings, "windowHeight", 300);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add default commands
@@ -110,25 +108,15 @@ int LoadConfig(const char* exePath, Configuration* config) {
     
     // Initialize defaults
     config->settings.defaultCommandIndex = 0;
-    config->settings.windowWidth = 400;
-    config->settings.windowHeight = 300;
     config->commandCount = 0;
     
     // Read settings
     cJSON* settings = cJSON_GetObjectItem(json, "settings");
     if (settings) {
         cJSON* defaultIndex = cJSON_GetObjectItem(settings, "defaultCommandIndex");
-        cJSON* width = cJSON_GetObjectItem(settings, "windowWidth");
-        cJSON* height = cJSON_GetObjectItem(settings, "windowHeight");
         
         if (defaultIndex && cJSON_IsNumber(defaultIndex)) {
             config->settings.defaultCommandIndex = defaultIndex->valueint;
-        }
-        if (width && cJSON_IsNumber(width)) {
-            config->settings.windowWidth = width->valueint;
-        }
-        if (height && cJSON_IsNumber(height)) {
-            config->settings.windowHeight = height->valueint;
         }
     }
     
@@ -185,10 +173,6 @@ int SaveConfig(const char* exePath, const Configuration* config) {
     cJSON* settings = cJSON_CreateObject();
     cJSON_AddNumberToObject(settings, "defaultCommandIndex", 
                            config->settings.defaultCommandIndex);
-    cJSON_AddNumberToObject(settings, "windowWidth", 
-                           config->settings.windowWidth);
-    cJSON_AddNumberToObject(settings, "windowHeight", 
-                           config->settings.windowHeight);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add commands
