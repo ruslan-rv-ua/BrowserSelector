@@ -1,20 +1,20 @@
 {
 	"settings":	{
-		"defaultCommandIndex":	1,
+		"defaultCommandIndex":	0,
 		"windowWidth":	400,
 		"windowHeight":	300
 	},
 	"commands":	[{
+			"name":	"Chrome",
+			"command":	"chrome.exe",
+			"arguments":	"--incognito {url}"
+		}, {
 			"name":	"LibreWolf",
 			"command":	"librewolf.exe",
 			"arguments":	"{url}"
 		}, {
-			"name":	"Chrome",
-			"command":	"chrome.exe",
-			"arguments":	"{url}"
-		}, {
 			"name":	"Edge",
-			"command":	"edge.exe",
+			"command":	"msedge.exe",
 			"arguments":	"{url}"
 		}]
 }

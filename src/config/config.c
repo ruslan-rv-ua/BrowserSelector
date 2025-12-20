@@ -32,15 +32,16 @@ int CreateDefaultConfig(const char* configPath) {
     cJSON* chrome = cJSON_CreateObject();
     cJSON_AddStringToObject(chrome, "name", "Chrome");
     cJSON_AddStringToObject(chrome, "command", "chrome.exe");
-    cJSON_AddStringToObject(chrome, "arguments", "{url}");
+    // Launch Chrome in incognito mode by default
+    cJSON_AddStringToObject(chrome, "arguments", "--incognito {url}");
     cJSON_AddItemToArray(commands, chrome);
     
-    // Firefox
-    cJSON* firefox = cJSON_CreateObject();
-    cJSON_AddStringToObject(firefox, "name", "Firefox");
-    cJSON_AddStringToObject(firefox, "command", "firefox.exe");
-    cJSON_AddStringToObject(firefox, "arguments", "{url}");
-    cJSON_AddItemToArray(commands, firefox);
+    // LibreWolf (replaces Firefox)
+    cJSON* librewolf = cJSON_CreateObject();
+    cJSON_AddStringToObject(librewolf, "name", "LibreWolf");
+    cJSON_AddStringToObject(librewolf, "command", "librewolf.exe");
+    cJSON_AddStringToObject(librewolf, "arguments", "{url}");
+    cJSON_AddItemToArray(commands, librewolf);
     
     // Edge
     cJSON* edge = cJSON_CreateObject();

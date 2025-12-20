@@ -8,11 +8,11 @@
     {
       "name": "Chrome",
       "command": "chrome.exe",
-      "arguments": "{url}"
+      "arguments": "--incognito {url}"
     },
     {
-      "name": "Firefox",
-      "command": "firefox.exe",
+      "name": "LibreWolf",
+      "command": "librewolf.exe",
       "arguments": "{url}"
     },
     {
@@ -20,11 +20,7 @@
       "command": "msedge.exe",
       "arguments": "{url}"
     },
-    {
-      "name": "LibreWolf",
-      "command": "librewolf.exe",
-      "arguments": "{url}"
-    },
+    
     {
       "name": "Opera",
       "command": "opera.exe",
