@@ -29,6 +29,9 @@ pacman -S mingw-w64-x86_64-make
 pacman -S git
 
 # Додати до PATH: C:\msys64\mingw64\bin
+# Через System Properties -> Advanced -> Environment Variables
+# Або через командний рядок (тимчасово):
+set PATH=%PATH%;C:\msys64\mingw64\bin
 ```
 
 **Варіант 2: Standalone MinGW-w64**
@@ -36,13 +39,39 @@ pacman -S git
 1. Завантажити з https://winlibs.com/
 2. Вибрати: GCC 13.x + MinGW-w64 x86_64
 3. Розпакувати в C:\mingw64
-4. Додати C:\mingw64\bin до системного PATH
+4. Додати C:\mingw64\bin до системного PATH:
+   - Win+R -> sysdm.cpl -> Advanced -> Environment Variables
+   - Знайти PATH -> Edit -> New -> додати C:\mingw64\bin
 ```
 
 **Перевірка встановлення:**
 ```bash
 gcc --version
 # Має вивести: gcc (GCC) 13.x.x або новіше
+```
+
+#### 2.1.1 Перевірка встановлення в Windows CMD
+```cmd
+# Перевірити версію GCC
+gcc --version
+
+# Перевірити наявність make
+make --version
+
+# Перевірити наявність windres
+windres --version
+```
+
+#### 2.1.2 Налаштування середовища Windows
+```cmd
+# Тимчасове налаштування PATH для поточної сесії
+set PATH=%PATH%;C:\msys64\mingw64\bin
+
+# Постійне налаштування через системні змінні:
+# 1. Win+R -> sysdm.cpl -> Advanced -> Environment Variables
+# 2. Знайти PATH в System variables -> Edit -> New
+# 3. Додати: C:\msys64\mingw64\bin
+# 4. Перезапустити командний рядок
 ```
 
 #### 2.2 Встановлення cJSON бібліотеки
@@ -122,18 +151,28 @@ browserselector/
   },
   "commands": [
     {
+      "name": "Chrome",
+      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "arguments": "{url}"
+    },
+    {
+      "name": "Firefox",
+      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+      "arguments": "{url}"
+    },
+    {
+      "name": "Edge",
+      "command": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+      "arguments": "{url}"
+    },
+    {
       "name": "LibreWolf",
       "command": "C:\\Program Files\\LibreWolf\\librewolf.exe",
       "arguments": "{url}"
     },
     {
-      "name": "Chrome",
-      "command": "chrome.exe",
-      "arguments": "{url}"
-    },
-    {
-      "name": "Edge",
-      "command": "msedge.exe",
+      "name": "Opera",
+      "command": "C:\\Program Files\\Opera\\launcher.exe",
       "arguments": "{url}"
     }
   ]
@@ -693,8 +732,8 @@ int ExecuteCommand(const Command* command, const char* url) {
 CC = gcc
 WINDRES = windres
 CFLAGS = -std=c11 -Wall -Wextra -O2 -Iinclude
-LDFLAGS = -mwindows -static-libgcc
-LIBS = -lcomctl32 -ladvapi32 -lshell32 -Llib -lcjson
+LDFLAGS = -mwindows -static-libgcc -static
+LIBS = -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -Llib -lcjson
 
 # Directories
 SRC_DIR = src
@@ -842,17 +881,17 @@ END
 ### 7. Інструкції по компіляції
 
 #### 7.1 Базова компіляція
-```bash
-# Збірка проєкту
+```cmd
+:: Збірка проєкту
 make
 
-# Збірка release версії (оптимізована, без debug символів)
+:: Збірка release версії (оптимізована, без debug символів)
 make release
 
-# Очистити build файли
+:: Очистити build файли
 make clean
 
-# Збірка та запуск
+:: Збірка та запуск
 make run
 ```
 
@@ -871,46 +910,66 @@ gcc -c -Iinclude src/registry/registry.c -o obj/registry.o
 windres -i resources/app.rc -o obj/app.res
 
 # Зібрати executable
-gcc -mwindows -static-libgcc -o bin/BrowserSelector.exe \
+gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe \
     obj/main.o obj/config.o obj/mainwindow.o obj/settings.o \
-    obj/commandeditor.o obj/executor.o obj/registry.o obj/app.res \
-    -Llib -lcjson -lcomctl32 -ladvapi32 -lshell32
+    obj/commandeditor.o obj/executor.o obj.registry.o obj/app.res \
+    -Llib -lcjson -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32
 
 # Додатково: strip для зменшення розміру
 strip bin/BrowserSelector.exe
 ```
 
 #### 7.3 Оптимізації розміру
-```bash
-# Компіляція з максимальною оптимізацією розміру
-gcc -Os -s -mwindows -static-libgcc -Iinclude \
-    src/main.c src/config/*.c src/ui/*.c \
-    src/executor/*.c src/registry/*.c \
-    obj/app.res -o bin/BrowserSelector.exe \
-    -Llib -lcjson -lcomctl32 -ladvapi32 -lshell32
+```cmd
+:: Компіляція з максимальною оптимізацією розміру
+gcc -Os -s -mwindows -static-libgcc -static -Iinclude ^
+    src/main.c src/config/*.c src/ui/*.c ^
+    src/executor/*.c src/registry/*.c ^
+    obj/app.res -o bin/BrowserSelector.exe ^
+    -Llib -lcjson -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32
 
-# Стиснення UPX (опціонально)
+:: Стиснення UPX (опціонально)
 upx --best --lzma bin/BrowserSelector.exe
 ```
 
 ### 8. Тестування
 
-#### 8.1 Тестові команди
-```bash
-# Тест без URL
-bin\BrowserSelector.exe
+#### 8.1 Підготовка тестового середовища Windows
+```cmd
+# Переконатись що всі інструменти доступні
+where gcc
+where make
+where windres
 
-# Тест з простим URL
-bin\BrowserSelector.exe "https://google.com"
-
-# Тест з URL що містить спецсимволи
-bin\BrowserSelector.exe "https://example.com/search?q=test&lang=uk"
-
-# Тест з довгим URL
-bin\BrowserSelector.exe "https://example.com/very/long/path/with/many/segments?param1=value1&param2=value2"
+# Перевірити структуру проєкту
+dir /s src\
+dir include\
+dir lib\
+dir resources\
 ```
 
-#### 8.2 Перевірка конфігурації
+#### 8.2 Тестові команди
+```cmd
+:: Тест без URL
+bin\BrowserSelector.exe
+
+:: Тест з простим URL
+bin\BrowserSelector.exe "https://google.com"
+
+:: Тест з URL що містить спецсимволи
+bin\BrowserSelector.exe "https://example.com/search?q=test&lang=uk"
+
+:: Тест з довгим URL
+bin\BrowserSelector.exe "https://example.com/very/long/path/with/many/segments?param1=value1&param2=value2"
+
+:: Тест з локальним файлом
+bin\BrowserSelector.exe "file:///C:/Users/Test/Desktop/index.html"
+
+:: Тест з URL що містить пробіли
+bin\BrowserSelector.exe "https://example.com/search?q=test query"
+```
+
+#### 8.3 Перевірка конфігурації
 ```json
 // Тестовий config.json з різними типами шляхів
 {
@@ -966,7 +1025,36 @@ bin\BrowserSelector.exe "https://example.com/very/long/path/with/many/segments?p
 
 ### 10. Поширені проблеми та рішення
 
-#### 10.1 Помилки компіляції
+#### 10.1 Проблеми з встановленням Windows
+
+**Проблема:** Команди gcc, make не розпізнаються
+```cmd
+# Рішення: Перевірити PATH
+echo %PATH%
+
+# Якщо шлях відсутній, додати тимчасово:
+set PATH=%PATH%;C:\msys64\mingw64\bin
+
+# Або постійно через System Properties
+```
+
+**Проблема:** Помилка "cannot find -lcjson"
+```cmd
+# Рішення: Перевірити наявність бібліотеки
+dir lib\libcjson.a
+
+# Якщо відсутня, скомпілювати cJSON:
+git clone https://github.com/DaveGamble/cJSON.git
+cd cJSON
+mkdir build
+cd build
+gcc -c ../cJSON.c -o cJSON.o
+ar rcs libcjson.a cJSON.o
+copy ..\cJSON.h ..\..\include\
+copy libcjson.a ..\..\lib\
+```
+
+#### 10.2 Помилки компіляції
 
 **Проблема:** `cJSON.h: No such file or directory`
 ```bash
@@ -987,7 +1075,7 @@ gcc ... -Llib -lcjson
 gcc -mwindows ...
 ```
 
-#### 10.2 Помилки виконання
+#### 10.3 Помилки виконання
 
 **Проблема:** "Failed to load configuration"
 - Перевірити чи config.json в тій же директорії що й .exe
@@ -1002,18 +1090,26 @@ gcc -mwindows ...
 ### 11. Додаткові можливості
 
 #### 11.1 Іконка застосунку
-```bash
+```cmd
 # Створити .ico файл з PNG
-# Використовувати ImageMagick:
+# Варіант 1: ImageMagick (потрібно встановити)
 magick convert icon.png -define icon:auto-resize=256,128,64,48,32,16 app.ico
 
-# Або онлайн сервіс: https://convertio.co/png-ico/
+# Варіант 2: Онлайн сервіс
+# https://convertio.co/png-ico/ або https://www.icoconverter.com/
+
+# Варіант 3: GIMP (безкоштовний редактор)
+# Відкрити PNG -> File -> Export As -> вибрати .ico формат
 ```
 
 #### 11.2 Цифровий підпис
-```bash
+```cmd
 # Використовувати signtool.exe з Windows SDK
+# Зазвичай знаходиться в C:\Program Files (x86)\Windows Kits\10\bin\<version>\x64\
 signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com BrowserSelector.exe
+
+# Альтернативно використовувати timestamp сервер:
+signtool sign /f certificate.pfx /p password /tr http://timestamp.digicert.com /td sha256 /fd sha256 BrowserSelector.exe
 ```
 
 ### 12. Критерії успіху
@@ -1045,3 +1141,53 @@ signtool sign /f certificate.pfx /p password /t http://timestamp.digicert.com Br
 - Dependency Walker: Перевірка залежностей DLL
 - Process Monitor: Моніторинг файлових операцій
 - UPX: Стиснення виконуваних файлів
+
+#### 12.1 Windows-специфічні інструменти
+```cmd
+# Перевірка залежностей .exe
+dumpbin /dependents bin\BrowserSelector.exe
+
+# Аналізатор продуктивності
+# Win+R -> perfmon
+
+# Моніторинг реєстру Windows
+# Win+R -> regedit
+
+# Перевірка цифрового підпису
+signtool verify /pa bin\BrowserSelector.exe
+```
+
+#### 12.2 Інтеграція з Windows
+
+#### 12.2.1 Реєстрація як браузер за замовчуванням
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\BrowserSelector]
+@="URL:BrowserSelector Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\BrowserSelector\shell]
+
+[HKEY_CLASSES_ROOT\BrowserSelector\shell\open]
+
+[HKEY_CLASSES_ROOT\BrowserSelector\shell\open\command]
+@="\"C:\\Program Files\\BrowserSelector\\BrowserSelector.exe\" \"%1\""
+```
+
+#### 12.2.2 Додавання до контекстного меню
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\http\shell\BrowserSelector]
+@="Open with Browser Selector"
+
+[HKEY_CLASSES_ROOT\http\shell\BrowserSelector\command]
+@="\"C:\\Program Files\\BrowserSelector\\BrowserSelector.exe\" \"%1\""
+
+[HKEY_CLASSES_ROOT\https\shell\BrowserSelector]
+@="Open with Browser Selector"
+
+[HKEY_CLASSES_ROOT\https\shell\BrowserSelector\command]
+@="\"C:\\Program Files\\BrowserSelector\\BrowserSelector.exe\" \"%1\""
+```
