@@ -15,27 +15,53 @@
 
 static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
 static WNDPROC originalListBoxProc = NULL;
-static WNDPROC originalButtonProc = NULL;
+static WNDPROC originalRegisterButtonProc = NULL;
+static WNDPROC originalSettingsButtonProc = NULL;
 
 // Subclass procedure for Settings button to intercept Tab key
 LRESULT CALLBACK ButtonSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
-    
+
     if (msg == WM_KEYDOWN && mainWin) {
-        switch (wParam) {
-            case VK_TAB:
-                // Tab - switch focus to ListBox
+        if (wParam == VK_TAB) {
+            BOOL shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+
+            // Tab cycle: ListBox -> Register -> Settings -> ListBox
+            if (hwnd == mainWin->registerBtn) {
+                if (shift) {
+                    SetFocus(mainWin->listBox);
+                } else {
+                    SetFocus(mainWin->settingsBtn);
+                }
+            } else if (hwnd == mainWin->settingsBtn) {
+                if (shift) {
+                    SetFocus(mainWin->registerBtn);
+                } else {
+                    SetFocus(mainWin->listBox);
+                }
+            } else {
+                // Fallback: send focus to list
                 SetFocus(mainWin->listBox);
-                return 0;
-                
-            case VK_ESCAPE:
-                DestroyWindow(GetParent(hwnd));
-                return 0;
+            }
+
+            return 0;
+        }
+
+        if (wParam == VK_ESCAPE) {
+            DestroyWindow(GetParent(hwnd));
+            return 0;
         }
     }
-    
-    // Call original Button procedure
-    return CallWindowProc(originalButtonProc, hwnd, msg, wParam, lParam);
+
+    // Call appropriate original Button procedure
+    if (hwnd == mainWin->registerBtn) {
+        return CallWindowProc(originalRegisterButtonProc, hwnd, msg, wParam, lParam);
+    }
+    if (hwnd == mainWin->settingsBtn) {
+        return CallWindowProc(originalSettingsButtonProc, hwnd, msg, wParam, lParam);
+    }
+
+    return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 // Subclass procedure for ListBox to intercept key presses
@@ -59,8 +85,14 @@ LRESULT CALLBACK ListBoxSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
                 return 0;
                 
             case VK_TAB: {
-                // Tab - switch focus to Settings button
-                SetFocus(mainWin->settingsBtn);
+                // Tab - switch focus to Register button
+                BOOL shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+                if (shift) {
+                    // Shift+Tab -> move focus to Settings (reverse cycle)
+                    SetFocus(mainWin->settingsBtn);
+                } else {
+                    SetFocus(mainWin->registerBtn);
+                }
                 return 0;
             }
         }
@@ -228,8 +260,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             );
             SendMessage(mainWin->settingsBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            // Subclass Settings button to intercept Tab key
-            originalButtonProc = (WNDPROC)SetWindowLongPtr(mainWin->settingsBtn, 
+            // Subclass Register and Settings buttons to intercept Tab key
+            originalRegisterButtonProc = (WNDPROC)SetWindowLongPtr(mainWin->registerBtn,
+                GWLP_WNDPROC, (LONG_PTR)ButtonSubclassProc);
+            originalSettingsButtonProc = (WNDPROC)SetWindowLongPtr(mainWin->settingsBtn,
                 GWLP_WNDPROC, (LONG_PTR)ButtonSubclassProc);
             
             // Set focus to ListBox
