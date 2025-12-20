@@ -1,0 +1,227 @@
+#include "mainwindow.h"
+#include "settings.h"
+#include "../executor/executor.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <commctrl.h>
+
+#define ID_LISTBOX 1001
+#define ID_SETTINGS_BTN 1002
+
+static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
+
+void RefreshCommandList(MainWindow* mainWin) {
+    // Clear list box
+    SendMessage(mainWin->listBox, LB_RESETCONTENT, 0, 0);
+    
+    // Add commands with numbers
+    for (int i = 0; i < mainWin->config->commandCount; i++) {
+        char itemText[MAX_NAME_LENGTH + 10];
+        snprintf(itemText, sizeof(itemText), "%d. %s", i + 1, mainWin->config->commands[i].name);
+        SendMessageA(mainWin->listBox, LB_ADDSTRING, 0, (LPARAM)itemText);
+    }
+    
+    // Set default selection
+    int sel = mainWin->config->settings.defaultCommandIndex;
+    if (sel >= mainWin->config->commandCount) sel = 0;
+    SendMessage(mainWin->listBox, LB_SETCURSEL, sel, 0);
+}
+
+HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* url, const char* exePath) {
+    // Register window class
+    WNDCLASSEXA wc;
+    ZeroMemory(&wc, sizeof(wc));
+    wc.cbSize = sizeof(WNDCLASSEXA);
+    wc.lpfnWndProc = MainWindowProc;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = MAIN_WINDOW_CLASS;
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(1));
+    wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(1));
+    
+    if (!RegisterClassExA(&wc)) {
+        // Class may already be registered
+        DWORD err = GetLastError();
+        if (err != ERROR_CLASS_ALREADY_EXISTS) {
+            return NULL;
+        }
+    }
+    
+    // Create window data structure
+    MainWindow* mainWin = (MainWindow*)malloc(sizeof(MainWindow));
+    if (!mainWin) return NULL;
+    
+    ZeroMemory(mainWin, sizeof(MainWindow));
+    mainWin->config = config;
+    mainWin->url = url ? _strdup(url) : NULL;
+    mainWin->hInstance = hInstance;
+    strncpy(mainWin->exePath, exePath, MAX_PATH - 1);
+    
+    // Calculate window position (center screen)
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    int winX = (screenWidth - config->settings.windowWidth) / 2;
+    int winY = (screenHeight - config->settings.windowHeight) / 2;
+    
+    // Create window
+    HWND hwnd = CreateWindowExA(
+        WS_EX_APPWINDOW | WS_EX_TOPMOST,
+        MAIN_WINDOW_CLASS,
+        "Browser Selector",
+        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+        winX, winY,
+        config->settings.windowWidth,
+        config->settings.windowHeight,
+        NULL, NULL, hInstance, mainWin
+    );
+    
+    if (!hwnd) {
+        if (mainWin->url) free(mainWin->url);
+        free(mainWin);
+        return NULL;
+    }
+    
+    return hwnd;
+}
+
+LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+    
+    switch (msg) {
+        case WM_CREATE: {
+            CREATESTRUCT* cs = (CREATESTRUCT*)lParam;
+            mainWin = (MainWindow*)cs->lpCreateParams;
+            SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)mainWin);
+            mainWin->hwnd = hwnd;
+            
+            // Get client rect for positioning
+            RECT clientRect;
+            GetClientRect(hwnd, &clientRect);
+            int clientWidth = clientRect.right - clientRect.left;
+            int clientHeight = clientRect.bottom - clientRect.top;
+            
+            // Create ListBox
+            mainWin->listBox = CreateWindowExA(
+                WS_EX_CLIENTEDGE,
+                "LISTBOX",
+                NULL,
+                WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP | 
+                LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
+                10, 10, 
+                clientWidth - 20, 
+                clientHeight - 60,
+                hwnd, (HMENU)ID_LISTBOX, cs->hInstance, NULL
+            );
+            
+            // Set font
+            HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+            SendMessage(mainWin->listBox, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Fill ListBox with commands
+            RefreshCommandList(mainWin);
+            
+            // Create Settings button
+            int btnWidth = 100;
+            int btnHeight = 30;
+            int btnX = (clientWidth - btnWidth) / 2;
+            int btnY = clientHeight - btnHeight - 10;
+            
+            mainWin->settingsBtn = CreateWindowExA(
+                0,
+                "BUTTON",
+                "Settings",
+                WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
+                btnX, btnY, btnWidth, btnHeight,
+                hwnd, (HMENU)ID_SETTINGS_BTN, cs->hInstance, NULL
+            );
+            SendMessage(mainWin->settingsBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Set focus to ListBox
+            SetFocus(mainWin->listBox);
+            
+            return 0;
+        }
+        
+        case WM_COMMAND: {
+            if (!mainWin) break;
+            
+            switch (LOWORD(wParam)) {
+                case ID_LISTBOX:
+                    if (HIWORD(wParam) == LBN_DBLCLK) {
+                        // Double click - execute command
+                        int index = (int)SendMessage(mainWin->listBox, LB_GETCURSEL, 0, 0);
+                        if (index != LB_ERR && index < mainWin->config->commandCount) {
+                            ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
+                            DestroyWindow(hwnd);
+                        }
+                    }
+                    break;
+                    
+                case ID_SETTINGS_BTN:
+                    // Open settings window
+                    if (ShowSettingsWindow(hwnd, mainWin->config, mainWin->exePath)) {
+                        // Settings changed, refresh list
+                        RefreshCommandList(mainWin);
+                    }
+                    SetFocus(mainWin->listBox);
+                    break;
+            }
+            return 0;
+        }
+        
+        case WM_KEYDOWN: {
+            if (!mainWin) break;
+            
+            switch (wParam) {
+                case VK_RETURN: {
+                    // Enter - execute selected command
+                    int index = (int)SendMessage(mainWin->listBox, LB_GETCURSEL, 0, 0);
+                    if (index != LB_ERR && index < mainWin->config->commandCount) {
+                        ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
+                        DestroyWindow(hwnd);
+                    }
+                    return 0;
+                }
+                
+                case VK_ESCAPE:
+                    DestroyWindow(hwnd);
+                    return 0;
+            }
+            break;
+        }
+        
+        case WM_CHAR: {
+            if (!mainWin) break;
+            
+            // Quick select 1-9
+            if (wParam >= '1' && wParam <= '9') {
+                int index = wParam - '1';
+                if (index < mainWin->config->commandCount) {
+                    ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
+                    DestroyWindow(hwnd);
+                }
+                return 0;
+            }
+            break;
+        }
+        
+        case WM_ACTIVATE: {
+            if (LOWORD(wParam) != WA_INACTIVE && mainWin && mainWin->listBox) {
+                SetFocus(mainWin->listBox);
+            }
+            break;
+        }
+        
+        case WM_DESTROY: {
+            if (mainWin) {
+                if (mainWin->url) free(mainWin->url);
+                free(mainWin);
+            }
+            PostQuitMessage(0);
+            return 0;
+        }
+    }
+    
+    return DefWindowProc(hwnd, msg, wParam, lParam);
+}
