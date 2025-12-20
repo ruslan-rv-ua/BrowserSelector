@@ -91,19 +91,16 @@ BrowserSelector.exe "https://example.com"
 - **Enter** - Open URL with selected browser
 - **1-9** - Quick select browser by number
 - **Escape** - Close without action
-- **Tab** - Switch between list and Settings button
+- **Tab** - Switch between list and buttons
 
-### Windows Registration
+### Browser Registration
 
-```cmd
-:: Register as browser handler
-BrowserSelector.exe register
+To use Browser Selector as your default browser in Windows, you need to register it first. Click the **Register** button in the main window. After registration:
+1. The button text will change to **Unregister**
+2. Open Windows Settings → Apps → Default apps
+3. Find and select Browser Selector as your default browser
 
-:: Unregister
-BrowserSelector.exe unregister
-```
-
-After registration, you can set Browser Selector as your default browser in Windows Settings.
+To unregister, click the **Unregister** button in the main window.
 
 ## Configuration
 

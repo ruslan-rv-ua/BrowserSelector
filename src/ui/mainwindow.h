@@ -7,6 +7,7 @@
 typedef struct {
     HWND hwnd;
     HWND listBox;
+    HWND registerBtn;
     HWND settingsBtn;
     Configuration* config;
     char* url;

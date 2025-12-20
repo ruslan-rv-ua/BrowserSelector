@@ -223,12 +223,15 @@ int CreateDefaultConfig(const char* configPath);
 typedef struct {
     HWND hwnd;
     HWND listBox;
+    HWND registerBtn;
     HWND settingsBtn;
     Configuration* config;
     char* url;
+    char exePath[MAX_PATH];
+    HINSTANCE hInstance;
 } MainWindow;
 
-HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* url);
+HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* url, const char* exePath);
 LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #endif // MAINWINDOW_H
@@ -990,10 +993,14 @@ bin\BrowserSelector.exe "https://example.com/search?q=test query"
 - [ ] Завантаження config.json
 - [ ] Створення конфігурації за замовчуванням
 - [ ] Відображення головного вікна
+- [ ] Відображення кнопки Register/Unregister з правильним текстом
 - [ ] Вибір команди мишею
 - [ ] Вибір команди клавіатурою (Enter)
 - [ ] Навігація стрілками
 - [ ] Швидкий вибір 1-9
+- [ ] Реєстрація браузера через кнопку Register
+- [ ] Видалення реєстрації через кнопку Unregister
+- [ ] Оновлення тексту кнопки після реєстрації/видалення реєстрації
 - [ ] Відкриття вікна налаштувань
 - [ ] Додавання нової команди
 - [ ] Редагування команди
@@ -1102,13 +1109,13 @@ signtool sign /f certificate.pfx /p password /tr http://timestamp.digicert.com /
 1. ✅ Один .exe файл (статично слінкований)
 2. ✅ Конфігурація в JSON поряд з exe
 3. ✅ Вибір браузера клавіатурою (стрілки + Enter)
-4. ✅ Tab переключає між ListBox та кнопкою Settings
+4. ✅ Tab переключає між ListBox та кнопками
 5. ✅ Вікно налаштувань дозволяє керувати командами
 6. ✅ Команда за замовчуванням обрана при запуску
 7. ✅ URL коректно передається в браузер
 8. ✅ Працює з NVDA та Windows Narrator
 9. ✅ Обробка помилок (відсутні файли, невірні шляхи)
-10. ✅ Реєстрація як браузер Windows
+10. ✅ Реєстрація як браузер Windows через кнопку Register/Unregister
 11. ✅ Відсутнє вікно консолі
 12. ✅ Малий розмір (~500KB-1MB зі статичним лінкуванням)
 

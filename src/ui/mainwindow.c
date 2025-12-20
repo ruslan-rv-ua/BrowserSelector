@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "settings.h"
 #include "../executor/executor.h"
+#include "../registry/registry.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <commctrl.h>
 
 #define ID_LISTBOX 1001
-#define ID_SETTINGS_BTN 1002
+#define ID_REGISTER_BTN 1002
+#define ID_SETTINGS_BTN 1003
 
 #define MAIN_WINDOW_WIDTH 400
 #define MAIN_WINDOW_HEIGHT 300
@@ -193,18 +195,35 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             // Fill ListBox with commands
             RefreshCommandList(mainWin);
             
-            // Create Settings button
+            // Create buttons (Register and Settings)
             int btnWidth = 100;
             int btnHeight = 30;
-            int btnX = (clientWidth - btnWidth) / 2;
+            int btnSpacing = 10;
+            int totalWidth = btnWidth * 2 + btnSpacing;
+            int btnStartX = (clientWidth - totalWidth) / 2;
             int btnY = clientHeight - btnHeight - 10;
             
+            // Create Register/Unregister button (left)
+            BOOL isRegistered = IsRegisteredAsBrowser();
+            const char* registerBtnText = isRegistered ? "Unregister" : "Register";
+            
+            mainWin->registerBtn = CreateWindowExA(
+                0,
+                "BUTTON",
+                registerBtnText,
+                WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
+                btnStartX, btnY, btnWidth, btnHeight,
+                hwnd, (HMENU)ID_REGISTER_BTN, cs->hInstance, NULL
+            );
+            SendMessage(mainWin->registerBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Create Settings button (right)
             mainWin->settingsBtn = CreateWindowExA(
                 0,
                 "BUTTON",
                 "Settings",
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
-                btnX, btnY, btnWidth, btnHeight,
+                btnStartX + btnWidth + btnSpacing, btnY, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_SETTINGS_BTN, cs->hInstance, NULL
             );
             SendMessage(mainWin->settingsBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
@@ -233,6 +252,43 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         }
                     }
                     break;
+                    
+                case ID_REGISTER_BTN: {
+                    // Toggle registration
+                    BOOL isRegistered = IsRegisteredAsBrowser();
+                    
+                    if (isRegistered) {
+                        // Unregister
+                        if (UnregisterAsBrowser()) {
+                            MessageBoxA(hwnd, 
+                                "Browser Selector has been unregistered.\n\n"
+                                "It will no longer appear in the list of available browsers.",
+                                "Unregistration Successful", MB_OK | MB_ICONINFORMATION);
+                            SetWindowTextA(mainWin->registerBtn, "Register");
+                        } else {
+                            MessageBoxA(hwnd, 
+                                "Failed to unregister Browser Selector.\n\n"
+                                "Please check permissions and try again.",
+                                "Unregistration Failed", MB_OK | MB_ICONERROR);
+                        }
+                    } else {
+                        // Register
+                        if (RegisterAsBrowser(mainWin->exePath)) {
+                            MessageBoxA(hwnd, 
+                                "Browser Selector has been registered.\n\n"
+                                "You can now set it as your default browser in Windows Settings.",
+                                "Registration Successful", MB_OK | MB_ICONINFORMATION);
+                            SetWindowTextA(mainWin->registerBtn, "Unregister");
+                        } else {
+                            MessageBoxA(hwnd, 
+                                "Failed to register Browser Selector.\n\n"
+                                "Try running as administrator.",
+                                "Registration Failed", MB_OK | MB_ICONERROR);
+                        }
+                    }
+                    SetFocus(mainWin->listBox);
+                    break;
+                }
                     
                 case ID_SETTINGS_BTN:
                     // Open settings window

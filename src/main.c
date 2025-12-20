@@ -37,14 +37,6 @@ static char* ParseCommandLine(LPSTR lpCmdLine) {
         }
     }
     
-    // Check if it looks like a URL or just "register"/"unregister" command
-    if (_stricmp(url, "register") == 0 || 
-        _stricmp(url, "unregister") == 0 ||
-        _stricmp(url, "--register") == 0 ||
-        _stricmp(url, "--unregister") == 0) {
-        return url;  // Return as command, not URL
-    }
-    
     return strlen(url) > 0 ? url : NULL;
 }
 
@@ -64,37 +56,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     
     // Parse command line
     char* arg = ParseCommandLine(lpCmdLine);
-    
-    // Handle registration commands
-    if (arg) {
-        if (_stricmp(arg, "register") == 0 || _stricmp(arg, "--register") == 0) {
-            if (RegisterAsBrowser(exePath)) {
-                MessageBoxA(NULL, 
-                    "Browser Selector has been registered.\n\n"
-                    "You can now set it as your default browser in Windows Settings.",
-                    "Registration Successful", MB_OK | MB_ICONINFORMATION);
-            } else {
-                MessageBoxA(NULL, 
-                    "Failed to register Browser Selector.\n\n"
-                    "Try running as administrator.",
-                    "Registration Failed", MB_OK | MB_ICONERROR);
-            }
-            return 0;
-        }
-        
-        if (_stricmp(arg, "unregister") == 0 || _stricmp(arg, "--unregister") == 0) {
-            if (UnregisterAsBrowser()) {
-                MessageBoxA(NULL, 
-                    "Browser Selector has been unregistered.",
-                    "Unregistration Successful", MB_OK | MB_ICONINFORMATION);
-            } else {
-                MessageBoxA(NULL, 
-                    "Failed to unregister Browser Selector.",
-                    "Unregistration Failed", MB_OK | MB_ICONERROR);
-            }
-            return 0;
-        }
-    }
     
     // Load configuration
     Configuration config;
