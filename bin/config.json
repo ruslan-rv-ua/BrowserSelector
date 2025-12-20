@@ -1,28 +1,20 @@
 {
 	"settings":	{
-		"defaultCommandIndex":	4,
+		"defaultCommandIndex":	1,
 		"windowWidth":	400,
 		"windowHeight":	300
 	},
 	"commands":	[{
-			"name":	"Firefox",
-			"command":	"firefox.exe",
-			"arguments":	"{url}"
-		}, {
-			"name":	"Edge",
-			"command":	"msedge.exe",
+			"name":	"LibreWolf",
+			"command":	"librewolf.exe",
 			"arguments":	"{url}"
 		}, {
 			"name":	"Chrome",
 			"command":	"chrome.exe",
 			"arguments":	"{url}"
 		}, {
-			"name":	"LibreWolf",
-			"command":	"librewolf.exe",
-			"arguments":	"{url}"
-		}, {
-			"name":	"Opera",
-			"command":	"opera.exe",
+			"name":	"Edge",
+			"command":	"edge.exe",
 			"arguments":	"{url}"
 		}]
 }

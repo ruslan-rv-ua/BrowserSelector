@@ -29,11 +29,11 @@ static void RefreshSettingsList(SettingsData* data) {
     for (int i = 0; i < data->config->commandCount; i++) {
         char itemText[MAX_NAME_LENGTH + 20];
         if (i == data->config->settings.defaultCommandIndex) {
-            snprintf(itemText, sizeof(itemText), "%d. %s [default]", 
-                    i + 1, data->config->commands[i].name);
+            snprintf(itemText, sizeof(itemText), "%s [default]", 
+                    data->config->commands[i].name);
         } else {
-            snprintf(itemText, sizeof(itemText), "%d. %s", 
-                    i + 1, data->config->commands[i].name);
+            snprintf(itemText, sizeof(itemText), "%s", 
+                    data->config->commands[i].name);
         }
         SendMessageA(data->listBox, LB_ADDSTRING, 0, (LPARAM)itemText);
     }

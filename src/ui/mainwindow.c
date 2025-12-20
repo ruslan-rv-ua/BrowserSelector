@@ -9,16 +9,81 @@
 #define ID_SETTINGS_BTN 1002
 
 static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
+static WNDPROC originalListBoxProc = NULL;
+static WNDPROC originalButtonProc = NULL;
+
+// Subclass procedure for Settings button to intercept Tab key
+LRESULT CALLBACK ButtonSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
+    
+    if (msg == WM_KEYDOWN && mainWin) {
+        switch (wParam) {
+            case VK_TAB:
+                // Tab - switch focus to ListBox
+                SetFocus(mainWin->listBox);
+                return 0;
+                
+            case VK_ESCAPE:
+                DestroyWindow(GetParent(hwnd));
+                return 0;
+        }
+    }
+    
+    // Call original Button procedure
+    return CallWindowProc(originalButtonProc, hwnd, msg, wParam, lParam);
+}
+
+// Subclass procedure for ListBox to intercept key presses
+LRESULT CALLBACK ListBoxSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
+    
+    if (msg == WM_KEYDOWN && mainWin) {
+        switch (wParam) {
+            case VK_RETURN: {
+                // Enter - execute selected command
+                int index = (int)SendMessage(hwnd, LB_GETCURSEL, 0, 0);
+                if (index != LB_ERR && index < mainWin->config->commandCount) {
+                    ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
+                    DestroyWindow(GetParent(hwnd));
+                }
+                return 0;
+            }
+            
+            case VK_ESCAPE:
+                DestroyWindow(GetParent(hwnd));
+                return 0;
+                
+            case VK_TAB: {
+                // Tab - switch focus to Settings button
+                SetFocus(mainWin->settingsBtn);
+                return 0;
+            }
+        }
+    }
+    
+    if (msg == WM_CHAR && mainWin) {
+        // Quick select 1-9
+        if (wParam >= '1' && wParam <= '9') {
+            int index = wParam - '1';
+            if (index < mainWin->config->commandCount) {
+                ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
+                DestroyWindow(GetParent(hwnd));
+            }
+            return 0;
+        }
+    }
+    
+    // Call original ListBox procedure
+    return CallWindowProc(originalListBoxProc, hwnd, msg, wParam, lParam);
+}
 
 void RefreshCommandList(MainWindow* mainWin) {
     // Clear list box
     SendMessage(mainWin->listBox, LB_RESETCONTENT, 0, 0);
     
-    // Add commands with numbers
+    // Add commands without numbers
     for (int i = 0; i < mainWin->config->commandCount; i++) {
-        char itemText[MAX_NAME_LENGTH + 10];
-        snprintf(itemText, sizeof(itemText), "%d. %s", i + 1, mainWin->config->commands[i].name);
-        SendMessageA(mainWin->listBox, LB_ADDSTRING, 0, (LPARAM)itemText);
+        SendMessageA(mainWin->listBox, LB_ADDSTRING, 0, (LPARAM)mainWin->config->commands[i].name);
     }
     
     // Set default selection
@@ -118,6 +183,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
             SendMessage(mainWin->listBox, WM_SETFONT, (WPARAM)hFont, TRUE);
             
+            // Subclass ListBox to intercept key presses
+            originalListBoxProc = (WNDPROC)SetWindowLongPtr(mainWin->listBox, 
+                GWLP_WNDPROC, (LONG_PTR)ListBoxSubclassProc);
+            
             // Fill ListBox with commands
             RefreshCommandList(mainWin);
             
@@ -136,6 +205,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 hwnd, (HMENU)ID_SETTINGS_BTN, cs->hInstance, NULL
             );
             SendMessage(mainWin->settingsBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Subclass Settings button to intercept Tab key
+            originalButtonProc = (WNDPROC)SetWindowLongPtr(mainWin->settingsBtn, 
+                GWLP_WNDPROC, (LONG_PTR)ButtonSubclassProc);
             
             // Set focus to ListBox
             SetFocus(mainWin->listBox);
@@ -168,42 +241,6 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     break;
             }
             return 0;
-        }
-        
-        case WM_KEYDOWN: {
-            if (!mainWin) break;
-            
-            switch (wParam) {
-                case VK_RETURN: {
-                    // Enter - execute selected command
-                    int index = (int)SendMessage(mainWin->listBox, LB_GETCURSEL, 0, 0);
-                    if (index != LB_ERR && index < mainWin->config->commandCount) {
-                        ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
-                        DestroyWindow(hwnd);
-                    }
-                    return 0;
-                }
-                
-                case VK_ESCAPE:
-                    DestroyWindow(hwnd);
-                    return 0;
-            }
-            break;
-        }
-        
-        case WM_CHAR: {
-            if (!mainWin) break;
-            
-            // Quick select 1-9
-            if (wParam >= '1' && wParam <= '9') {
-                int index = wParam - '1';
-                if (index < mainWin->config->commandCount) {
-                    ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
-                    DestroyWindow(hwnd);
-                }
-                return 0;
-            }
-            break;
         }
         
         case WM_ACTIVATE: {
