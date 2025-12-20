@@ -41,12 +41,12 @@ int CreateDefaultConfig(const char* configPath) {
     cJSON_AddStringToObject(chrome, "arguments", "--incognito {url}");
     cJSON_AddItemToArray(commands, chrome);
     
-    // Edge
-    cJSON* edge = cJSON_CreateObject();
-    cJSON_AddStringToObject(edge, "name", "Edge");
-    cJSON_AddStringToObject(edge, "command", "msedge.exe");
-    cJSON_AddStringToObject(edge, "arguments", "{url}");
-    cJSON_AddItemToArray(commands, edge);
+    // Helium
+    cJSON* helium = cJSON_CreateObject();
+    cJSON_AddStringToObject(helium, "name", "Helium");
+    cJSON_AddStringToObject(helium, "command", "helium.exe");
+    cJSON_AddStringToObject(helium, "arguments", "{url}");
+    cJSON_AddItemToArray(commands, helium);
     
     cJSON_AddItemToObject(json, "commands", commands);
     

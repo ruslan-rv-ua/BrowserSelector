@@ -11,8 +11,8 @@
 			"command":	"chrome.exe",
 			"arguments":	"--incognito {url}"
 		}, {
-			"name":	"Edge",
-			"command":	"msedge.exe",
+			"name":	"Helium",
+			"command":	"helium.exe",
 			"arguments":	"{url}"
 		}]
 }
