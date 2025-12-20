@@ -333,14 +333,30 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                     "Success", MB_OK | MB_ICONINFORMATION);
                                 SetWindowTextA(mainWin->registerBtn, "Unregister");
                             } else {
-                                // Windows Settings opened - inform user
-                                MessageBoxA(hwnd, 
-                                    "Browser Selector has been registered.\n\n"
-                                    "Windows Settings has been opened where you can manually "
-                                    "select Browser Selector as your default browser.\n\n"
-                                    "Look for 'BrowserSelector' in the list of web browsers.",
-                                    "Manual Selection Required", MB_OK | MB_ICONINFORMATION);
-                                // Don't change button text yet - wait for user to complete in Settings
+                                // Windows Settings opened or failed - ask user to check again
+                                int result = MessageBoxA(hwnd,
+                                    "After selecting Browser Selector in Windows Settings,\n"
+                                    "click 'Check Status' to verify the change.\n\n"
+                                    "Did you complete the selection in Windows Settings?",
+                                    "Status Update",
+                                    MB_YESNO | MB_ICONQUESTION);
+                                
+                                if (result == IDYES) {
+                                    // Re-check status
+                                    if (IsDefaultBrowser()) {
+                                        MessageBoxA(hwnd,
+                                            "Browser Selector is now your default browser!",
+                                            "Success",
+                                            MB_OK | MB_ICONINFORMATION);
+                                        SetWindowTextA(mainWin->registerBtn, "Unregister");
+                                    } else {
+                                        MessageBoxA(hwnd,
+                                            "Browser Selector is not yet set as default.\n\n"
+                                            "Please make sure to select 'BrowserSelector' in Windows Settings.",
+                                            "Not Set",
+                                            MB_OK | MB_ICONWARNING);
+                                    }
+                                }
                             }
                         }
                     }

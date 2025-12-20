@@ -98,8 +98,15 @@ BrowserSelector.exe "https://example.com"
 To use Browser Selector as your default browser in Windows:
 
 1. Click the **Set as Default** button in the main window
-2. The app will register itself and attempt to set as default browser
-3. On Windows 10+, you may need to manually select Browser Selector in the Windows Settings dialog that opens
+2. **On Windows 7/8:**
+   - The app will automatically register and set itself as default
+   - You'll see a success message
+3. **On Windows 10/11:**
+   - Due to security restrictions, Windows Settings will open automatically
+   - Scroll down to **Web browser**
+   - Click the current browser name
+   - Select **BrowserSelector** from the list
+   - Return to the app and click "Yes" when prompted to verify
 
 The button automatically detects the current status:
 - Shows **Set as Default** when not registered or not set as default

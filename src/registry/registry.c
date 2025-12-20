@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <shlobj.h>
-#include <shobjidl.h>
+#include <windows.h>
 
 #define APP_NAME "BrowserSelector"
 #define APP_DESC "Browser Selector"
@@ -196,47 +196,70 @@ BOOL IsDefaultBrowser(void) {
 }
 
 BOOL SetAsDefaultBrowser(void) {
-    // Try to set default using IApplicationAssociationRegistration (Windows Vista+)
-    IApplicationAssociationRegistration* pAAR = NULL;
+    // On Windows 10 and later, programmatic setting of default browser is blocked
+    // We need to open Windows Settings for user to select manually
     
-    HRESULT hr = CoInitialize(NULL);
-    BOOL comInitialized = SUCCEEDED(hr);
+    // Check Windows version
+    OSVERSIONINFOW osvi = {0};
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
     
-    hr = CoCreateInstance(&CLSID_ApplicationAssociationRegistration, NULL,
-                         CLSCTX_INPROC, &IID_IApplicationAssociationRegistration,
-                         (void**)&pAAR);
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    GetVersionExW(&osvi);
+    #pragma GCC diagnostic pop
     
-    if (SUCCEEDED(hr) && pAAR) {
-        // Set as default for http
-        WCHAR appName[256];
-        MultiByteToWideChar(CP_ACP, 0, APP_NAME, -1, appName, 256);
+    BOOL isWindows10OrLater = (osvi.dwMajorVersion >= 10);
+    
+    if (isWindows10OrLater) {
+        // Windows 10+: Must use Settings UI
+        MessageBoxA(NULL,
+            "Due to Windows 10+ security restrictions, you need to manually select Browser Selector.\n\n"
+            "The Windows Settings will open where you can:\n"
+            "1. Scroll down to 'Web browser'\n"
+            "2. Click the current browser name\n"
+            "3. Select 'BrowserSelector' from the list\n\n"
+            "Click OK to open Settings.",
+            "Manual Selection Required",
+            MB_OK | MB_ICONINFORMATION);
         
-        hr = pAAR->lpVtbl->SetAppAsDefault(pAAR, appName, L"http", AT_URLPROTOCOL);
-        
-        if (SUCCEEDED(hr)) {
-            // Set as default for https
-            hr = pAAR->lpVtbl->SetAppAsDefault(pAAR, appName, L"https", AT_URLPROTOCOL);
-        }
-        
-        pAAR->lpVtbl->Release(pAAR);
-        
-        if (comInitialized) {
-            CoUninitialize();
-        }
-        
-        if (SUCCEEDED(hr)) {
-            SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
-            return TRUE;
-        }
+        ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);
+        return FALSE; // User needs to complete manually
     }
     
-    if (comInitialized) {
-        CoUninitialize();
+    // Windows 7/8: Try to set programmatically via registry
+    // Set UserChoice for http
+    char keyPath[512];
+    HKEY hKey;
+    
+    snprintf(keyPath, sizeof(keyPath), 
+             "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice");
+    
+    LONG result = RegCreateKeyExA(HKEY_CURRENT_USER, keyPath, 0, NULL,
+                                  REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+    
+    if (result == ERROR_SUCCESS) {
+        RegSetValueExA(hKey, "ProgId", 0, REG_SZ, 
+                      (const BYTE*)APP_NAME, (DWORD)(strlen(APP_NAME) + 1));
+        RegCloseKey(hKey);
     }
     
-    // If API method failed, open Windows Settings for user to select manually
-    // This is required on Windows 10+ due to security restrictions
-    ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);
+    // Set UserChoice for https
+    snprintf(keyPath, sizeof(keyPath),
+             "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice");
     
-    return FALSE; // Indicate user needs to complete manually
+    result = RegCreateKeyExA(HKEY_CURRENT_USER, keyPath, 0, NULL,
+                            REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
+    
+    if (result == ERROR_SUCCESS) {
+        RegSetValueExA(hKey, "ProgId", 0, REG_SZ,
+                      (const BYTE*)APP_NAME, (DWORD)(strlen(APP_NAME) + 1));
+        RegCloseKey(hKey);
+    }
+    
+    // Notify system of changes
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+    
+    // Verify it worked
+    Sleep(500); // Give system time to update
+    return IsDefaultBrowser();
 }
