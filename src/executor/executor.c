@@ -54,11 +54,19 @@ static char* ResolveCommand(const char* command) {
         char* lastSlash = strrchr(exePath, '\\');
         if (lastSlash) {
             *lastSlash = '\0';
-            snprintf(resolved, MAX_PATH, "%s\\%s", exePath, command);
-            
-            DWORD attrs = GetFileAttributesA(resolved);
-            if (attrs != INVALID_FILE_ATTRIBUTES && !(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
-                return _strdup(resolved);
+            // Use safe path combination
+            size_t exeLen = strlen(exePath);
+            size_t cmdLen = strlen(command);
+            if (exeLen + cmdLen + 2 < MAX_PATH) {
+                int written = snprintf(resolved, MAX_PATH, "%s\\%s", exePath, command);
+                if (written < 0 || written >= MAX_PATH) {
+                    return NULL;  // Truncation occurred
+                }
+                
+                DWORD attrs = GetFileAttributesA(resolved);
+                if (attrs != INVALID_FILE_ATTRIBUTES && !(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
+                    return _strdup(resolved);
+                }
             }
         }
         return NULL;
@@ -70,10 +78,14 @@ static char* ResolveCommand(const char* command) {
     }
     
     // Try with .exe extension
-    char commandWithExt[MAX_PATH];
-    snprintf(commandWithExt, MAX_PATH, "%s.exe", command);
-    if (SearchPathA(NULL, commandWithExt, NULL, MAX_PATH, resolved, NULL)) {
-        return _strdup(resolved);
+    if (strlen(command) + 4 < MAX_PATH) {
+        char commandWithExt[MAX_PATH];
+        int written = snprintf(commandWithExt, MAX_PATH, "%s.exe", command);
+        if (written > 0 && written < MAX_PATH) {
+            if (SearchPathA(NULL, commandWithExt, NULL, MAX_PATH, resolved, NULL)) {
+                return _strdup(resolved);
+            }
+        }
     }
     
     return NULL;

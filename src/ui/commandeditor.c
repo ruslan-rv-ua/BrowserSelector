@@ -151,12 +151,9 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     }
                     
                     // Save data
-                    strncpy(data->command->name, name, MAX_NAME_LENGTH - 1);
-                    data->command->name[MAX_NAME_LENGTH - 1] = '\0';
-                    strncpy(data->command->command, cmd, MAX_PATH_LENGTH - 1);
-                    data->command->command[MAX_PATH_LENGTH - 1] = '\0';
-                    strncpy(data->command->arguments, args, MAX_PATH_LENGTH - 1);
-                    data->command->arguments[MAX_PATH_LENGTH - 1] = '\0';
+                    snprintf(data->command->name, MAX_NAME_LENGTH, "%s", name);
+                    snprintf(data->command->command, MAX_PATH_LENGTH, "%s", cmd);
+                    snprintf(data->command->arguments, MAX_PATH_LENGTH, "%s", args);
                     
                     data->saved = TRUE;
                     DestroyWindow(hwnd);
