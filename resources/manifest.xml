@@ -6,9 +6,6 @@
     name="BrowserSelector"
     type="win32"/>
   <description>Browser Selector Application</description>
-  <!-- Additional metadata: author/publisher (non-standard) -->
-  <publisher>Ruslan Iskov</publisher>
-  <author>Ruslan Iskov &lt;ruslan.rv.ua+github@gmail.com&gt;</author>
   <dependency>
     <dependentAssembly>
       <assemblyIdentity

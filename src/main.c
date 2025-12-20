@@ -7,8 +7,6 @@
 #include "ui/mainwindow.h"
 #include "registry/registry.h"
 
-#pragma comment(lib, "comctl32.lib")
-
 // Parse command line to extract URL
 static char* ParseCommandLine(LPSTR lpCmdLine) {
     if (!lpCmdLine || strlen(lpCmdLine) == 0) {
