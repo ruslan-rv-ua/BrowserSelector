@@ -9,7 +9,7 @@ A portable Windows desktop application that acts as a browser selector. When a U
 - **Configurable**: Add, edit, delete, and reorder browsers through the Settings window
 - **Screen Reader Compatible**: Works with NVDA and Windows Narrator
 - **No Console Window**: Clean GUI-only experience
-- **Windows Registry Integration**: Can register as a browser handler
+- **Smart Default Browser Setup**: Automatically registers and sets as default with one click
 
 ## Building
 
@@ -95,12 +95,17 @@ BrowserSelector.exe "https://example.com"
 
 ### Browser Registration
 
-To use Browser Selector as your default browser in Windows, you need to register it first. Click the **Register** button in the main window. After registration:
-1. The button text will change to **Unregister**
-2. Open Windows Settings → Apps → Default apps
-3. Find and select Browser Selector as your default browser
+To use Browser Selector as your default browser in Windows:
 
-To unregister, click the **Unregister** button in the main window.
+1. Click the **Set as Default** button in the main window
+2. The app will register itself and attempt to set as default browser
+3. On Windows 10+, you may need to manually select Browser Selector in the Windows Settings dialog that opens
+
+The button automatically detects the current status:
+- Shows **Set as Default** when not registered or not set as default
+- Shows **Unregister** when already registered and set as default browser
+
+To remove Browser Selector from the system, click **Unregister** when the app is set as default.
 
 ## Configuration
 

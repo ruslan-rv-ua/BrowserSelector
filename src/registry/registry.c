@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <shlobj.h>
+#include <shobjidl.h>
 
 #define APP_NAME "BrowserSelector"
 #define APP_DESC "Browser Selector"
@@ -155,4 +156,87 @@ BOOL IsRegisteredAsBrowser(void) {
     }
     
     return FALSE;
+}
+
+BOOL IsDefaultBrowser(void) {
+    char currentDefault[256];
+    DWORD bufferSize = sizeof(currentDefault);
+    HKEY hKey;
+    
+    // Check http default
+    LONG result = RegOpenKeyExA(HKEY_CURRENT_USER, 
+                                "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice",
+                                0, KEY_READ, &hKey);
+    
+    if (result == ERROR_SUCCESS) {
+        result = RegQueryValueExA(hKey, "ProgId", NULL, NULL, 
+                                 (LPBYTE)currentDefault, &bufferSize);
+        RegCloseKey(hKey);
+        
+        if (result == ERROR_SUCCESS && strcmp(currentDefault, APP_NAME) == 0) {
+            // Check https as well
+            bufferSize = sizeof(currentDefault);
+            result = RegOpenKeyExA(HKEY_CURRENT_USER,
+                                  "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice",
+                                  0, KEY_READ, &hKey);
+            
+            if (result == ERROR_SUCCESS) {
+                result = RegQueryValueExA(hKey, "ProgId", NULL, NULL,
+                                         (LPBYTE)currentDefault, &bufferSize);
+                RegCloseKey(hKey);
+                
+                if (result == ERROR_SUCCESS && strcmp(currentDefault, APP_NAME) == 0) {
+                    return TRUE;
+                }
+            }
+        }
+    }
+    
+    return FALSE;
+}
+
+BOOL SetAsDefaultBrowser(void) {
+    // Try to set default using IApplicationAssociationRegistration (Windows Vista+)
+    IApplicationAssociationRegistration* pAAR = NULL;
+    
+    HRESULT hr = CoInitialize(NULL);
+    BOOL comInitialized = SUCCEEDED(hr);
+    
+    hr = CoCreateInstance(&CLSID_ApplicationAssociationRegistration, NULL,
+                         CLSCTX_INPROC, &IID_IApplicationAssociationRegistration,
+                         (void**)&pAAR);
+    
+    if (SUCCEEDED(hr) && pAAR) {
+        // Set as default for http
+        WCHAR appName[256];
+        MultiByteToWideChar(CP_ACP, 0, APP_NAME, -1, appName, 256);
+        
+        hr = pAAR->lpVtbl->SetAppAsDefault(pAAR, appName, L"http", AT_URLPROTOCOL);
+        
+        if (SUCCEEDED(hr)) {
+            // Set as default for https
+            hr = pAAR->lpVtbl->SetAppAsDefault(pAAR, appName, L"https", AT_URLPROTOCOL);
+        }
+        
+        pAAR->lpVtbl->Release(pAAR);
+        
+        if (comInitialized) {
+            CoUninitialize();
+        }
+        
+        if (SUCCEEDED(hr)) {
+            SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
+            return TRUE;
+        }
+    }
+    
+    if (comInitialized) {
+        CoUninitialize();
+    }
+    
+    // If API method failed, open Windows Settings for user to select manually
+    // This is required on Windows 10+ due to security restrictions
+    ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);
+    
+    return FALSE; // Indicate user needs to complete manually
 }
