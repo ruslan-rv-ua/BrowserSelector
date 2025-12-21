@@ -1,4 +1,5 @@
 #include "commandeditor.h"
+#include "../i18n/i18n.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,20 +21,29 @@ typedef struct {
 static const char* CMD_EDITOR_CLASS = "CommandEditorClass";
 
 static void BrowseForExecutable(HWND hwnd, HWND editControl) {
-    OPENFILENAMEA ofn;
-    char filename[MAX_PATH] = "";
+    OPENFILENAMEW ofn;
+    wchar_t filename[MAX_PATH] = L"";
+    
+    // Build filter string (needs double null terminators)
+    wchar_t filter[256];
+    const wchar_t* exeFilter = I18n_GetStringW(IDS_BROWSE_FILTER_EXE);
+    const wchar_t* allFilter = I18n_GetStringW(IDS_BROWSE_FILTER_ALL);
+    swprintf(filter, 256, L"%s%c*.exe%c%s%c*.*%c", exeFilter, 0, 0, allFilter, 0, 0);
     
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = hwnd;
-    ofn.lpstrFilter = "Executable Files (*.exe)\0*.exe\0All Files (*.*)\0*.*\0";
+    ofn.lpstrFilter = filter;
     ofn.lpstrFile = filename;
     ofn.nMaxFile = MAX_PATH;
     ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
-    ofn.lpstrTitle = "Select Browser Executable";
+    ofn.lpstrTitle = I18n_GetStringW(IDS_BROWSE_TITLE);
     
-    if (GetOpenFileNameA(&ofn)) {
-        SetWindowTextA(editControl, filename);
+    if (GetOpenFileNameW(&ofn)) {
+        // Convert wide to ANSI for the edit control
+        char ansiFilename[MAX_PATH];
+        WideCharToMultiByte(CP_ACP, 0, filename, -1, ansiFilename, MAX_PATH, NULL, NULL);
+        SetWindowTextA(editControl, ansiFilename);
     }
 }
 
@@ -49,7 +59,7 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
             
             // Name label and edit
-            HWND label = CreateWindowExA(0, "STATIC", "Name:",
+            HWND label = CreateWindowExW(0, L"STATIC", I18n_GetStringW(IDS_NAME_LABEL),
                 WS_CHILD | WS_VISIBLE,
                 10, 15, 60, 20, hwnd, NULL, cs->hInstance, NULL);
             SendMessage(label, WM_SETFONT, (WPARAM)hFont, TRUE);
@@ -61,7 +71,7 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             SendMessage(nameEdit, EM_SETLIMITTEXT, MAX_NAME_LENGTH - 1, 0);
             
             // Command label and edit
-            label = CreateWindowExA(0, "STATIC", "Command:",
+            label = CreateWindowExW(0, L"STATIC", I18n_GetStringW(IDS_COMMAND_LABEL),
                 WS_CHILD | WS_VISIBLE,
                 10, 50, 60, 20, hwnd, NULL, cs->hInstance, NULL);
             SendMessage(label, WM_SETFONT, (WPARAM)hFont, TRUE);
@@ -79,7 +89,7 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             SendMessage(browseBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // Arguments label and edit
-            label = CreateWindowExA(0, "STATIC", "Arguments:",
+            label = CreateWindowExW(0, L"STATIC", I18n_GetStringW(IDS_ARGUMENTS_LABEL),
                 WS_CHILD | WS_VISIBLE,
                 10, 85, 65, 20, hwnd, NULL, cs->hInstance, NULL);
             SendMessage(label, WM_SETFONT, (WPARAM)hFont, TRUE);
@@ -91,18 +101,18 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             SendMessage(argsEdit, EM_SETLIMITTEXT, MAX_PATH_LENGTH - 1, 0);
             
             // Help text
-            label = CreateWindowExA(0, "STATIC", "Use {url} as placeholder for the URL",
+            label = CreateWindowExW(0, L"STATIC", I18n_GetStringW(IDS_URL_PLACEHOLDER_HINT),
                 WS_CHILD | WS_VISIBLE,
                 80, 110, 250, 20, hwnd, NULL, cs->hInstance, NULL);
             SendMessage(label, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // OK and Cancel buttons
-            HWND okBtn = CreateWindowExA(0, "BUTTON", "OK",
+            HWND okBtn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_OK_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON,
                 170, 145, 80, 28, hwnd, (HMENU)ID_OK_BTN, cs->hInstance, NULL);
             SendMessage(okBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            HWND cancelBtn = CreateWindowExA(0, "BUTTON", "Cancel",
+            HWND cancelBtn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_CANCEL_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 255, 145, 80, 28, hwnd, (HMENU)ID_CANCEL_BTN, cs->hInstance, NULL);
             SendMessage(cancelBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
@@ -137,7 +147,8 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     char* p = name;
                     while (*p == ' ') p++;
                     if (*p == '\0') {
-                        MessageBoxA(hwnd, "Name cannot be empty", "Validation Error", MB_OK | MB_ICONWARNING);
+                        MessageBoxW(hwnd, I18n_GetStringW(IDS_VALIDATION_NAME_EMPTY), 
+                                   I18n_GetStringW(IDS_VALIDATION_ERROR_TITLE), MB_OK | MB_ICONWARNING);
                         SetFocus(GetDlgItem(hwnd, ID_NAME_EDIT));
                         return 0;
                     }
@@ -145,7 +156,8 @@ LRESULT CALLBACK CommandEditorProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     p = cmd;
                     while (*p == ' ') p++;
                     if (*p == '\0') {
-                        MessageBoxA(hwnd, "Command cannot be empty", "Validation Error", MB_OK | MB_ICONWARNING);
+                        MessageBoxW(hwnd, I18n_GetStringW(IDS_VALIDATION_CMD_EMPTY), 
+                                   I18n_GetStringW(IDS_VALIDATION_ERROR_TITLE), MB_OK | MB_ICONWARNING);
                         SetFocus(GetDlgItem(hwnd, ID_COMMAND_EDIT));
                         return 0;
                     }
@@ -196,16 +208,16 @@ BOOL ShowCommandEditor(HWND parent, Command* command, BOOL isNew) {
     HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(parent, GWLP_HINSTANCE);
     
     // Register window class
-    WNDCLASSEXA wc;
+    WNDCLASSEXW wc;
     ZeroMemory(&wc, sizeof(wc));
-    wc.cbSize = sizeof(WNDCLASSEXA);
+    wc.cbSize = sizeof(WNDCLASSEXW);
     wc.lpfnWndProc = CommandEditorProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = CMD_EDITOR_CLASS;
+    wc.lpszClassName = L"CommandEditorClass";
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     
-    RegisterClassExA(&wc);
+    RegisterClassExW(&wc);
     
     // Prepare data
     CommandEditorData data;
@@ -222,10 +234,10 @@ BOOL ShowCommandEditor(HWND parent, Command* command, BOOL isNew) {
     int winY = parentRect.top + (parentRect.bottom - parentRect.top - winHeight) / 2;
     
     // Create window
-    const char* title = isNew ? "Add Browser" : "Edit Browser";
-    HWND hwnd = CreateWindowExA(
+    const wchar_t* title = isNew ? I18n_GetStringW(IDS_ADD_BROWSER_TITLE) : I18n_GetStringW(IDS_EDIT_BROWSER_TITLE);
+    HWND hwnd = CreateWindowExW(
         WS_EX_DLGMODALFRAME | WS_EX_TOPMOST,
-        CMD_EDITOR_CLASS,
+        L"CommandEditorClass",
         title,
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
         winX, winY, winWidth, winHeight,

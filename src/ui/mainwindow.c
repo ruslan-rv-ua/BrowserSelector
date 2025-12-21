@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "../executor/executor.h"
 #include "../registry/registry.h"
+#include "../i18n/i18n.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <commctrl.h>
@@ -172,9 +173,9 @@ static void StartTimer(MainWindow* mainWin) {
     mainWin->timerId = SetTimer(mainWin->hwnd, TIMER_ID, 1000, NULL);
     
     // Update countdown display
-    char countdownText[100];
-    sprintf(countdownText, "Opening default browser in %d seconds...", mainWin->remainingSeconds);
-    SetWindowTextA(mainWin->countdownLabel, countdownText);
+    wchar_t countdownText[256];
+    swprintf(countdownText, 256, I18n_GetStringW(IDS_COUNTDOWN_SECONDS), mainWin->remainingSeconds);
+    SetWindowTextW(mainWin->countdownLabel, countdownText);
 }
 
 static void StopTimer(MainWindow* mainWin) {
@@ -185,21 +186,21 @@ static void StopTimer(MainWindow* mainWin) {
         mainWin->remainingSeconds = 0;
         
         // Clear countdown display
-        SetWindowTextA(mainWin->countdownLabel, "");
+        SetWindowTextW(mainWin->countdownLabel, L"");
     }
 }
 
 static void UpdateCountdownDisplay(MainWindow* mainWin) {
     if (mainWin->timerActive) {
-        char countdownText[100];
+        wchar_t countdownText[256];
         if (mainWin->remainingSeconds > 1) {
-            sprintf(countdownText, "Opening default browser in %d seconds...", mainWin->remainingSeconds);
+            swprintf(countdownText, 256, I18n_GetStringW(IDS_COUNTDOWN_SECONDS), mainWin->remainingSeconds);
         } else if (mainWin->remainingSeconds == 1) {
-            sprintf(countdownText, "Opening default browser in 1 second...");
+            wcscpy(countdownText, I18n_GetStringW(IDS_COUNTDOWN_SECOND));
         } else {
-            sprintf(countdownText, "Opening default browser now...");
+            wcscpy(countdownText, I18n_GetStringW(IDS_COUNTDOWN_NOW));
         }
-        SetWindowTextA(mainWin->countdownLabel, countdownText);
+        SetWindowTextW(mainWin->countdownLabel, countdownText);
     }
 }
 
@@ -213,18 +214,18 @@ static void ExecuteDefaultCommand(MainWindow* mainWin) {
 
 HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* url, const char* exePath) {
     // Register window class
-    WNDCLASSEXA wc;
+    WNDCLASSEXW wc;
     ZeroMemory(&wc, sizeof(wc));
-    wc.cbSize = sizeof(WNDCLASSEXA);
+    wc.cbSize = sizeof(WNDCLASSEXW);
     wc.lpfnWndProc = MainWindowProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = MAIN_WINDOW_CLASS;
+    wc.lpszClassName = L"BrowserSelectorClass";
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(1));
     wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(1));
     
-    if (!RegisterClassExA(&wc)) {
+    if (!RegisterClassExW(&wc)) {
         // Class may already be registered
         DWORD err = GetLastError();
         if (err != ERROR_CLASS_ALREADY_EXISTS) {
@@ -254,10 +255,10 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
     int winY = (screenHeight - MAIN_WINDOW_HEIGHT) / 2;
     
     // Create window
-    HWND hwnd = CreateWindowExA(
+    HWND hwnd = CreateWindowExW(
         WS_EX_APPWINDOW,
-        MAIN_WINDOW_CLASS,
-        "Browser Selector",
+        L"BrowserSelectorClass",
+        I18n_GetStringW(IDS_APP_TITLE),
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         winX, winY,
         MAIN_WINDOW_WIDTH,
@@ -337,11 +338,12 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             // Create Register/Unregister button (left)
             BOOL isRegistered = IsRegisteredAsBrowser();
             BOOL isDefault = IsDefaultBrowser();
-            const char* registerBtnText = (isRegistered && isDefault) ? "Unregister as default browser" : "Set as default Windows browser";
+            const wchar_t* registerBtnText = (isRegistered && isDefault) ? 
+                I18n_GetStringW(IDS_UNREGISTER_BTN) : I18n_GetStringW(IDS_SET_DEFAULT_BTN);
             
-            mainWin->registerBtn = CreateWindowExA(
+            mainWin->registerBtn = CreateWindowExW(
                 0,
-                "BUTTON",
+                L"BUTTON",
                 registerBtnText,
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnStartX, btnY, btnWidth, btnHeight,
@@ -350,10 +352,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             SendMessage(mainWin->registerBtn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // Create Settings button (right)
-            mainWin->settingsBtn = CreateWindowExA(
+            mainWin->settingsBtn = CreateWindowExW(
                 0,
-                "BUTTON",
-                "Settings",
+                L"BUTTON",
+                I18n_GetStringW(IDS_SETTINGS_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnStartX + btnWidth + btnSpacing, btnY, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_SETTINGS_BTN, cs->hInstance, NULL
@@ -410,16 +412,16 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     if (isRegistered && isDefault) {
                         // Unregister completely
                         if (UnregisterAsBrowser()) {
-                            MessageBoxA(hwnd, 
-                                "Browser Selector has been unregistered.\n\n"
-                                "It will no longer appear in the list of available browsers.",
-                                "Unregistration Successful", MB_OK | MB_ICONINFORMATION);
-                            SetWindowTextA(mainWin->registerBtn, "Set as default Windows browser");
+                            MessageBoxW(hwnd, 
+                                I18n_GetStringW(IDS_UNREG_SUCCESS_MSG),
+                                I18n_GetStringW(IDS_UNREG_SUCCESS_TITLE), 
+                                MB_OK | MB_ICONINFORMATION);
+                            SetWindowTextW(mainWin->registerBtn, I18n_GetStringW(IDS_SET_DEFAULT_BTN));
                         } else {
-                            MessageBoxA(hwnd, 
-                                "Failed to unregister Browser Selector.\n\n"
-                                "Please check permissions and try again.",
-                                "Unregistration Failed", MB_OK | MB_ICONERROR);
+                            MessageBoxW(hwnd, 
+                                I18n_GetStringW(IDS_UNREG_FAILED_MSG),
+                                I18n_GetStringW(IDS_UNREG_FAILED_TITLE), 
+                                MB_OK | MB_ICONERROR);
                         }
                     } else {
                         // Register and set as default
@@ -429,10 +431,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                             // First register
                             success = RegisterAsBrowser(mainWin->exePath);
                             if (!success) {
-                                MessageBoxA(hwnd, 
-                                    "Failed to register Browser Selector.\n\n"
-                                    "Try running as administrator.",
-                                    "Registration Failed", MB_OK | MB_ICONERROR);
+                                MessageBoxW(hwnd, 
+                                    I18n_GetStringW(IDS_REG_FAILED_MSG),
+                                    I18n_GetStringW(IDS_REG_FAILED_TITLE), 
+                                    MB_OK | MB_ICONERROR);
                             }
                         }
                         
@@ -441,33 +443,30 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                             BOOL setDefault = SetAsDefaultBrowser();
                             
                             if (setDefault) {
-                                MessageBoxA(hwnd, 
-                                    "Browser Selector has been set as your default browser!\n\n"
-                                    "All web links will now open through Browser Selector.",
-                                    "Success", MB_OK | MB_ICONINFORMATION);
-                                SetWindowTextA(mainWin->registerBtn, "Unregister as default browser");
+                                MessageBoxW(hwnd, 
+                                    I18n_GetStringW(IDS_REG_SUCCESS_MSG),
+                                    I18n_GetStringW(IDS_REG_SUCCESS_TITLE), 
+                                    MB_OK | MB_ICONINFORMATION);
+                                SetWindowTextW(mainWin->registerBtn, I18n_GetStringW(IDS_UNREGISTER_BTN));
                             } else {
                                 // Settings opened - user needs to complete manually
-                                int result = MessageBoxA(hwnd,
-                                    "Windows Settings has been opened for manual selection.\n\n"
-                                    "After selecting Browser Selector, click 'Yes' to verify.\n\n"
-                                    "Have you completed the selection?",
-                                    "Verification",
+                                int result = MessageBoxW(hwnd,
+                                    I18n_GetStringW(IDS_VERIFY_MSG),
+                                    I18n_GetStringW(IDS_VERIFY_TITLE),
                                     MB_YESNO | MB_ICONQUESTION);
                                 
                                 if (result == IDYES) {
                                     // Re-check status
                                     if (IsDefaultBrowser()) {
-                                        MessageBoxA(hwnd,
-                                            "Browser Selector is now your default browser!",
-                                            "Success",
+                                        MessageBoxW(hwnd,
+                                            I18n_GetStringW(IDS_NOW_DEFAULT_MSG),
+                                            I18n_GetStringW(IDS_SUCCESS),
                                             MB_OK | MB_ICONINFORMATION);
-                                        SetWindowTextA(mainWin->registerBtn, "Unregister as default browser");
+                                        SetWindowTextW(mainWin->registerBtn, I18n_GetStringW(IDS_UNREGISTER_BTN));
                                     } else {
-                                        MessageBoxA(hwnd,
-                                            "Browser Selector is not yet set as default.\n\n"
-                                            "Please make sure to select 'BrowserSelector' in Windows Settings.",
-                                            "Not Set",
+                                        MessageBoxW(hwnd,
+                                            I18n_GetStringW(IDS_NOT_DEFAULT_MSG),
+                                            I18n_GetStringW(IDS_WARNING),
                                             MB_OK | MB_ICONWARNING);
                                     }
                                 }

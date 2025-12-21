@@ -13,6 +13,7 @@
 - **Білд:** Один портативний .exe файл
 - **Windows Registry:** Native Win32 Registry API
 - **Криптографія:** Windows CryptoAPI (для UserChoice hash на Windows 10+)
+- **i18n:** Windows String Resources (STRINGTABLE) з підтримкою Unicode
 
 ### 2. Встановлення компонентів
 
@@ -117,15 +118,19 @@ browserselector/
 │   ├── executor/
 │   │   ├── executor.c      # Запуск команд
 │   │   └── executor.h
-│   └── registry/
-│       ├── registry.c      # Реєстрація браузера
-│       └── registry.h
+│   ├── registry/
+│   │   ├── registry.c      # Реєстрація браузера
+│   │   └── registry.h
+│   └── i18n/
+│       ├── i18n.c          # Інтернаціоналізація
+│       └── i18n.h
 ├── include/
 │   └── cJSON.h            # Заголовок cJSON
 ├── lib/
 │   └── libcjson.a         # Статична бібліотека cJSON
 ├── resources/
 │   ├── app.rc             # Ресурсний файл
+│   ├── strings.rc         # Локалізовані рядки (всі мови)
 │   └── manifest.xml       # Маніфест застосунку
 ├── Makefile               # Файл збірки
 ├── config.json            # Конфігурація за замовчуванням
@@ -188,6 +193,47 @@ browserselector/
 - При запуску застосунку відображається зворотний відлік
 - Будь-яка дія користувача (натискання клавіші, клік миші) скасовує автовідкриття
 - Налаштовується у вікні налаштувань
+
+#### 3.4 Інтернаціоналізація (i18n)
+
+**Підтримувані мови:**
+| Мова | Код Windows |
+|------|-------------|
+| English (основна) | LANG_ENGLISH |
+| Українська | LANG_UKRAINIAN |
+| Німецька | LANG_GERMAN |
+| Французька | LANG_FRENCH |
+| Іспанська | LANG_SPANISH |
+| Італійська | LANG_ITALIAN |
+| Польська | LANG_POLISH |
+| Нідерландська | LANG_DUTCH |
+| Португальська | LANG_PORTUGUESE |
+
+**НЕ підтримуються:** російська, китайська, японська.
+
+**Архітектура:**
+- Усі рядки зберігаються в `resources/strings.rc` як Windows STRINGTABLE
+- Кожна мова має свій блок `LANGUAGE LANG_XXX, SUBLANG_DEFAULT`
+- Ресурсні файли компілюються з кодовою сторінкою UTF-8 (`--codepage=65001`)
+- При запуску викликається `I18n_Init(hInstance)` яка визначає мову Windows через `GetUserDefaultUILanguage()`
+- Використовуються Wide-string функції Win32 API (CreateWindowExW, MessageBoxW, SetWindowTextW)
+
+**Отримання рядків:**
+```c
+// Wide string (рекомендовано для Win32 UI)
+const wchar_t* str = I18n_GetStringW(IDS_APP_TITLE);
+
+// ANSI string (для сумісності)
+const char* str = I18n_GetStringA(IDS_APP_TITLE);
+```
+
+**Категорії рядків:**
+- 100-199: Головне вікно
+- 200-299: Вікно налаштувань
+- 300-399: Редактор команд
+- 400-499: Повідомлення про помилки
+- 500-599: Реєстрація браузера
+- 600-699: Основні повідомлення застосунку
 
 ### 4. Структури даних
 
@@ -1039,6 +1085,12 @@ bin\BrowserSelector.exe "https://example.com/search?q=test query"
   - [x] Налаштування WaitTime в діалозі налаштувань (діапазон 1-10 секунд)
   - [x] Валідація значень WaitTime
   - [x] Збереження/завантаження WaitTime в config.json
+- [x] i18n (інтернаціоналізація):
+  - [x] Локалізовані рядки вшиті в exe файл (Windows STRINGTABLE)
+  - [x] Автоматичне визначення мови Windows UI при старті
+  - [x] Підтримка 9 мов: English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese
+  - [x] Fallback на English якщо мова не підтримується
+  - [x] Коректне відображення Unicode символів (UTF-16)
 
 ### 10. Поширені проблеми та рішення
 

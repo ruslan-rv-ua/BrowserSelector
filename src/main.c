@@ -6,6 +6,7 @@
 #include "config/config.h"
 #include "ui/mainwindow.h"
 #include "registry/registry.h"
+#include "i18n/i18n.h"
 
 // Parse command line to extract URL
 static char* ParseCommandLine(LPSTR lpCmdLine) {
@@ -44,6 +45,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow) {
     (void)hPrevInstance;  // Unused
     
+    // Initialize i18n (must be first to load localized strings)
+    I18n_Init(hInstance);
+    
     // Initialize common controls
     INITCOMMONCONTROLSEX icc;
     icc.dwSize = sizeof(icc);
@@ -60,38 +64,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     // Load configuration
     Configuration config;
     if (!LoadConfig(exePath, &config)) {
-        MessageBoxA(NULL, "Failed to load configuration.\n\nA default config.json will be created.", 
-                   "Warning", MB_OK | MB_ICONWARNING);
+        MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_LOAD_FAILED_MSG), 
+                   I18n_GetStringW(IDS_WARNING), MB_OK | MB_ICONWARNING);
         
         // Try to create default config
         char configPath[MAX_PATH];
         GetConfigPath(exePath, configPath);
         if (!CreateDefaultConfig(configPath)) {
-            MessageBoxA(NULL, "Failed to create default configuration.", 
-                       "Error", MB_OK | MB_ICONERROR);
+            MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_CREATE_FAILED), 
+                       I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
             return 1;
         }
         
         // Try loading again
         if (!LoadConfig(exePath, &config)) {
-            MessageBoxA(NULL, "Failed to load configuration after creating default.", 
-                       "Error", MB_OK | MB_ICONERROR);
+            MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_LOAD_RETRY_FAIL), 
+                       I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
             return 1;
         }
     }
     
     // Check if we have any commands
     if (config.commandCount == 0) {
-        MessageBoxA(NULL, 
-            "No browsers configured.\n\n"
-            "The settings window will open to add browsers.",
-            "No Browsers", MB_OK | MB_ICONINFORMATION);
+        MessageBoxW(NULL, 
+            I18n_GetStringW(IDS_NO_BROWSERS_MSG),
+            I18n_GetStringW(IDS_NO_BROWSERS_TITLE), MB_OK | MB_ICONINFORMATION);
     }
     
     // Create main window
     HWND hwnd = CreateMainWindow(hInstance, &config, arg, exePath);
     if (!hwnd) {
-        MessageBoxA(NULL, "Failed to create main window.", "Error", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, I18n_GetStringW(IDS_WINDOW_CREATE_FAILED), 
+                   I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
         return 1;
     }
     

@@ -1,5 +1,8 @@
 #include <windows.h>
 
+// Include string resources for all languages
+#include "strings.rc"
+
 // Application icon
 1 ICON "icon.ico"
 

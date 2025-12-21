@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc
 WINDRES = windres
-CFLAGS = -std=c11 -Wall -Wextra -O2 -Iinclude
+CFLAGS = -std=c11 -Wall -Wextra -O2 -Iinclude -DUNICODE -D_UNICODE
 LDFLAGS = -mwindows -static-libgcc -static
 LIBS = -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
 
@@ -18,6 +18,7 @@ SOURCES = $(SRC_DIR)/main.c \
           $(SRC_DIR)/ui/commandeditor.c \
           $(SRC_DIR)/executor/executor.c \
           $(SRC_DIR)/registry/registry.c \
+          $(SRC_DIR)/i18n/i18n.c \
           include/cJSON.c
 
 # Object files
@@ -28,6 +29,7 @@ OBJECTS = $(OBJ_DIR)/main.o \
           $(OBJ_DIR)/commandeditor.o \
           $(OBJ_DIR)/executor.o \
           $(OBJ_DIR)/registry.o \
+          $(OBJ_DIR)/i18n.o \
           $(OBJ_DIR)/cJSON.o
 
 RESOURCE_OBJ = $(OBJ_DIR)/app.res
@@ -66,12 +68,15 @@ $(OBJ_DIR)/executor.o: $(SRC_DIR)/executor/executor.c
 $(OBJ_DIR)/registry.o: $(SRC_DIR)/registry/registry.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_DIR)/i18n.o: $(SRC_DIR)/i18n/i18n.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(OBJ_DIR)/cJSON.o: include/cJSON.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile resource file
-$(RESOURCE_OBJ): resources/app.rc
-	$(WINDRES) resources/app.rc -O coff -o $(RESOURCE_OBJ)
+# Compile resource file with UTF-8 code page
+$(RESOURCE_OBJ): resources/app.rc resources/strings.rc
+	$(WINDRES) --codepage=65001 -I$(SRC_DIR) resources/app.rc -O coff -o $(RESOURCE_OBJ)
 
 # Link executable
 $(TARGET): $(OBJECTS) $(RESOURCE_OBJ)

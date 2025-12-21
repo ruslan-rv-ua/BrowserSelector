@@ -1,0 +1,895 @@
+// String resources for Browser Selector
+// This file contains all localized strings embedded in the executable
+
+#include <windows.h>
+#include "../src/i18n/i18n.h"
+
+// ============================================================================
+// ENGLISH (Default/Neutral) - LANG_ENGLISH, SUBLANG_NEUTRAL
+// ============================================================================
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Browser Selector"
+    IDS_SETTINGS_BTN            "Settings"
+    IDS_SET_DEFAULT_BTN         "Set as default browser"
+    IDS_UNREGISTER_BTN          "Unregister as default"
+    IDS_COUNTDOWN_SECONDS       "Opening default browser in %d seconds..."
+    IDS_COUNTDOWN_SECOND        "Opening default browser in 1 second..."
+    IDS_COUNTDOWN_NOW           "Opening default browser now..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Settings - Browser Selector"
+    IDS_ADD_BTN                 "Add"
+    IDS_EDIT_BTN                "Edit"
+    IDS_DELETE_BTN              "Delete"
+    IDS_MOVE_UP_BTN             "Move Up"
+    IDS_MOVE_DOWN_BTN           "Move Down"
+    IDS_SET_DEFAULT_CMD_BTN     "Set Default"
+    IDS_CLOSE_BTN               "Close"
+    IDS_WAITTIME_LABEL          "Wait Time (1-10 sec):"
+    IDS_DEFAULT_MARKER          "[default]"
+    IDS_MAX_COMMANDS_WARNING    "Maximum number of commands reached"
+    IDS_CONFIRM_DELETE_TITLE    "Confirm Delete"
+    IDS_CONFIRM_DELETE_MSG      "Delete '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Add Browser"
+    IDS_EDIT_BROWSER_TITLE      "Edit Browser"
+    IDS_NAME_LABEL              "Name:"
+    IDS_COMMAND_LABEL           "Command:"
+    IDS_ARGUMENTS_LABEL         "Arguments:"
+    IDS_URL_PLACEHOLDER_HINT    "Use {url} as placeholder for the URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Cancel"
+    IDS_BROWSE_TITLE            "Select Browser Executable"
+    IDS_BROWSE_FILTER_EXE       "Executable Files (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "All Files (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Name cannot be empty"
+    IDS_VALIDATION_CMD_EMPTY    "Command cannot be empty"
+    IDS_VALIDATION_ERROR_TITLE  "Validation Error"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Error"
+    IDS_WARNING                 "Warning"
+    IDS_SUCCESS                 "Success"
+    IDS_CMD_NOT_FOUND           "Command not found: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Make sure the program is installed and in your PATH, or use an absolute path."
+    IDS_LAUNCH_FAILED           "Failed to launch: %s\nError code: %lu"
+    IDS_MEMORY_ERROR            "Failed to allocate memory"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registration Successful"
+    IDS_REG_SUCCESS_MSG         "Browser Selector has been set as your default browser!\n\nAll web links will now open through Browser Selector."
+    IDS_REG_FAILED_TITLE        "Registration Failed"
+    IDS_REG_FAILED_MSG          "Failed to register Browser Selector.\n\nTry running as administrator."
+    IDS_UNREG_SUCCESS_TITLE     "Unregistration Successful"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector has been unregistered.\n\nIt will no longer appear in the list of available browsers."
+    IDS_UNREG_FAILED_TITLE      "Unregistration Failed"
+    IDS_UNREG_FAILED_MSG        "Failed to unregister Browser Selector.\n\nPlease check permissions and try again."
+    IDS_SET_DEFAULT_TITLE       "Set as Default Browser"
+    IDS_SET_DEFAULT_MSG         "Please select Browser Selector as your default browser.\n\nSteps in Windows Settings:\n1. Scroll to 'Web browser'\n2. Click the current browser name\n3. Select 'BrowserSelector' from the list"
+    IDS_VERIFY_TITLE            "Verification"
+    IDS_VERIFY_MSG              "Windows Settings has been opened for manual selection.\n\nAfter selecting Browser Selector, click 'Yes' to verify.\n\nHave you completed the selection?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector is now your default browser!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector is not yet set as default.\n\nPlease make sure to select 'BrowserSelector' in Windows Settings."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Failed to load configuration"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Failed to load configuration.\n\nA default config.json will be created."
+    IDS_CONFIG_CREATE_FAILED    "Failed to create default configuration."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Failed to load configuration after creating default."
+    IDS_NO_BROWSERS_TITLE       "No Browsers"
+    IDS_NO_BROWSERS_MSG         "No browsers configured.\n\nThe settings window will open to add browsers."
+    IDS_WINDOW_CREATE_FAILED    "Failed to create main window."
+END
+
+
+// ============================================================================
+// UKRAINIAN - LANG_UKRAINIAN, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_UKRAINIAN, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Вибір браузера"
+    IDS_SETTINGS_BTN            "Налаштування"
+    IDS_SET_DEFAULT_BTN         "Встановити за замовчуванням"
+    IDS_UNREGISTER_BTN          "Скасувати реєстрацію"
+    IDS_COUNTDOWN_SECONDS       "Відкриття браузера за замовчуванням через %d сек..."
+    IDS_COUNTDOWN_SECOND        "Відкриття браузера за замовчуванням через 1 сек..."
+    IDS_COUNTDOWN_NOW           "Відкриття браузера за замовчуванням..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Налаштування - Вибір браузера"
+    IDS_ADD_BTN                 "Додати"
+    IDS_EDIT_BTN                "Редагувати"
+    IDS_DELETE_BTN              "Видалити"
+    IDS_MOVE_UP_BTN             "Вгору"
+    IDS_MOVE_DOWN_BTN           "Вниз"
+    IDS_SET_DEFAULT_CMD_BTN     "За замовч."
+    IDS_CLOSE_BTN               "Закрити"
+    IDS_WAITTIME_LABEL          "Час очікування (1-10 сек):"
+    IDS_DEFAULT_MARKER          "[за замовч.]"
+    IDS_MAX_COMMANDS_WARNING    "Досягнуто максимальну кількість команд"
+    IDS_CONFIRM_DELETE_TITLE    "Підтвердження видалення"
+    IDS_CONFIRM_DELETE_MSG      "Видалити '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Додати браузер"
+    IDS_EDIT_BROWSER_TITLE      "Редагувати браузер"
+    IDS_NAME_LABEL              "Назва:"
+    IDS_COMMAND_LABEL           "Команда:"
+    IDS_ARGUMENTS_LABEL         "Аргументи:"
+    IDS_URL_PLACEHOLDER_HINT    "Використовуйте {url} як заповнювач для URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Скасувати"
+    IDS_BROWSE_TITLE            "Виберіть виконуваний файл браузера"
+    IDS_BROWSE_FILTER_EXE       "Виконувані файли (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Усі файли (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Назва не може бути порожньою"
+    IDS_VALIDATION_CMD_EMPTY    "Команда не може бути порожньою"
+    IDS_VALIDATION_ERROR_TITLE  "Помилка перевірки"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Помилка"
+    IDS_WARNING                 "Попередження"
+    IDS_SUCCESS                 "Успіх"
+    IDS_CMD_NOT_FOUND           "Команду не знайдено: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Переконайтесь, що програма встановлена та є в PATH, або вкажіть повний шлях."
+    IDS_LAUNCH_FAILED           "Не вдалося запустити: %s\nКод помилки: %lu"
+    IDS_MEMORY_ERROR            "Не вдалося виділити пам'ять"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Реєстрація успішна"
+    IDS_REG_SUCCESS_MSG         "Browser Selector встановлено браузером за замовчуванням!\n\nУсі посилання тепер відкриватимуться через Browser Selector."
+    IDS_REG_FAILED_TITLE        "Помилка реєстрації"
+    IDS_REG_FAILED_MSG          "Не вдалося зареєструвати Browser Selector.\n\nСпробуйте запустити від імені адміністратора."
+    IDS_UNREG_SUCCESS_TITLE     "Скасування реєстрації успішне"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector було скасовано реєстрацію.\n\nВін більше не з'являтиметься у списку доступних браузерів."
+    IDS_UNREG_FAILED_TITLE      "Помилка скасування реєстрації"
+    IDS_UNREG_FAILED_MSG        "Не вдалося скасувати реєстрацію Browser Selector.\n\nПеревірте дозволи та спробуйте знову."
+    IDS_SET_DEFAULT_TITLE       "Встановити браузером за замовчуванням"
+    IDS_SET_DEFAULT_MSG         "Будь ласка, виберіть Browser Selector як браузер за замовчуванням.\n\nКроки в налаштуваннях Windows:\n1. Прокрутіть до 'Веб-браузер'\n2. Натисніть на поточний браузер\n3. Виберіть 'BrowserSelector' зі списку"
+    IDS_VERIFY_TITLE            "Перевірка"
+    IDS_VERIFY_MSG              "Відкрито налаштування Windows для ручного вибору.\n\nПісля вибору Browser Selector натисніть 'Так' для перевірки.\n\nВи завершили вибір?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector тепер ваш браузер за замовчуванням!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector ще не встановлено за замовчуванням.\n\nБудь ласка, виберіть 'BrowserSelector' в налаштуваннях Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Не вдалося завантажити конфігурацію"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Не вдалося завантажити конфігурацію.\n\nБуде створено config.json за замовчуванням."
+    IDS_CONFIG_CREATE_FAILED    "Не вдалося створити конфігурацію за замовчуванням."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Не вдалося завантажити конфігурацію після створення."
+    IDS_NO_BROWSERS_TITLE       "Немає браузерів"
+    IDS_NO_BROWSERS_MSG         "Браузери не налаштовані.\n\nВідкриється вікно налаштувань для додавання браузерів."
+    IDS_WINDOW_CREATE_FAILED    "Не вдалося створити головне вікно."
+END
+
+
+// ============================================================================
+// GERMAN - LANG_GERMAN, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_GERMAN, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Browser-Auswahl"
+    IDS_SETTINGS_BTN            "Einstellungen"
+    IDS_SET_DEFAULT_BTN         "Als Standard festlegen"
+    IDS_UNREGISTER_BTN          "Registrierung aufheben"
+    IDS_COUNTDOWN_SECONDS       "Standardbrowser wird in %d Sekunden geöffnet..."
+    IDS_COUNTDOWN_SECOND        "Standardbrowser wird in 1 Sekunde geöffnet..."
+    IDS_COUNTDOWN_NOW           "Standardbrowser wird jetzt geöffnet..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Einstellungen - Browser-Auswahl"
+    IDS_ADD_BTN                 "Hinzufügen"
+    IDS_EDIT_BTN                "Bearbeiten"
+    IDS_DELETE_BTN              "Löschen"
+    IDS_MOVE_UP_BTN             "Nach oben"
+    IDS_MOVE_DOWN_BTN           "Nach unten"
+    IDS_SET_DEFAULT_CMD_BTN     "Als Standard"
+    IDS_CLOSE_BTN               "Schließen"
+    IDS_WAITTIME_LABEL          "Wartezeit (1-10 Sek):"
+    IDS_DEFAULT_MARKER          "[Standard]"
+    IDS_MAX_COMMANDS_WARNING    "Maximale Anzahl an Befehlen erreicht"
+    IDS_CONFIRM_DELETE_TITLE    "Löschen bestätigen"
+    IDS_CONFIRM_DELETE_MSG      "'%s' löschen?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Browser hinzufügen"
+    IDS_EDIT_BROWSER_TITLE      "Browser bearbeiten"
+    IDS_NAME_LABEL              "Name:"
+    IDS_COMMAND_LABEL           "Befehl:"
+    IDS_ARGUMENTS_LABEL         "Argumente:"
+    IDS_URL_PLACEHOLDER_HINT    "Verwenden Sie {url} als Platzhalter für die URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Abbrechen"
+    IDS_BROWSE_TITLE            "Browser-Programm auswählen"
+    IDS_BROWSE_FILTER_EXE       "Ausführbare Dateien (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Alle Dateien (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Name darf nicht leer sein"
+    IDS_VALIDATION_CMD_EMPTY    "Befehl darf nicht leer sein"
+    IDS_VALIDATION_ERROR_TITLE  "Validierungsfehler"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Fehler"
+    IDS_WARNING                 "Warnung"
+    IDS_SUCCESS                 "Erfolg"
+    IDS_CMD_NOT_FOUND           "Befehl nicht gefunden: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Stellen Sie sicher, dass das Programm installiert und im PATH ist, oder verwenden Sie einen absoluten Pfad."
+    IDS_LAUNCH_FAILED           "Starten fehlgeschlagen: %s\nFehlercode: %lu"
+    IDS_MEMORY_ERROR            "Speicherzuweisung fehlgeschlagen"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registrierung erfolgreich"
+    IDS_REG_SUCCESS_MSG         "Browser Selector wurde als Standardbrowser festgelegt!\n\nAlle Weblinks werden nun über Browser Selector geöffnet."
+    IDS_REG_FAILED_TITLE        "Registrierung fehlgeschlagen"
+    IDS_REG_FAILED_MSG          "Browser Selector konnte nicht registriert werden.\n\nVersuchen Sie, als Administrator auszuführen."
+    IDS_UNREG_SUCCESS_TITLE     "Registrierung aufgehoben"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector wurde abgemeldet.\n\nEr erscheint nicht mehr in der Liste der verfügbaren Browser."
+    IDS_UNREG_FAILED_TITLE      "Aufheben fehlgeschlagen"
+    IDS_UNREG_FAILED_MSG        "Browser Selector konnte nicht abgemeldet werden.\n\nBitte überprüfen Sie die Berechtigungen und versuchen Sie es erneut."
+    IDS_SET_DEFAULT_TITLE       "Als Standardbrowser festlegen"
+    IDS_SET_DEFAULT_MSG         "Bitte wählen Sie Browser Selector als Standardbrowser.\n\nSchritte in Windows-Einstellungen:\n1. Scrollen Sie zu 'Webbrowser'\n2. Klicken Sie auf den aktuellen Browser\n3. Wählen Sie 'BrowserSelector' aus der Liste"
+    IDS_VERIFY_TITLE            "Überprüfung"
+    IDS_VERIFY_MSG              "Windows-Einstellungen wurden zur manuellen Auswahl geöffnet.\n\nNach Auswahl von Browser Selector klicken Sie auf 'Ja' zur Überprüfung.\n\nHaben Sie die Auswahl abgeschlossen?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector ist jetzt Ihr Standardbrowser!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector ist noch nicht als Standard festgelegt.\n\nBitte wählen Sie 'BrowserSelector' in den Windows-Einstellungen."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Konfiguration konnte nicht geladen werden"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Konfiguration konnte nicht geladen werden.\n\nEine Standard-config.json wird erstellt."
+    IDS_CONFIG_CREATE_FAILED    "Standardkonfiguration konnte nicht erstellt werden."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Konfiguration konnte nach dem Erstellen nicht geladen werden."
+    IDS_NO_BROWSERS_TITLE       "Keine Browser"
+    IDS_NO_BROWSERS_MSG         "Keine Browser konfiguriert.\n\nDas Einstellungsfenster wird zum Hinzufügen von Browsern geöffnet."
+    IDS_WINDOW_CREATE_FAILED    "Hauptfenster konnte nicht erstellt werden."
+END
+
+
+// ============================================================================
+// FRENCH - LANG_FRENCH, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_FRENCH, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Sélecteur de navigateur"
+    IDS_SETTINGS_BTN            "Paramètres"
+    IDS_SET_DEFAULT_BTN         "Définir par défaut"
+    IDS_UNREGISTER_BTN          "Annuler l'inscription"
+    IDS_COUNTDOWN_SECONDS       "Ouverture du navigateur par défaut dans %d secondes..."
+    IDS_COUNTDOWN_SECOND        "Ouverture du navigateur par défaut dans 1 seconde..."
+    IDS_COUNTDOWN_NOW           "Ouverture du navigateur par défaut..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Paramètres - Sélecteur de navigateur"
+    IDS_ADD_BTN                 "Ajouter"
+    IDS_EDIT_BTN                "Modifier"
+    IDS_DELETE_BTN              "Supprimer"
+    IDS_MOVE_UP_BTN             "Monter"
+    IDS_MOVE_DOWN_BTN           "Descendre"
+    IDS_SET_DEFAULT_CMD_BTN     "Par défaut"
+    IDS_CLOSE_BTN               "Fermer"
+    IDS_WAITTIME_LABEL          "Délai d'attente (1-10 sec):"
+    IDS_DEFAULT_MARKER          "[par défaut]"
+    IDS_MAX_COMMANDS_WARNING    "Nombre maximum de commandes atteint"
+    IDS_CONFIRM_DELETE_TITLE    "Confirmer la suppression"
+    IDS_CONFIRM_DELETE_MSG      "Supprimer '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Ajouter un navigateur"
+    IDS_EDIT_BROWSER_TITLE      "Modifier le navigateur"
+    IDS_NAME_LABEL              "Nom:"
+    IDS_COMMAND_LABEL           "Commande:"
+    IDS_ARGUMENTS_LABEL         "Arguments:"
+    IDS_URL_PLACEHOLDER_HINT    "Utilisez {url} comme espace réservé pour l'URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Annuler"
+    IDS_BROWSE_TITLE            "Sélectionner l'exécutable du navigateur"
+    IDS_BROWSE_FILTER_EXE       "Fichiers exécutables (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Tous les fichiers (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Le nom ne peut pas être vide"
+    IDS_VALIDATION_CMD_EMPTY    "La commande ne peut pas être vide"
+    IDS_VALIDATION_ERROR_TITLE  "Erreur de validation"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Erreur"
+    IDS_WARNING                 "Avertissement"
+    IDS_SUCCESS                 "Succès"
+    IDS_CMD_NOT_FOUND           "Commande non trouvée: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Assurez-vous que le programme est installé et dans le PATH, ou utilisez un chemin absolu."
+    IDS_LAUNCH_FAILED           "Échec du lancement: %s\nCode d'erreur: %lu"
+    IDS_MEMORY_ERROR            "Échec de l'allocation de mémoire"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Inscription réussie"
+    IDS_REG_SUCCESS_MSG         "Browser Selector est maintenant votre navigateur par défaut!\n\nTous les liens web s'ouvriront via Browser Selector."
+    IDS_REG_FAILED_TITLE        "Échec de l'inscription"
+    IDS_REG_FAILED_MSG          "Impossible d'inscrire Browser Selector.\n\nEssayez d'exécuter en tant qu'administrateur."
+    IDS_UNREG_SUCCESS_TITLE     "Désinscription réussie"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector a été désinscrit.\n\nIl n'apparaîtra plus dans la liste des navigateurs disponibles."
+    IDS_UNREG_FAILED_TITLE      "Échec de la désinscription"
+    IDS_UNREG_FAILED_MSG        "Impossible de désinscrire Browser Selector.\n\nVérifiez les autorisations et réessayez."
+    IDS_SET_DEFAULT_TITLE       "Définir comme navigateur par défaut"
+    IDS_SET_DEFAULT_MSG         "Veuillez sélectionner Browser Selector comme navigateur par défaut.\n\nÉtapes dans les paramètres Windows:\n1. Faites défiler jusqu'à 'Navigateur web'\n2. Cliquez sur le navigateur actuel\n3. Sélectionnez 'BrowserSelector' dans la liste"
+    IDS_VERIFY_TITLE            "Vérification"
+    IDS_VERIFY_MSG              "Les paramètres Windows ont été ouverts pour la sélection manuelle.\n\nAprès avoir sélectionné Browser Selector, cliquez sur 'Oui' pour vérifier.\n\nAvez-vous terminé la sélection?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector est maintenant votre navigateur par défaut!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector n'est pas encore défini par défaut.\n\nVeuillez sélectionner 'BrowserSelector' dans les paramètres Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Échec du chargement de la configuration"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Échec du chargement de la configuration.\n\nUn config.json par défaut sera créé."
+    IDS_CONFIG_CREATE_FAILED    "Échec de la création de la configuration par défaut."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Échec du chargement de la configuration après création."
+    IDS_NO_BROWSERS_TITLE       "Aucun navigateur"
+    IDS_NO_BROWSERS_MSG         "Aucun navigateur configuré.\n\nLa fenêtre des paramètres s'ouvrira pour ajouter des navigateurs."
+    IDS_WINDOW_CREATE_FAILED    "Échec de la création de la fenêtre principale."
+END
+
+
+// ============================================================================
+// SPANISH - LANG_SPANISH, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_SPANISH, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Selector de navegador"
+    IDS_SETTINGS_BTN            "Configuración"
+    IDS_SET_DEFAULT_BTN         "Establecer por defecto"
+    IDS_UNREGISTER_BTN          "Anular registro"
+    IDS_COUNTDOWN_SECONDS       "Abriendo navegador predeterminado en %d segundos..."
+    IDS_COUNTDOWN_SECOND        "Abriendo navegador predeterminado en 1 segundo..."
+    IDS_COUNTDOWN_NOW           "Abriendo navegador predeterminado..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Configuración - Selector de navegador"
+    IDS_ADD_BTN                 "Añadir"
+    IDS_EDIT_BTN                "Editar"
+    IDS_DELETE_BTN              "Eliminar"
+    IDS_MOVE_UP_BTN             "Subir"
+    IDS_MOVE_DOWN_BTN           "Bajar"
+    IDS_SET_DEFAULT_CMD_BTN     "Por defecto"
+    IDS_CLOSE_BTN               "Cerrar"
+    IDS_WAITTIME_LABEL          "Tiempo de espera (1-10 seg):"
+    IDS_DEFAULT_MARKER          "[por defecto]"
+    IDS_MAX_COMMANDS_WARNING    "Número máximo de comandos alcanzado"
+    IDS_CONFIRM_DELETE_TITLE    "Confirmar eliminación"
+    IDS_CONFIRM_DELETE_MSG      "¿Eliminar '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Añadir navegador"
+    IDS_EDIT_BROWSER_TITLE      "Editar navegador"
+    IDS_NAME_LABEL              "Nombre:"
+    IDS_COMMAND_LABEL           "Comando:"
+    IDS_ARGUMENTS_LABEL         "Argumentos:"
+    IDS_URL_PLACEHOLDER_HINT    "Use {url} como marcador para la URL"
+    IDS_OK_BTN                  "Aceptar"
+    IDS_CANCEL_BTN              "Cancelar"
+    IDS_BROWSE_TITLE            "Seleccionar ejecutable del navegador"
+    IDS_BROWSE_FILTER_EXE       "Archivos ejecutables (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Todos los archivos (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "El nombre no puede estar vacío"
+    IDS_VALIDATION_CMD_EMPTY    "El comando no puede estar vacío"
+    IDS_VALIDATION_ERROR_TITLE  "Error de validación"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Error"
+    IDS_WARNING                 "Advertencia"
+    IDS_SUCCESS                 "Éxito"
+    IDS_CMD_NOT_FOUND           "Comando no encontrado: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Asegúrese de que el programa está instalado y en el PATH, o use una ruta absoluta."
+    IDS_LAUNCH_FAILED           "Error al iniciar: %s\nCódigo de error: %lu"
+    IDS_MEMORY_ERROR            "Error al asignar memoria"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registro exitoso"
+    IDS_REG_SUCCESS_MSG         "¡Browser Selector se ha establecido como su navegador predeterminado!\n\nTodos los enlaces web se abrirán a través de Browser Selector."
+    IDS_REG_FAILED_TITLE        "Error de registro"
+    IDS_REG_FAILED_MSG          "No se pudo registrar Browser Selector.\n\nIntente ejecutar como administrador."
+    IDS_UNREG_SUCCESS_TITLE     "Anulación de registro exitosa"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector ha sido dado de baja.\n\nYa no aparecerá en la lista de navegadores disponibles."
+    IDS_UNREG_FAILED_TITLE      "Error al anular registro"
+    IDS_UNREG_FAILED_MSG        "No se pudo anular el registro de Browser Selector.\n\nVerifique los permisos e intente de nuevo."
+    IDS_SET_DEFAULT_TITLE       "Establecer como navegador predeterminado"
+    IDS_SET_DEFAULT_MSG         "Por favor, seleccione Browser Selector como su navegador predeterminado.\n\nPasos en Configuración de Windows:\n1. Desplácese hasta 'Navegador web'\n2. Haga clic en el navegador actual\n3. Seleccione 'BrowserSelector' de la lista"
+    IDS_VERIFY_TITLE            "Verificación"
+    IDS_VERIFY_MSG              "La Configuración de Windows se ha abierto para selección manual.\n\nDespués de seleccionar Browser Selector, haga clic en 'Sí' para verificar.\n\n¿Ha completado la selección?"
+    IDS_NOW_DEFAULT_MSG         "¡Browser Selector es ahora su navegador predeterminado!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector aún no está establecido por defecto.\n\nPor favor, seleccione 'BrowserSelector' en la Configuración de Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Error al cargar la configuración"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Error al cargar la configuración.\n\nSe creará un config.json predeterminado."
+    IDS_CONFIG_CREATE_FAILED    "Error al crear la configuración predeterminada."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Error al cargar la configuración después de crearla."
+    IDS_NO_BROWSERS_TITLE       "Sin navegadores"
+    IDS_NO_BROWSERS_MSG         "No hay navegadores configurados.\n\nSe abrirá la ventana de configuración para añadir navegadores."
+    IDS_WINDOW_CREATE_FAILED    "Error al crear la ventana principal."
+END
+
+
+// ============================================================================
+// ITALIAN - LANG_ITALIAN, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_ITALIAN, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Selettore browser"
+    IDS_SETTINGS_BTN            "Impostazioni"
+    IDS_SET_DEFAULT_BTN         "Imposta predefinito"
+    IDS_UNREGISTER_BTN          "Annulla registrazione"
+    IDS_COUNTDOWN_SECONDS       "Apertura browser predefinito tra %d secondi..."
+    IDS_COUNTDOWN_SECOND        "Apertura browser predefinito tra 1 secondo..."
+    IDS_COUNTDOWN_NOW           "Apertura browser predefinito..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Impostazioni - Selettore browser"
+    IDS_ADD_BTN                 "Aggiungi"
+    IDS_EDIT_BTN                "Modifica"
+    IDS_DELETE_BTN              "Elimina"
+    IDS_MOVE_UP_BTN             "Sposta su"
+    IDS_MOVE_DOWN_BTN           "Sposta giù"
+    IDS_SET_DEFAULT_CMD_BTN     "Predefinito"
+    IDS_CLOSE_BTN               "Chiudi"
+    IDS_WAITTIME_LABEL          "Tempo di attesa (1-10 sec):"
+    IDS_DEFAULT_MARKER          "[predefinito]"
+    IDS_MAX_COMMANDS_WARNING    "Numero massimo di comandi raggiunto"
+    IDS_CONFIRM_DELETE_TITLE    "Conferma eliminazione"
+    IDS_CONFIRM_DELETE_MSG      "Eliminare '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Aggiungi browser"
+    IDS_EDIT_BROWSER_TITLE      "Modifica browser"
+    IDS_NAME_LABEL              "Nome:"
+    IDS_COMMAND_LABEL           "Comando:"
+    IDS_ARGUMENTS_LABEL         "Argomenti:"
+    IDS_URL_PLACEHOLDER_HINT    "Usa {url} come segnaposto per l'URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Annulla"
+    IDS_BROWSE_TITLE            "Seleziona eseguibile del browser"
+    IDS_BROWSE_FILTER_EXE       "File eseguibili (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Tutti i file (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Il nome non può essere vuoto"
+    IDS_VALIDATION_CMD_EMPTY    "Il comando non può essere vuoto"
+    IDS_VALIDATION_ERROR_TITLE  "Errore di validazione"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Errore"
+    IDS_WARNING                 "Avviso"
+    IDS_SUCCESS                 "Successo"
+    IDS_CMD_NOT_FOUND           "Comando non trovato: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Assicurati che il programma sia installato e nel PATH, o usa un percorso assoluto."
+    IDS_LAUNCH_FAILED           "Avvio fallito: %s\nCodice errore: %lu"
+    IDS_MEMORY_ERROR            "Allocazione memoria fallita"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registrazione riuscita"
+    IDS_REG_SUCCESS_MSG         "Browser Selector è stato impostato come browser predefinito!\n\nTutti i link web si apriranno tramite Browser Selector."
+    IDS_REG_FAILED_TITLE        "Registrazione fallita"
+    IDS_REG_FAILED_MSG          "Impossibile registrare Browser Selector.\n\nProva ad eseguire come amministratore."
+    IDS_UNREG_SUCCESS_TITLE     "Annullamento registrazione riuscito"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector è stato rimosso.\n\nNon apparirà più nell'elenco dei browser disponibili."
+    IDS_UNREG_FAILED_TITLE      "Annullamento fallito"
+    IDS_UNREG_FAILED_MSG        "Impossibile annullare la registrazione di Browser Selector.\n\nControlla i permessi e riprova."
+    IDS_SET_DEFAULT_TITLE       "Imposta come browser predefinito"
+    IDS_SET_DEFAULT_MSG         "Seleziona Browser Selector come browser predefinito.\n\nPassaggi nelle Impostazioni Windows:\n1. Scorri fino a 'Browser web'\n2. Clicca sul browser attuale\n3. Seleziona 'BrowserSelector' dalla lista"
+    IDS_VERIFY_TITLE            "Verifica"
+    IDS_VERIFY_MSG              "Le Impostazioni Windows sono state aperte per la selezione manuale.\n\nDopo aver selezionato Browser Selector, clicca 'Sì' per verificare.\n\nHai completato la selezione?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector è ora il tuo browser predefinito!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector non è ancora impostato come predefinito.\n\nSeleziona 'BrowserSelector' nelle Impostazioni Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Caricamento configurazione fallito"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Caricamento configurazione fallito.\n\nVerrà creato un config.json predefinito."
+    IDS_CONFIG_CREATE_FAILED    "Creazione configurazione predefinita fallita."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Caricamento configurazione fallito dopo la creazione."
+    IDS_NO_BROWSERS_TITLE       "Nessun browser"
+    IDS_NO_BROWSERS_MSG         "Nessun browser configurato.\n\nSi aprirà la finestra impostazioni per aggiungere browser."
+    IDS_WINDOW_CREATE_FAILED    "Creazione finestra principale fallita."
+END
+
+
+// ============================================================================
+// POLISH - LANG_POLISH, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Wybór przeglądarki"
+    IDS_SETTINGS_BTN            "Ustawienia"
+    IDS_SET_DEFAULT_BTN         "Ustaw jako domyślną"
+    IDS_UNREGISTER_BTN          "Wyrejestruj"
+    IDS_COUNTDOWN_SECONDS       "Otwarcie domyślnej przeglądarki za %d sekund..."
+    IDS_COUNTDOWN_SECOND        "Otwarcie domyślnej przeglądarki za 1 sekundę..."
+    IDS_COUNTDOWN_NOW           "Otwieranie domyślnej przeglądarki..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Ustawienia - Wybór przeglądarki"
+    IDS_ADD_BTN                 "Dodaj"
+    IDS_EDIT_BTN                "Edytuj"
+    IDS_DELETE_BTN              "Usuń"
+    IDS_MOVE_UP_BTN             "W górę"
+    IDS_MOVE_DOWN_BTN           "W dół"
+    IDS_SET_DEFAULT_CMD_BTN     "Domyślna"
+    IDS_CLOSE_BTN               "Zamknij"
+    IDS_WAITTIME_LABEL          "Czas oczekiwania (1-10 sek):"
+    IDS_DEFAULT_MARKER          "[domyślna]"
+    IDS_MAX_COMMANDS_WARNING    "Osiągnięto maksymalną liczbę poleceń"
+    IDS_CONFIRM_DELETE_TITLE    "Potwierdź usunięcie"
+    IDS_CONFIRM_DELETE_MSG      "Usunąć '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Dodaj przeglądarkę"
+    IDS_EDIT_BROWSER_TITLE      "Edytuj przeglądarkę"
+    IDS_NAME_LABEL              "Nazwa:"
+    IDS_COMMAND_LABEL           "Polecenie:"
+    IDS_ARGUMENTS_LABEL         "Argumenty:"
+    IDS_URL_PLACEHOLDER_HINT    "Użyj {url} jako znacznika dla adresu URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Anuluj"
+    IDS_BROWSE_TITLE            "Wybierz plik wykonywalny przeglądarki"
+    IDS_BROWSE_FILTER_EXE       "Pliki wykonywalne (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Wszystkie pliki (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Nazwa nie może być pusta"
+    IDS_VALIDATION_CMD_EMPTY    "Polecenie nie może być puste"
+    IDS_VALIDATION_ERROR_TITLE  "Błąd walidacji"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Błąd"
+    IDS_WARNING                 "Ostrzeżenie"
+    IDS_SUCCESS                 "Sukces"
+    IDS_CMD_NOT_FOUND           "Nie znaleziono polecenia: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Upewnij się, że program jest zainstalowany i w PATH, lub użyj ścieżki bezwzględnej."
+    IDS_LAUNCH_FAILED           "Uruchomienie nie powiodło się: %s\nKod błędu: %lu"
+    IDS_MEMORY_ERROR            "Nie udało się przydzielić pamięci"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Rejestracja udana"
+    IDS_REG_SUCCESS_MSG         "Browser Selector został ustawiony jako domyślna przeglądarka!\n\nWszystkie linki będą otwierane przez Browser Selector."
+    IDS_REG_FAILED_TITLE        "Rejestracja nie powiodła się"
+    IDS_REG_FAILED_MSG          "Nie udało się zarejestrować Browser Selector.\n\nSpróbuj uruchomić jako administrator."
+    IDS_UNREG_SUCCESS_TITLE     "Wyrejestrowanie udane"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector został wyrejestrowany.\n\nNie będzie już widoczny na liście dostępnych przeglądarek."
+    IDS_UNREG_FAILED_TITLE      "Wyrejestrowanie nie powiodło się"
+    IDS_UNREG_FAILED_MSG        "Nie udało się wyrejestrować Browser Selector.\n\nSprawdź uprawnienia i spróbuj ponownie."
+    IDS_SET_DEFAULT_TITLE       "Ustaw jako domyślną przeglądarkę"
+    IDS_SET_DEFAULT_MSG         "Wybierz Browser Selector jako domyślną przeglądarkę.\n\nKroki w Ustawieniach Windows:\n1. Przewiń do 'Przeglądarka internetowa'\n2. Kliknij bieżącą przeglądarkę\n3. Wybierz 'BrowserSelector' z listy"
+    IDS_VERIFY_TITLE            "Weryfikacja"
+    IDS_VERIFY_MSG              "Ustawienia Windows zostały otwarte do ręcznego wyboru.\n\nPo wybraniu Browser Selector kliknij 'Tak' aby zweryfikować.\n\nCzy zakończyłeś wybór?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector jest teraz Twoją domyślną przeglądarką!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector nie jest jeszcze ustawiony jako domyślny.\n\nWybierz 'BrowserSelector' w Ustawieniach Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Nie udało się wczytać konfiguracji"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Nie udało się wczytać konfiguracji.\n\nZostanie utworzony domyślny config.json."
+    IDS_CONFIG_CREATE_FAILED    "Nie udało się utworzyć domyślnej konfiguracji."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Nie udało się wczytać konfiguracji po utworzeniu."
+    IDS_NO_BROWSERS_TITLE       "Brak przeglądarek"
+    IDS_NO_BROWSERS_MSG         "Nie skonfigurowano przeglądarek.\n\nOkno ustawień otworzy się aby dodać przeglądarki."
+    IDS_WINDOW_CREATE_FAILED    "Nie udało się utworzyć głównego okna."
+END
+
+
+// ============================================================================
+// DUTCH - LANG_DUTCH, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_DUTCH, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Browser Kiezer"
+    IDS_SETTINGS_BTN            "Instellingen"
+    IDS_SET_DEFAULT_BTN         "Als standaard instellen"
+    IDS_UNREGISTER_BTN          "Registratie opheffen"
+    IDS_COUNTDOWN_SECONDS       "Standaardbrowser openen over %d seconden..."
+    IDS_COUNTDOWN_SECOND        "Standaardbrowser openen over 1 seconde..."
+    IDS_COUNTDOWN_NOW           "Standaardbrowser wordt geopend..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Instellingen - Browser Kiezer"
+    IDS_ADD_BTN                 "Toevoegen"
+    IDS_EDIT_BTN                "Bewerken"
+    IDS_DELETE_BTN              "Verwijderen"
+    IDS_MOVE_UP_BTN             "Omhoog"
+    IDS_MOVE_DOWN_BTN           "Omlaag"
+    IDS_SET_DEFAULT_CMD_BTN     "Standaard"
+    IDS_CLOSE_BTN               "Sluiten"
+    IDS_WAITTIME_LABEL          "Wachttijd (1-10 sec):"
+    IDS_DEFAULT_MARKER          "[standaard]"
+    IDS_MAX_COMMANDS_WARNING    "Maximum aantal opdrachten bereikt"
+    IDS_CONFIRM_DELETE_TITLE    "Verwijderen bevestigen"
+    IDS_CONFIRM_DELETE_MSG      "'%s' verwijderen?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Browser toevoegen"
+    IDS_EDIT_BROWSER_TITLE      "Browser bewerken"
+    IDS_NAME_LABEL              "Naam:"
+    IDS_COMMAND_LABEL           "Opdracht:"
+    IDS_ARGUMENTS_LABEL         "Argumenten:"
+    IDS_URL_PLACEHOLDER_HINT    "Gebruik {url} als tijdelijke aanduiding voor de URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Annuleren"
+    IDS_BROWSE_TITLE            "Browser-uitvoerbestand selecteren"
+    IDS_BROWSE_FILTER_EXE       "Uitvoerbare bestanden (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Alle bestanden (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "Naam mag niet leeg zijn"
+    IDS_VALIDATION_CMD_EMPTY    "Opdracht mag niet leeg zijn"
+    IDS_VALIDATION_ERROR_TITLE  "Validatiefout"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Fout"
+    IDS_WARNING                 "Waarschuwing"
+    IDS_SUCCESS                 "Succes"
+    IDS_CMD_NOT_FOUND           "Opdracht niet gevonden: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Zorg ervoor dat het programma is geïnstalleerd en in het PATH staat, of gebruik een absoluut pad."
+    IDS_LAUNCH_FAILED           "Starten mislukt: %s\nFoutcode: %lu"
+    IDS_MEMORY_ERROR            "Geheugentoewijzing mislukt"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registratie geslaagd"
+    IDS_REG_SUCCESS_MSG         "Browser Selector is ingesteld als uw standaardbrowser!\n\nAlle weblinks worden nu geopend via Browser Selector."
+    IDS_REG_FAILED_TITLE        "Registratie mislukt"
+    IDS_REG_FAILED_MSG          "Kan Browser Selector niet registreren.\n\nProbeer als administrator uit te voeren."
+    IDS_UNREG_SUCCESS_TITLE     "Registratie opgeheven"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector is uitgeschreven.\n\nHet verschijnt niet meer in de lijst met beschikbare browsers."
+    IDS_UNREG_FAILED_TITLE      "Opheffen mislukt"
+    IDS_UNREG_FAILED_MSG        "Kan registratie van Browser Selector niet opheffen.\n\nControleer de machtigingen en probeer opnieuw."
+    IDS_SET_DEFAULT_TITLE       "Als standaardbrowser instellen"
+    IDS_SET_DEFAULT_MSG         "Selecteer Browser Selector als uw standaardbrowser.\n\nStappen in Windows-instellingen:\n1. Scroll naar 'Webbrowser'\n2. Klik op de huidige browser\n3. Selecteer 'BrowserSelector' uit de lijst"
+    IDS_VERIFY_TITLE            "Verificatie"
+    IDS_VERIFY_MSG              "Windows-instellingen zijn geopend voor handmatige selectie.\n\nNa het selecteren van Browser Selector, klik op 'Ja' om te verifiëren.\n\nHeeft u de selectie voltooid?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector is nu uw standaardbrowser!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector is nog niet als standaard ingesteld.\n\nSelecteer 'BrowserSelector' in Windows-instellingen."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Configuratie laden mislukt"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Configuratie laden mislukt.\n\nEen standaard config.json wordt aangemaakt."
+    IDS_CONFIG_CREATE_FAILED    "Standaardconfiguratie aanmaken mislukt."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Configuratie laden mislukt na aanmaken."
+    IDS_NO_BROWSERS_TITLE       "Geen browsers"
+    IDS_NO_BROWSERS_MSG         "Geen browsers geconfigureerd.\n\nHet instellingenvenster wordt geopend om browsers toe te voegen."
+    IDS_WINDOW_CREATE_FAILED    "Hoofdvenster aanmaken mislukt."
+END
+
+
+// ============================================================================
+// PORTUGUESE - LANG_PORTUGUESE, SUBLANG_DEFAULT
+// ============================================================================
+LANGUAGE LANG_PORTUGUESE, SUBLANG_DEFAULT
+#pragma code_page(65001)
+
+STRINGTABLE
+BEGIN
+    // Main window
+    IDS_APP_TITLE               "Seletor de Navegador"
+    IDS_SETTINGS_BTN            "Configurações"
+    IDS_SET_DEFAULT_BTN         "Definir como padrão"
+    IDS_UNREGISTER_BTN          "Cancelar registro"
+    IDS_COUNTDOWN_SECONDS       "Abrindo navegador padrão em %d segundos..."
+    IDS_COUNTDOWN_SECOND        "Abrindo navegador padrão em 1 segundo..."
+    IDS_COUNTDOWN_NOW           "Abrindo navegador padrão..."
+END
+
+STRINGTABLE
+BEGIN
+    // Settings window
+    IDS_SETTINGS_TITLE          "Configurações - Seletor de Navegador"
+    IDS_ADD_BTN                 "Adicionar"
+    IDS_EDIT_BTN                "Editar"
+    IDS_DELETE_BTN              "Excluir"
+    IDS_MOVE_UP_BTN             "Mover acima"
+    IDS_MOVE_DOWN_BTN           "Mover abaixo"
+    IDS_SET_DEFAULT_CMD_BTN     "Padrão"
+    IDS_CLOSE_BTN               "Fechar"
+    IDS_WAITTIME_LABEL          "Tempo de espera (1-10 seg):"
+    IDS_DEFAULT_MARKER          "[padrão]"
+    IDS_MAX_COMMANDS_WARNING    "Número máximo de comandos atingido"
+    IDS_CONFIRM_DELETE_TITLE    "Confirmar exclusão"
+    IDS_CONFIRM_DELETE_MSG      "Excluir '%s'?"
+END
+
+STRINGTABLE
+BEGIN
+    // Command editor
+    IDS_ADD_BROWSER_TITLE       "Adicionar navegador"
+    IDS_EDIT_BROWSER_TITLE      "Editar navegador"
+    IDS_NAME_LABEL              "Nome:"
+    IDS_COMMAND_LABEL           "Comando:"
+    IDS_ARGUMENTS_LABEL         "Argumentos:"
+    IDS_URL_PLACEHOLDER_HINT    "Use {url} como marcador para a URL"
+    IDS_OK_BTN                  "OK"
+    IDS_CANCEL_BTN              "Cancelar"
+    IDS_BROWSE_TITLE            "Selecionar executável do navegador"
+    IDS_BROWSE_FILTER_EXE       "Arquivos executáveis (*.exe)"
+    IDS_BROWSE_FILTER_ALL       "Todos os arquivos (*.*)"
+    IDS_VALIDATION_NAME_EMPTY   "O nome não pode estar vazio"
+    IDS_VALIDATION_CMD_EMPTY    "O comando não pode estar vazio"
+    IDS_VALIDATION_ERROR_TITLE  "Erro de validação"
+END
+
+STRINGTABLE
+BEGIN
+    // Error messages
+    IDS_ERROR                   "Erro"
+    IDS_WARNING                 "Aviso"
+    IDS_SUCCESS                 "Sucesso"
+    IDS_CMD_NOT_FOUND           "Comando não encontrado: %s"
+    IDS_CMD_NOT_FOUND_HINT      "Certifique-se de que o programa está instalado e no PATH, ou use um caminho absoluto."
+    IDS_LAUNCH_FAILED           "Falha ao iniciar: %s\nCódigo de erro: %lu"
+    IDS_MEMORY_ERROR            "Falha na alocação de memória"
+END
+
+STRINGTABLE
+BEGIN
+    // Registration messages
+    IDS_REG_SUCCESS_TITLE       "Registro bem-sucedido"
+    IDS_REG_SUCCESS_MSG         "Browser Selector foi definido como seu navegador padrão!\n\nTodos os links serão abertos através do Browser Selector."
+    IDS_REG_FAILED_TITLE        "Falha no registro"
+    IDS_REG_FAILED_MSG          "Não foi possível registrar o Browser Selector.\n\nTente executar como administrador."
+    IDS_UNREG_SUCCESS_TITLE     "Cancelamento de registro bem-sucedido"
+    IDS_UNREG_SUCCESS_MSG       "Browser Selector foi removido.\n\nEle não aparecerá mais na lista de navegadores disponíveis."
+    IDS_UNREG_FAILED_TITLE      "Falha no cancelamento"
+    IDS_UNREG_FAILED_MSG        "Não foi possível cancelar o registro do Browser Selector.\n\nVerifique as permissões e tente novamente."
+    IDS_SET_DEFAULT_TITLE       "Definir como navegador padrão"
+    IDS_SET_DEFAULT_MSG         "Selecione Browser Selector como seu navegador padrão.\n\nPassos nas Configurações do Windows:\n1. Role até 'Navegador da web'\n2. Clique no navegador atual\n3. Selecione 'BrowserSelector' da lista"
+    IDS_VERIFY_TITLE            "Verificação"
+    IDS_VERIFY_MSG              "As Configurações do Windows foram abertas para seleção manual.\n\nApós selecionar Browser Selector, clique em 'Sim' para verificar.\n\nVocê completou a seleção?"
+    IDS_NOW_DEFAULT_MSG         "Browser Selector agora é seu navegador padrão!"
+    IDS_NOT_DEFAULT_MSG         "Browser Selector ainda não está definido como padrão.\n\nSelecione 'BrowserSelector' nas Configurações do Windows."
+END
+
+STRINGTABLE
+BEGIN
+    // Main application messages
+    IDS_CONFIG_LOAD_FAILED      "Falha ao carregar configuração"
+    IDS_CONFIG_LOAD_FAILED_MSG  "Falha ao carregar configuração.\n\nUm config.json padrão será criado."
+    IDS_CONFIG_CREATE_FAILED    "Falha ao criar configuração padrão."
+    IDS_CONFIG_LOAD_RETRY_FAIL  "Falha ao carregar configuração após criação."
+    IDS_NO_BROWSERS_TITLE       "Sem navegadores"
+    IDS_NO_BROWSERS_MSG         "Nenhum navegador configurado.\n\nA janela de configurações será aberta para adicionar navegadores."
+    IDS_WINDOW_CREATE_FAILED    "Falha ao criar janela principal."
+END

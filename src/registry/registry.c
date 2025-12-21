@@ -1,4 +1,5 @@
 #include "registry.h"
+#include "../i18n/i18n.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -224,13 +225,9 @@ BOOL SetAsDefaultBrowser(void) {
     }
     
     // Fallback: Open Windows Settings
-    MessageBoxA(NULL,
-        "Please select Browser Selector as your default browser.\n\n"
-        "Steps in Windows Settings:\n"
-        "1. Scroll to 'Web browser'\n"
-        "2. Click the current browser name\n"
-        "3. Select 'BrowserSelector' from the list",
-        "Set as Default Browser",
+    MessageBoxW(NULL,
+        I18n_GetStringW(IDS_SET_DEFAULT_MSG),
+        I18n_GetStringW(IDS_SET_DEFAULT_TITLE),
         MB_OK | MB_ICONINFORMATION);
     
     ShellExecuteA(NULL, "open", "ms-settings:defaultapps", NULL, NULL, SW_SHOW);

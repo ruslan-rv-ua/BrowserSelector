@@ -1,4 +1,5 @@
 #include "executor.h"
+#include "../i18n/i18n.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -95,16 +96,27 @@ int ExecuteCommand(const Command* command, const char* url) {
     // Prepare arguments with URL substitution
     char* args = ReplaceUrlPlaceholder(command->arguments, url);
     if (!args) {
-        MessageBoxA(NULL, "Failed to allocate memory for arguments", "Error", MB_OK | MB_ICONERROR);
+        MessageBoxW(NULL, I18n_GetStringW(IDS_MEMORY_ERROR), 
+                   I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
         return 0;
     }
     
     // Resolve command path
     char* cmdPath = ResolveCommand(command->command);
     if (!cmdPath) {
-        char error[512];
-        snprintf(error, sizeof(error), "Command not found: %s\n\nMake sure the program is installed and in your PATH, or use an absolute path.", command->command);
-        MessageBoxA(NULL, error, "Error", MB_OK | MB_ICONERROR);
+        wchar_t error[1024];
+        wchar_t wideCmd[MAX_PATH];
+        MultiByteToWideChar(CP_ACP, 0, command->command, -1, wideCmd, MAX_PATH);
+        
+        swprintf(error, 1024, L"%s\n\n%s", 
+                I18n_GetStringW(IDS_CMD_NOT_FOUND), 
+                I18n_GetStringW(IDS_CMD_NOT_FOUND_HINT));
+        
+        // Replace %s with command name
+        wchar_t finalError[1024];
+        swprintf(finalError, 1024, error, wideCmd);
+        
+        MessageBoxW(NULL, finalError, I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
         free(args);
         return 0;
     }
@@ -137,10 +149,12 @@ int ExecuteCommand(const Command* command, const char* url) {
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
     } else {
-        char error[512];
-        snprintf(error, sizeof(error), "Failed to launch: %s\nError code: %lu", 
-                command->command, GetLastError());
-        MessageBoxA(NULL, error, "Error", MB_OK | MB_ICONERROR);
+        wchar_t error[1024];
+        wchar_t wideCmd[MAX_PATH];
+        MultiByteToWideChar(CP_ACP, 0, command->command, -1, wideCmd, MAX_PATH);
+        
+        swprintf(error, 1024, I18n_GetStringW(IDS_LAUNCH_FAILED), wideCmd, GetLastError());
+        MessageBoxW(NULL, error, I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
     }
     
     free(cmdPath);

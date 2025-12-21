@@ -18,6 +18,7 @@
 ## 📱 Key Features
 
 - **👁️ Accessibility first!**: Works with NVDA and Windows Narrator
+- **🌍 Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
 - **🖥️ Clean Interface**
 - **📦 Portable**: Single .exe file with JSON configuration
 - **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
@@ -57,6 +58,24 @@ The application features an auto-open timer that automatically launches the defa
 - **Visual countdown**: Shows remaining seconds in the main window
 - **Cancel on interaction**: Any user action cancels the timer
 - **Settings**: Configure wait time in the settings window
+
+## 🌍 Supported Languages
+
+Browser Selector automatically detects your Windows UI language and displays the interface accordingly:
+
+| Language | Code |
+|----------|------|
+| English | en (default) |
+| Ukrainian | uk |
+| German | de |
+| French | fr |
+| Spanish | es |
+| Italian | it |
+| Polish | pl |
+| Dutch | nl |
+| Portuguese | pt |
+
+If your Windows language is not in this list, the application falls back to English.
 
 ## ⚙️ Browser Configuration
 
@@ -208,14 +227,18 @@ browserselector/
 │   ├── executor/
 │   │   ├── executor.c      # Command execution
 │   │   └── executor.h
-│   └── registry/
-│       ├── registry.c      # Windows registry
-│       └── registry.h
+│   ├── registry/
+│   │   ├── registry.c      # Windows registry
+│   │   └── registry.h
+│   └── i18n/
+│       ├── i18n.c          # Internationalization
+│       └── i18n.h
 ├── include/
 │   ├── cJSON.h             # cJSON library
 │   └── cJSON.c
 ├── resources/
 │   ├── app.rc              # Resource file
+│   ├── strings.rc          # Localized strings (all languages)
 │   └── manifest.xml        # Application manifest
 ├── Makefile
 ├── config.json

@@ -1,6 +1,7 @@
 #include "settings.h"
 #include "commandeditor.h"
 #include "../config/config.h"
+#include "../i18n/i18n.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,15 +34,19 @@ static void RefreshSettingsList(SettingsData* data) {
     SendMessage(data->listBox, LB_RESETCONTENT, 0, 0);
     
     for (int i = 0; i < data->config->commandCount; i++) {
-        char itemText[MAX_NAME_LENGTH + 20];
+        wchar_t itemText[MAX_NAME_LENGTH + 40];
+        wchar_t wideName[MAX_NAME_LENGTH];
+        
+        // Convert name to wide string
+        MultiByteToWideChar(CP_ACP, 0, data->config->commands[i].name, -1, wideName, MAX_NAME_LENGTH);
+        
         if (i == data->config->settings.defaultCommandIndex) {
-            snprintf(itemText, sizeof(itemText), "%s [default]", 
-                    data->config->commands[i].name);
+            swprintf(itemText, sizeof(itemText)/sizeof(wchar_t), L"%s %s", 
+                    wideName, I18n_GetStringW(IDS_DEFAULT_MARKER));
         } else {
-            snprintf(itemText, sizeof(itemText), "%s", 
-                    data->config->commands[i].name);
+            wcscpy(itemText, wideName);
         }
-        SendMessageA(data->listBox, LB_ADDSTRING, 0, (LPARAM)itemText);
+        SendMessageW(data->listBox, LB_ADDSTRING, 0, (LPARAM)itemText);
     }
 }
 
@@ -70,9 +75,9 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
             
             // List box for commands
-            data->listBox = CreateWindowExA(
+            data->listBox = CreateWindowExW(
                 WS_EX_CLIENTEDGE,
-                "LISTBOX",
+                L"LISTBOX",
                 NULL,
                 WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
                 LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
@@ -82,16 +87,16 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             SendMessage(data->listBox, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // WaitTime controls
-            HWND waitTimeLabel = CreateWindowExA(
-                0, "STATIC", "Wait Time (1-10 sec):",
+            HWND waitTimeLabel = CreateWindowExW(
+                0, L"STATIC", I18n_GetStringW(IDS_WAITTIME_LABEL),
                 WS_CHILD | WS_VISIBLE,
                 10, 200, 150, 20,
                 hwnd, (HMENU)ID_WAITTIME_LABEL, cs->hInstance, NULL
             );
             SendMessage(waitTimeLabel, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            data->waitTimeEdit = CreateWindowExA(
-                WS_EX_CLIENTEDGE, "EDIT", "",
+            data->waitTimeEdit = CreateWindowExW(
+                WS_EX_CLIENTEDGE, L"EDIT", L"",
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER | ES_AUTOHSCROLL,
                 170, 200, 50, 20,
                 hwnd, (HMENU)ID_WAITTIME_EDIT, cs->hInstance, NULL
@@ -99,8 +104,8 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             SendMessage(data->waitTimeEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // Create spin control
-            data->waitTimeSpin = CreateWindowExA(
-                0, UPDOWN_CLASS, NULL,
+            data->waitTimeSpin = CreateWindowExW(
+                0, UPDOWN_CLASSW, NULL,
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | UDS_ALIGNRIGHT | UDS_ARROWKEYS | UDS_SETBUDDYINT | UDS_NOTHOUSANDS,
                 220, 200, 20, 20,
                 hwnd, (HMENU)ID_WAITTIME_SPIN, cs->hInstance, NULL
@@ -118,43 +123,43 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             int btnHeight = 26;
             int btnSpacing = 32;
             
-            HWND btn = CreateWindowExA(0, "BUTTON", "Add",
+            HWND btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_ADD_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_ADD_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Edit",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_EDIT_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10 + btnSpacing, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_EDIT_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Delete",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_DELETE_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10 + btnSpacing * 2, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_DELETE_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Move Up",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_MOVE_UP_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10 + btnSpacing * 3, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_MOVE_UP_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Move Down",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_MOVE_DOWN_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10 + btnSpacing * 4, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_MOVE_DOWN_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Set Default",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_SET_DEFAULT_CMD_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 10 + btnSpacing * 5, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_SET_DEFAULT_BTN, cs->hInstance, NULL);
             SendMessage(btn, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            btn = CreateWindowExA(0, "BUTTON", "Close",
+            btn = CreateWindowExW(0, L"BUTTON", I18n_GetStringW(IDS_CLOSE_BTN),
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
                 btnX, 220 - btnHeight, btnWidth, btnHeight,
                 hwnd, (HMENU)ID_CLOSE_BTN, cs->hInstance, NULL);
@@ -228,7 +233,8 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                     
                 case ID_ADD_BTN: {
                     if (data->config->commandCount >= MAX_COMMANDS) {
-                        MessageBoxA(hwnd, "Maximum number of commands reached", "Warning", MB_OK | MB_ICONWARNING);
+                        MessageBoxW(hwnd, I18n_GetStringW(IDS_MAX_COMMANDS_WARNING), 
+                                   I18n_GetStringW(IDS_WARNING), MB_OK | MB_ICONWARNING);
                         break;
                     }
                     
@@ -263,10 +269,14 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                 
                 case ID_DELETE_BTN: {
                     if (sel != LB_ERR && sel < data->config->commandCount) {
-                        char msg[256];
-                        snprintf(msg, sizeof(msg), "Delete '%s'?", data->config->commands[sel].name);
+                        wchar_t msg[512];
+                        wchar_t wideName[MAX_NAME_LENGTH];
+                        MultiByteToWideChar(CP_ACP, 0, data->config->commands[sel].name, -1, wideName, MAX_NAME_LENGTH);
                         
-                        if (MessageBoxA(hwnd, msg, "Confirm Delete", MB_YESNO | MB_ICONQUESTION) == IDYES) {
+                        swprintf(msg, sizeof(msg)/sizeof(wchar_t), I18n_GetStringW(IDS_CONFIRM_DELETE_MSG), wideName);
+                        
+                        if (MessageBoxW(hwnd, msg, I18n_GetStringW(IDS_CONFIRM_DELETE_TITLE), 
+                                       MB_YESNO | MB_ICONQUESTION) == IDYES) {
                             // Shift remaining commands
                             for (int i = sel; i < data->config->commandCount - 1; i++) {
                                 data->config->commands[i] = data->config->commands[i + 1];
@@ -361,16 +371,16 @@ BOOL ShowSettingsWindow(HWND parent, Configuration* config, const char* exePath)
     HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtr(parent, GWLP_HINSTANCE);
     
     // Register window class
-    WNDCLASSEXA wc;
+    WNDCLASSEXW wc;
     ZeroMemory(&wc, sizeof(wc));
-    wc.cbSize = sizeof(WNDCLASSEXA);
+    wc.cbSize = sizeof(WNDCLASSEXW);
     wc.lpfnWndProc = SettingsWindowProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = SETTINGS_CLASS;
+    wc.lpszClassName = L"SettingsWindowClass";
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     
-    RegisterClassExA(&wc);
+    RegisterClassExW(&wc);
     
     // Prepare data
     SettingsData data;
@@ -387,10 +397,10 @@ BOOL ShowSettingsWindow(HWND parent, Configuration* config, const char* exePath)
     int winY = parentRect.top + (parentRect.bottom - parentRect.top - winHeight) / 2;
     
     // Create window
-    HWND hwnd = CreateWindowExA(
+    HWND hwnd = CreateWindowExW(
         WS_EX_DLGMODALFRAME | WS_EX_TOPMOST,
-        SETTINGS_CLASS,
-        "Settings - Browser Selector",
+        L"SettingsWindowClass",
+        I18n_GetStringW(IDS_SETTINGS_TITLE),
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
         winX, winY, winWidth, winHeight,
         parent, NULL, hInstance, &data
