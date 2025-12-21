@@ -4,27 +4,25 @@
 
 ## 🚀 Quick Start
 
-### For Users
-
-1. **Download** `BrowserSelector.exe` and `config.json` to the same folder
+1. **Download** `BrowserSelector.exe` from the [Releases](<releases_url>) page
 2. **Run** `BrowserSelector.exe "https://example.com"` or just `BrowserSelector.exe`
 3. **Select** a browser from the list or wait for automatic opening (10 seconds by default)
 
 ### How to Set as Default Browser
 
 1. Click the **"Set as Default"** button
-2. In Windows Settings, find the **Web browser** section
-3. Click on the current browser name and select **BrowserSelector**
+2. In opened Windows Settings window select **BrowserSelector** as the default web browser
+3. Confirm the changes by clicking "Yes" in Browser Selector
 4. Now all links will open through Browser Selector!
 
 ## 📱 Key Features
 
-- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
-- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
-- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
-- **👁️ Accessibility**: Works with NVDA and Windows Narrator
+- **👁️ Accessibility first!**: Works with NVDA and Windows Narrator
+- **🖥️ Clean Interface**
 - **📦 Portable**: Single .exe file with JSON configuration
-- **🖥️ Clean Interface**: No console window - GUI only
+- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
+- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
+- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
 
 ## 🎮 How to Use
 
