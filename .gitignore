@@ -2,12 +2,14 @@
 
 # Build directories
 /obj/
+/bin/
 /build/
 /out/
 
 # Compiled objects and executables
 *.o
 *.obj
+*.exe
 *.dll
 *.lib
 *.a
