@@ -1,7 +1,6 @@
 # .gitignore for BrowserSelector (C, MinGW/Makefile)
 
 # Build directories
-/bin/
 /obj/
 /build/
 /out/
@@ -9,7 +8,6 @@
 # Compiled objects and executables
 *.o
 *.obj
-*.exe
 *.dll
 *.lib
 *.a
