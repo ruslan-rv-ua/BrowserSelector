@@ -60,6 +60,13 @@ LRESULT CALLBACK ButtonSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             return 0;
         }
 
+        if (wParam == VK_RETURN) {
+            // Enter - activate the button
+            SendMessage(GetParent(hwnd), WM_COMMAND,
+                       (WPARAM)GetWindowLongPtr(hwnd, GWLP_ID), (LPARAM)hwnd);
+            return 0;
+        }
+
         if (wParam == VK_ESCAPE) {
             DestroyWindow(GetParent(hwnd));
             return 0;
