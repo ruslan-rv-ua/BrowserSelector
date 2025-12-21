@@ -1,7 +1,6 @@
 # .gitignore for BrowserSelector (C, MinGW/Makefile)
 
 # Build directories
-/bin/
 /obj/
 /build/
 /out/
