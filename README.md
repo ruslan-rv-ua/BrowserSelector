@@ -1,6 +1,22 @@
-# Browser Selector
+<p align="center">
+  <img src="resources/logo.png" alt="Browser Selector Logo" width="200"/>
+</p>
 
-**Browser Selector** is a **accessible** portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
+<h1 align="center">Browser Selector</h1>
+
+<p align="center">
+  <strong>Browser Selector</strong> is a <strong>accessible</strong> portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
+</p>
+
+## 📱 Key Features
+
+- **👁️ Accessibility first!**: Works with NVDA and Windows Narrator
+- **🌍 Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
+- **🖥️ Clean Interface**
+- **📦 Portable**: Single .exe file with JSON configuration
+- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
+- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
+- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
 
 ## 🚀 Quick Start
 
@@ -14,16 +30,6 @@
 2. In opened Windows Settings window select **BrowserSelector** as the default web browser
 3. Confirm the changes by clicking "Yes" in Browser Selector
 4. Now all links will open through Browser Selector!
-
-## 📱 Key Features
-
-- **👁️ Accessibility first!**: Works with NVDA and Windows Narrator
-- **🌍 Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
-- **🖥️ Clean Interface**
-- **📦 Portable**: Single .exe file with JSON configuration
-- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
-- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
-- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
 
 ## 🎮 How to Use
 
@@ -206,43 +212,6 @@ gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
 
 :: Copy configuration
 copy config.json bin\
-```
-
-### Project Structure
-
-```
-browserselector/
-├── src/
-│   ├── main.c              # Entry point
-│   ├── config/
-│   │   ├── config.c        # Configuration handling
-│   │   └── config.h
-│   ├── ui/
-│   │   ├── mainwindow.c    # Main window
-│   │   ├── mainwindow.h
-│   │   ├── settings.c      # Settings window
-│   │   ├── settings.h
-│   │   ├── commandeditor.c # Add/Edit dialog
-│   │   └── commandeditor.h
-│   ├── executor/
-│   │   ├── executor.c      # Command execution
-│   │   └── executor.h
-│   ├── registry/
-│   │   ├── registry.c      # Windows registry
-│   │   └── registry.h
-│   └── i18n/
-│       ├── i18n.c          # Internationalization
-│       └── i18n.h
-├── include/
-│   ├── cJSON.h             # cJSON library
-│   └── cJSON.c
-├── resources/
-│   ├── app.rc              # Resource file
-│   ├── strings.rc          # Localized strings (all languages)
-│   └── manifest.xml        # Application manifest
-├── Makefile
-├── config.json
-└── README.md
 ```
 
 ### Configuration File Format
