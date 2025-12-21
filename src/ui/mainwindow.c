@@ -12,7 +12,7 @@
 #define ID_COUNTDOWN_LABEL 1004
 #define TIMER_ID 1005
 
-#define MAIN_WINDOW_WIDTH 400
+#define MAIN_WINDOW_WIDTH 480  // Increased from 400 to accommodate wider buttons
 #define MAIN_WINDOW_HEIGHT 320
 
 static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
@@ -327,7 +327,7 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             RefreshCommandList(mainWin);
             
             // Create buttons (Register and Settings)
-            int btnWidth = 100;
+            int btnWidth = 160;  // Increased from 100 to accommodate longer text
             int btnHeight = 30;
             int btnSpacing = 10;
             int totalWidth = btnWidth * 2 + btnSpacing;
@@ -337,7 +337,7 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             // Create Register/Unregister button (left)
             BOOL isRegistered = IsRegisteredAsBrowser();
             BOOL isDefault = IsDefaultBrowser();
-            const char* registerBtnText = (isRegistered && isDefault) ? "Unregister" : "Set as Default";
+            const char* registerBtnText = (isRegistered && isDefault) ? "Unregister as default browser" : "Set as default Windows browser";
             
             mainWin->registerBtn = CreateWindowExA(
                 0,
@@ -414,7 +414,7 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                 "Browser Selector has been unregistered.\n\n"
                                 "It will no longer appear in the list of available browsers.",
                                 "Unregistration Successful", MB_OK | MB_ICONINFORMATION);
-                            SetWindowTextA(mainWin->registerBtn, "Set as Default");
+                            SetWindowTextA(mainWin->registerBtn, "Set as default Windows browser");
                         } else {
                             MessageBoxA(hwnd, 
                                 "Failed to unregister Browser Selector.\n\n"
@@ -445,7 +445,7 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                     "Browser Selector has been set as your default browser!\n\n"
                                     "All web links will now open through Browser Selector.",
                                     "Success", MB_OK | MB_ICONINFORMATION);
-                                SetWindowTextA(mainWin->registerBtn, "Unregister");
+                                SetWindowTextA(mainWin->registerBtn, "Unregister as default browser");
                             } else {
                                 // Settings opened - user needs to complete manually
                                 int result = MessageBoxA(hwnd,
@@ -462,7 +462,7 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                             "Browser Selector is now your default browser!",
                                             "Success",
                                             MB_OK | MB_ICONINFORMATION);
-                                        SetWindowTextA(mainWin->registerBtn, "Unregister");
+                                        SetWindowTextA(mainWin->registerBtn, "Unregister as default browser");
                                     } else {
                                         MessageBoxA(hwnd,
                                             "Browser Selector is not yet set as default.\n\n"
