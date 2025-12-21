@@ -5,6 +5,12 @@
 <h1 align="center">Browser Selector</h1>
 
 <p align="center">
+  <img src="https://img.shields.io/github/v/release/ruslan-rv-ua/BrowserSelector" alt="Version">
+  <img src="https://img.shields.io/github/license/ruslan-rv-ua/BrowserSelector" alt="License">
+  <img src="https://img.shields.io/badge/platform-Windows-blue" alt="Platform">
+</p>
+
+<p align="center">
   <strong>Browser Selector</strong> is a <strong>accessible</strong> portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
 </p>
 
@@ -214,6 +220,25 @@ gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
 copy config.json bin\
 ```
 
+### Project Structure
+
+- `src/` - Source code
+  - `ui/` - Interface logic (GDI/WinAPI)
+  - `config/` - JSON configuration handling
+  - `registry/` - Windows Registry operations
+  - `i18n/` - Internationalization helper functions
+- `resources/` - Icons, localized strings (`strings.rc`)
+- `include/` - Header files and external libraries (cJSON)
+
+### Adding Translations
+
+Localization is handled via Windows Resource files which allows the app to automatically adapt to the user's OS language. To add a new language:
+
+1. Open `resources/strings.rc`.
+2. Add a new `STRINGTABLE` block with the appropriate `LANGUAGE` identifier.
+3. Translate the string definitions.
+4. Rebuild the project.
+
 ### Configuration File Format
 
 The `config.json` file is stored in the same directory as the executable:
@@ -246,6 +271,26 @@ The `config.json` file is stored in the same directory as the executable:
 - **arguments**: Command line arguments. Use `{url}` as placeholder for the URL
 - **defaultCommandIndex**: Index of the default browser (0-based)
 - **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
+
+## ❓ Troubleshooting
+
+### Configuration file is corrupted
+If `config.json` becomes invalid or corrupted, the application will detect this on startup. It will attempt to create a new default configuration file. You can also manually delete `config.json` to force a reset.
+
+### Browser not opening
+- Check if the path in `config.json` is correct.
+- If using just the executable name (e.g., `chrome.exe`), ensure it is available in your system's PATH.
+- Verify that the arguments placeholder `{url}` is present if needed.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
