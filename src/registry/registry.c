@@ -205,8 +205,8 @@ BOOL SetAsDefaultBrowser(void) {
     HMODULE hShell32 = LoadLibraryA("shell32.dll");
     if (hShell32) {
         // Try the undocumented API that shows the protocol selection dialog
-        LaunchAdvancedAssociationUIProc pLaunchUI = 
-            (LaunchAdvancedAssociationUIProc)GetProcAddress(hShell32, 
+        LaunchAdvancedAssociationUIProc pLaunchUI =
+            (LaunchAdvancedAssociationUIProc)(uintptr_t)GetProcAddress(hShell32,
                 (LPCSTR)MAKEINTRESOURCEA(144)); // Ordinal 144
         
         if (pLaunchUI) {
