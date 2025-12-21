@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <strong>Browser Selector</strong> is a <strong>accessible</strong> portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
+  <strong>Browser Selector</strong> is <strong>an accessible</strong>, portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application presents a menu with your configured browsers for you to choose from.
 </p>
 
 ## 📱 Key Features
@@ -20,9 +20,9 @@
 - **🌍 Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
 - **🖥️ Clean Interface**
 - **📦 Portable**: Single .exe file with JSON configuration
-- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
-- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
-- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
+- **⌨️ Quick Navigation**: Use Arrow keys, Enter, Escape, and numbers 1-9 for quick selection
+- **🔄 Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
+- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
 
 ## 🚀 Quick Start
 
@@ -54,12 +54,12 @@ BrowserSelector.exe "file:///C:/Users/Test/Desktop/index.html"
 
 ### Keyboard Shortcuts
 
-- **↑/↓** - Navigate through browser list
-- **Enter** - Open URL with selected browser
-- **1-9** - Quick select browser by number
-- **Escape** - Close without action
-- **Tab** - Switch between list and buttons
-- **Any Key** - Cancel auto-open timer
+- **↑/↓** - Navigate through the browser list
+- **Enter** - Open URL with the selected browser
+- **1-9** - Select browser by number
+- **Escape** - Close Browser Selector without opening any link
+- **Tab** - Switch focus between list and buttons
+- **Any Key** - Pause/Cancel the auto-open timer
 
 ### Auto-Open Timer
 
@@ -146,7 +146,7 @@ Click the **"Settings"** button to access configuration:
 
 ### Why Manual Confirmation?
 
-Windows 10/11 requires users to manually confirm default browser changes for security reasons. This applies to ALL browsers, including Firefox, Chrome, and Edge when first installed.
+Windows 10 and 11 require users to manually confirm changes to the default browser for security reasons. This applies to **all** browsers, including Firefox, Chrome, and Edge. Only you, the user, can authorize this change.
 
 ---
 
