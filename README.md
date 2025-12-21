@@ -1,6 +1,6 @@
 # Browser Selector
 
-**Browser Selector** is a portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
+**Browser Selector** is a **accessible** portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
 
 ## 🚀 Quick Start
 
