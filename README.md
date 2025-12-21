@@ -6,6 +6,7 @@ A portable Windows desktop application that acts as a browser selector. When a U
 
 - **Portable**: Single .exe file with JSON configuration
 - **Keyboard Navigation**: Use arrow keys, Enter, Escape, and number keys (1-9) for quick selection
+- **Auto-Open Timer**: Automatically opens default browser after configurable wait time (1-10 seconds)
 - **Configurable**: Add, edit, delete, and reorder browsers through the Settings window
 - **Screen Reader Compatible**: Works with NVDA and Windows Narrator
 - **No Console Window**: Clean GUI-only experience
@@ -92,6 +93,17 @@ BrowserSelector.exe "https://example.com"
 - **1-9** - Quick select browser by number
 - **Escape** - Close without action
 - **Tab** - Switch between list and buttons
+- **Any Key** - Cancel auto-open timer
+
+### Auto-Open Timer
+
+The application features an auto-open timer that automatically launches the default browser after a configurable wait time:
+
+- **Default wait time**: 10 seconds
+- **Configurable range**: 1-10 seconds
+- **Visual countdown**: Shows remaining seconds in the main window
+- **Cancel on interaction**: Any user action (key press, mouse click) cancels the timer
+- **Settings**: Configure wait time in the Settings dialog
 
 ### Browser Registration
 
@@ -123,7 +135,8 @@ The `config.json` file is stored in the same directory as the executable.
 ```json
 {
   "settings": {
-    "defaultCommandIndex": 0
+    "defaultCommandIndex": 0,
+    "waitTime": 10
   },
   "commands": [
     {
@@ -145,6 +158,11 @@ The `config.json` file is stored in the same directory as the executable.
 - **name**: Display name in the selector
 - **command**: Path to executable (can be absolute, relative, or just the exe name if in PATH)
 - **arguments**: Command line arguments. Use `{url}` as placeholder for the URL
+
+### Settings Configuration
+
+- **defaultCommandIndex**: Index of the default browser (0-based)
+- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
 
 ### Examples
 

@@ -13,11 +13,14 @@
 #define ID_MOVE_DOWN_BTN 3006
 #define ID_SET_DEFAULT_BTN 3007
 #define ID_CLOSE_BTN 3008
+#define ID_WAITTIME_LABEL 3009
+#define ID_WAITTIME_EDIT 3010
 
 typedef struct {
     Configuration* config;
     const char* exePath;
     HWND listBox;
+    HWND waitTimeEdit;
     BOOL changed;
 } SettingsData;
 
@@ -68,12 +71,34 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                 WS_EX_CLIENTEDGE,
                 "LISTBOX",
                 NULL,
-                WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP | 
+                WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
                 LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
-                10, 10, 280, 200,
+                10, 10, 280, 180,
                 hwnd, (HMENU)ID_COMMAND_LIST, cs->hInstance, NULL
             );
             SendMessage(data->listBox, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // WaitTime controls
+            HWND waitTimeLabel = CreateWindowExA(
+                0, "STATIC", "Wait Time (1-10 sec):",
+                WS_CHILD | WS_VISIBLE,
+                10, 200, 150, 20,
+                hwnd, (HMENU)ID_WAITTIME_LABEL, cs->hInstance, NULL
+            );
+            SendMessage(waitTimeLabel, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            data->waitTimeEdit = CreateWindowExA(
+                WS_EX_CLIENTEDGE, "EDIT", "",
+                WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER | ES_AUTOHSCROLL,
+                170, 200, 50, 20,
+                hwnd, (HMENU)ID_WAITTIME_EDIT, cs->hInstance, NULL
+            );
+            SendMessage(data->waitTimeEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Set initial wait time value
+            char waitTimeStr[10];
+            snprintf(waitTimeStr, sizeof(waitTimeStr), "%d", data->config->settings.waitTime);
+            SetWindowTextA(data->waitTimeEdit, waitTimeStr);
             
             // Buttons
             int btnX = 300;
@@ -139,6 +164,32 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             if (!data) break;
             
             int sel = (int)SendMessage(data->listBox, LB_GETCURSEL, 0, 0);
+            
+            // Handle WaitTime edit control
+            if (LOWORD(wParam) == ID_WAITTIME_EDIT) {
+                if (HIWORD(wParam) == EN_CHANGE) {
+                    char buffer[10];
+                    GetWindowTextA(data->waitTimeEdit, buffer, sizeof(buffer));
+                    
+                    int waitTime = atoi(buffer);
+                    if (waitTime < 1) {
+                        waitTime = 1;
+                        snprintf(buffer, sizeof(buffer), "%d", waitTime);
+                        SetWindowTextA(data->waitTimeEdit, buffer);
+                    } else if (waitTime > 10) {
+                        waitTime = 10;
+                        snprintf(buffer, sizeof(buffer), "%d", waitTime);
+                        SetWindowTextA(data->waitTimeEdit, buffer);
+                    }
+                    
+                    if (waitTime != data->config->settings.waitTime) {
+                        data->config->settings.waitTime = waitTime;
+                        data->changed = TRUE;
+                        SaveConfig(data->exePath, data->config);
+                    }
+                }
+                return 0;
+            }
             
             switch (LOWORD(wParam)) {
                 case ID_COMMAND_LIST:
@@ -311,7 +362,7 @@ BOOL ShowSettingsWindow(HWND parent, Configuration* config, const char* exePath)
     RECT parentRect;
     GetWindowRect(parent, &parentRect);
     int winWidth = 410;
-    int winHeight = 270;
+    int winHeight = 290;
     int winX = parentRect.left + (parentRect.right - parentRect.left - winWidth) / 2;
     int winY = parentRect.top + (parentRect.bottom - parentRect.top - winHeight) / 2;
     

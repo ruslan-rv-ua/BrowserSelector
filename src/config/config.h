@@ -13,6 +13,7 @@ typedef struct {
 
 typedef struct {
     int defaultCommandIndex;
+    int waitTime;
 } Settings;
 
 typedef struct {

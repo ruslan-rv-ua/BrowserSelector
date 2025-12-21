@@ -21,6 +21,7 @@ int CreateDefaultConfig(const char* configPath) {
     // Add settings
     cJSON* settings = cJSON_CreateObject();
     cJSON_AddNumberToObject(settings, "defaultCommandIndex", 0);
+    cJSON_AddNumberToObject(settings, "waitTime", 10);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add default commands
@@ -108,15 +109,21 @@ int LoadConfig(const char* exePath, Configuration* config) {
     
     // Initialize defaults
     config->settings.defaultCommandIndex = 0;
+    config->settings.waitTime = 10;
     config->commandCount = 0;
     
     // Read settings
     cJSON* settings = cJSON_GetObjectItem(json, "settings");
     if (settings) {
         cJSON* defaultIndex = cJSON_GetObjectItem(settings, "defaultCommandIndex");
+        cJSON* waitTime = cJSON_GetObjectItem(settings, "waitTime");
         
         if (defaultIndex && cJSON_IsNumber(defaultIndex)) {
             config->settings.defaultCommandIndex = defaultIndex->valueint;
+        }
+        
+        if (waitTime && cJSON_IsNumber(waitTime)) {
+            config->settings.waitTime = waitTime->valueint;
         }
     }
     
@@ -171,8 +178,10 @@ int SaveConfig(const char* exePath, const Configuration* config) {
     
     // Add settings
     cJSON* settings = cJSON_CreateObject();
-    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 
+    cJSON_AddNumberToObject(settings, "defaultCommandIndex",
                            config->settings.defaultCommandIndex);
+    cJSON_AddNumberToObject(settings, "waitTime",
+                           config->settings.waitTime);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add commands

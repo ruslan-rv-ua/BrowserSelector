@@ -9,20 +9,33 @@
 #define ID_LISTBOX 1001
 #define ID_REGISTER_BTN 1002
 #define ID_SETTINGS_BTN 1003
+#define ID_COUNTDOWN_LABEL 1004
+#define TIMER_ID 1005
 
 #define MAIN_WINDOW_WIDTH 400
-#define MAIN_WINDOW_HEIGHT 300
+#define MAIN_WINDOW_HEIGHT 320
 
 static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
 static WNDPROC originalListBoxProc = NULL;
 static WNDPROC originalRegisterButtonProc = NULL;
 static WNDPROC originalSettingsButtonProc = NULL;
 
+// Forward declarations for timer functions
+static void StartTimer(MainWindow* mainWin);
+static void StopTimer(MainWindow* mainWin);
+static void UpdateCountdownDisplay(MainWindow* mainWin);
+static void ExecuteDefaultCommand(MainWindow* mainWin);
+
 // Subclass procedure for Settings button to intercept Tab key
 LRESULT CALLBACK ButtonSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
 
     if (msg == WM_KEYDOWN && mainWin) {
+        // Stop timer on any key press
+        if (mainWin->timerActive) {
+            StopTimer(mainWin);
+        }
+        
         if (wParam == VK_TAB) {
             BOOL shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
 
@@ -69,6 +82,11 @@ LRESULT CALLBACK ListBoxSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
     MainWindow* mainWin = (MainWindow*)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
     
     if (msg == WM_KEYDOWN && mainWin) {
+        // Stop timer on any key press
+        if (mainWin->timerActive) {
+            StopTimer(mainWin);
+        }
+        
         switch (wParam) {
             case VK_RETURN: {
                 // Enter - execute selected command
@@ -99,6 +117,11 @@ LRESULT CALLBACK ListBoxSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
     }
     
     if (msg == WM_CHAR && mainWin) {
+        // Stop timer on any character input
+        if (mainWin->timerActive) {
+            StopTimer(mainWin);
+        }
+        
         // Quick select 1-9
         if (wParam >= '1' && wParam <= '9') {
             int index = wParam - '1';
@@ -127,6 +150,58 @@ void RefreshCommandList(MainWindow* mainWin) {
     int sel = mainWin->config->settings.defaultCommandIndex;
     if (sel >= mainWin->config->commandCount) sel = 0;
     SendMessage(mainWin->listBox, LB_SETCURSEL, sel, 0);
+}
+
+// Timer functions
+static void StartTimer(MainWindow* mainWin) {
+    if (mainWin->timerActive || mainWin->config->settings.waitTime <= 0) {
+        return;
+    }
+    
+    mainWin->remainingSeconds = mainWin->config->settings.waitTime;
+    mainWin->timerActive = TRUE;
+    
+    // Start timer (1000ms = 1 second)
+    mainWin->timerId = SetTimer(mainWin->hwnd, TIMER_ID, 1000, NULL);
+    
+    // Update countdown display
+    char countdownText[100];
+    sprintf(countdownText, "Opening default browser in %d seconds...", mainWin->remainingSeconds);
+    SetWindowTextA(mainWin->countdownLabel, countdownText);
+}
+
+static void StopTimer(MainWindow* mainWin) {
+    if (mainWin->timerActive && mainWin->timerId != 0) {
+        KillTimer(mainWin->hwnd, mainWin->timerId);
+        mainWin->timerId = 0;
+        mainWin->timerActive = FALSE;
+        mainWin->remainingSeconds = 0;
+        
+        // Clear countdown display
+        SetWindowTextA(mainWin->countdownLabel, "");
+    }
+}
+
+static void UpdateCountdownDisplay(MainWindow* mainWin) {
+    if (mainWin->timerActive) {
+        char countdownText[100];
+        if (mainWin->remainingSeconds > 1) {
+            sprintf(countdownText, "Opening default browser in %d seconds...", mainWin->remainingSeconds);
+        } else if (mainWin->remainingSeconds == 1) {
+            sprintf(countdownText, "Opening default browser in 1 second...");
+        } else {
+            sprintf(countdownText, "Opening default browser now...");
+        }
+        SetWindowTextA(mainWin->countdownLabel, countdownText);
+    }
+}
+
+static void ExecuteDefaultCommand(MainWindow* mainWin) {
+    int defaultIndex = mainWin->config->settings.defaultCommandIndex;
+    if (defaultIndex >= 0 && defaultIndex < mainWin->config->commandCount) {
+        ExecuteCommand(&mainWin->config->commands[defaultIndex], mainWin->url);
+    }
+    DestroyWindow(mainWin->hwnd);
 }
 
 HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* url, const char* exePath) {
@@ -159,6 +234,11 @@ HWND CreateMainWindow(HINSTANCE hInstance, Configuration* config, const char* ur
     mainWin->url = url ? _strdup(url) : NULL;
     mainWin->hInstance = hInstance;
     strncpy(mainWin->exePath, exePath, MAX_PATH - 1);
+    
+    // Initialize timer fields
+    mainWin->timerId = 0;
+    mainWin->timerActive = FALSE;
+    mainWin->remainingSeconds = 0;
     
     // Calculate window position (center screen) using hard-coded constants
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -203,22 +283,34 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             int clientWidth = clientRect.right - clientRect.left;
             int clientHeight = clientRect.bottom - clientRect.top;
             
-            // Create ListBox
+            // Create countdown label (positioned above ListBox)
+            mainWin->countdownLabel = CreateWindowExA(
+                0,
+                "STATIC",
+                "",
+                WS_CHILD | WS_VISIBLE | SS_CENTER,
+                10, 5,
+                clientWidth - 20, 20,
+                hwnd, (HMENU)ID_COUNTDOWN_LABEL, cs->hInstance, NULL
+            );
+            
+            // Create ListBox (positioned below countdown label)
             mainWin->listBox = CreateWindowExA(
                 WS_EX_CLIENTEDGE,
                 "LISTBOX",
                 NULL,
-                WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP | 
+                WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
                 LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
-                10, 10, 
-                clientWidth - 20, 
-                clientHeight - 60,
+                10, 30,
+                clientWidth - 20,
+                clientHeight - 80,
                 hwnd, (HMENU)ID_LISTBOX, cs->hInstance, NULL
             );
             
             // Set font
             HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
             SendMessage(mainWin->listBox, WM_SETFONT, (WPARAM)hFont, TRUE);
+            SendMessage(mainWin->countdownLabel, WM_SETFONT, (WPARAM)hFont, TRUE);
             
             // Subclass ListBox to intercept key presses
             originalListBoxProc = (WNDPROC)SetWindowLongPtr(mainWin->listBox, 
@@ -270,6 +362,11 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             // Set focus to ListBox
             SetFocus(mainWin->listBox);
             
+            // Start auto-open timer if waitTime is configured
+            if (mainWin->config->settings.waitTime > 0) {
+                StartTimer(mainWin);
+            }
+            
             return 0;
         }
         
@@ -279,6 +376,11 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             switch (LOWORD(wParam)) {
                 case ID_LISTBOX:
                     if (HIWORD(wParam) == LBN_DBLCLK) {
+                        // Stop timer on user interaction
+                        if (mainWin->timerActive) {
+                            StopTimer(mainWin);
+                        }
+                        
                         // Double click - execute command
                         int index = (int)SendMessage(mainWin->listBox, LB_GETCURSEL, 0, 0);
                         if (index != LB_ERR && index < mainWin->config->commandCount) {
@@ -289,6 +391,11 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     break;
                     
                 case ID_REGISTER_BTN: {
+                    // Stop timer on user interaction
+                    if (mainWin->timerActive) {
+                        StopTimer(mainWin);
+                    }
+                    
                     // Check current state
                     BOOL isRegistered = IsRegisteredAsBrowser();
                     BOOL isDefault = IsDefaultBrowser();
@@ -365,6 +472,11 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 }
                     
                 case ID_SETTINGS_BTN:
+                    // Stop timer on user interaction
+                    if (mainWin->timerActive) {
+                        StopTimer(mainWin);
+                    }
+                    
                     // Open settings window
                     if (ShowSettingsWindow(hwnd, mainWin->config, mainWin->exePath)) {
                         // Settings changed, refresh list
@@ -372,6 +484,22 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     }
                     SetFocus(mainWin->listBox);
                     break;
+            }
+            return 0;
+        }
+        
+        case WM_TIMER: {
+            if (wParam == TIMER_ID && mainWin && mainWin->timerActive) {
+                mainWin->remainingSeconds--;
+                
+                if (mainWin->remainingSeconds <= 0) {
+                    // Timer reached zero - execute default command
+                    StopTimer(mainWin);
+                    ExecuteDefaultCommand(mainWin);
+                } else {
+                    // Update countdown display
+                    UpdateCountdownDisplay(mainWin);
+                }
             }
             return 0;
         }
@@ -394,6 +522,11 @@ LRESULT CALLBACK MainWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         }
         
         case WM_DESTROY: {
+            // Clean up timer
+            if (mainWin && mainWin->timerActive) {
+                StopTimer(mainWin);
+            }
+            
             if (mainWin) {
                 if (mainWin->url) free(mainWin->url);
                 free(mainWin);

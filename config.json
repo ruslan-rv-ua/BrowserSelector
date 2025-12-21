@@ -1,0 +1,19 @@
+{
+	"settings":	{
+		"defaultCommandIndex":	0,
+		"waitTime":	5
+	},
+	"commands":	[{
+			"name":	"Chrome",
+			"command":	"chrome.exe",
+			"arguments":	"{url}"
+		}, {
+			"name":	"Firefox",
+			"command":	"firefox.exe",
+			"arguments":	"{url}"
+		}, {
+			"name":	"Edge",
+			"command":	"msedge.exe",
+			"arguments":	"{url}"
+		}]
+}

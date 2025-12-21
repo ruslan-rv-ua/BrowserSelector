@@ -9,10 +9,16 @@ typedef struct {
     HWND listBox;
     HWND registerBtn;
     HWND settingsBtn;
+    HWND countdownLabel;  // Label for countdown display
     Configuration* config;
     char* url;
     char exePath[MAX_PATH];
     HINSTANCE hInstance;
+    
+    // Timer fields
+    UINT_PTR timerId;
+    int remainingSeconds;
+    BOOL timerActive;
 } MainWindow;
 
 // Create and show main window
