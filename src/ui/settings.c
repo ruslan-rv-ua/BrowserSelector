@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <commctrl.h>
 
 #define ID_COMMAND_LIST 3001
 #define ID_ADD_BTN 3002
@@ -15,12 +16,14 @@
 #define ID_CLOSE_BTN 3008
 #define ID_WAITTIME_LABEL 3009
 #define ID_WAITTIME_EDIT 3010
+#define ID_WAITTIME_SPIN 3011
 
 typedef struct {
     Configuration* config;
     const char* exePath;
     HWND listBox;
     HWND waitTimeEdit;
+    HWND waitTimeSpin;
     BOOL changed;
 } SettingsData;
 
@@ -95,10 +98,19 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
             );
             SendMessage(data->waitTimeEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
             
-            // Set initial wait time value
-            char waitTimeStr[10];
-            snprintf(waitTimeStr, sizeof(waitTimeStr), "%d", data->config->settings.waitTime);
-            SetWindowTextA(data->waitTimeEdit, waitTimeStr);
+            // Create spin control
+            data->waitTimeSpin = CreateWindowExA(
+                0, UPDOWN_CLASS, NULL,
+                WS_CHILD | WS_VISIBLE | WS_TABSTOP | UDS_ALIGNRIGHT | UDS_ARROWKEYS | UDS_SETBUDDYINT | UDS_NOTHOUSANDS,
+                220, 200, 20, 20,
+                hwnd, (HMENU)ID_WAITTIME_SPIN, cs->hInstance, NULL
+            );
+            SendMessage(data->waitTimeSpin, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
+            // Set spin control range and buddy
+            SendMessage(data->waitTimeSpin, UDM_SETRANGE, 0, MAKELONG(10, 1)); // Min=1, Max=10
+            SendMessage(data->waitTimeSpin, UDM_SETBUDDY, (WPARAM)data->waitTimeEdit, 0);
+            SendMessage(data->waitTimeSpin, UDM_SETPOS, 0, MAKELONG(data->config->settings.waitTime, 0));
             
             // Buttons
             int btnX = 300;
@@ -176,10 +188,12 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                         waitTime = 1;
                         snprintf(buffer, sizeof(buffer), "%d", waitTime);
                         SetWindowTextA(data->waitTimeEdit, buffer);
+                        SendMessage(data->waitTimeSpin, UDM_SETPOS, 0, MAKELONG(waitTime, 0));
                     } else if (waitTime > 10) {
                         waitTime = 10;
                         snprintf(buffer, sizeof(buffer), "%d", waitTime);
                         SetWindowTextA(data->waitTimeEdit, buffer);
+                        SendMessage(data->waitTimeSpin, UDM_SETPOS, 0, MAKELONG(waitTime, 0));
                     }
                     
                     if (waitTime != data->config->settings.waitTime) {
@@ -188,6 +202,12 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                         SaveConfig(data->exePath, data->config);
                     }
                 }
+                return 0;
+            }
+            
+            // Handle WaitTime spin control
+            if (LOWORD(wParam) == ID_WAITTIME_SPIN) {
+                // Spin control changes are handled through the buddy edit control
                 return 0;
             }
             
