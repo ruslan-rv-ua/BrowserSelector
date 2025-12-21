@@ -4,7 +4,7 @@
 
 ## 🚀 Quick Start
 
-1. **Download** `BrowserSelector.exe` from the [Releases](<releases_url>) page
+1. **Download** `BrowserSelector.exe` from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page
 2. **Run** `BrowserSelector.exe "https://example.com"` or just `BrowserSelector.exe`
 3. **Select** a browser from the list or wait for automatic opening (10 seconds by default)
 
