@@ -1,20 +1,137 @@
 # Browser Selector
 
-A portable Windows desktop application that acts as a browser selector. When a URL is opened, the application shows a menu with configured browsers/commands for the user to choose from.
+**Browser Selector** is a portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application shows a menu with configured browsers/commands for you to choose from.
 
-## Features
+## 🚀 Quick Start
 
-- **Portable**: Single .exe file with JSON configuration
-- **Keyboard Navigation**: Use arrow keys, Enter, Escape, and number keys (1-9) for quick selection
-- **Auto-Open Timer**: Automatically opens default browser after configurable wait time (1-10 seconds)
-- **Configurable**: Add, edit, delete, and reorder browsers through the Settings window
-- **Screen Reader Compatible**: Works with NVDA and Windows Narrator
-- **No Console Window**: Clean GUI-only experience
-- **Easy Setup**: One-click registration with guided Windows Settings integration
+### For Users
 
-## Building
+1. **Download** `BrowserSelector.exe` and `config.json` to the same folder
+2. **Run** `BrowserSelector.exe "https://example.com"` or just `BrowserSelector.exe`
+3. **Select** a browser from the list or wait for automatic opening (10 seconds by default)
 
-### Prerequisites
+### How to Set as Default Browser
+
+1. Click the **"Set as Default"** button
+2. In Windows Settings, find the **Web browser** section
+3. Click on the current browser name and select **BrowserSelector**
+4. Now all links will open through Browser Selector!
+
+## 📱 Key Features
+
+- **🔄 Auto-Open**: Default browser opens automatically after configurable time (1-10 seconds)
+- **⌨️ Quick Navigation**: Use arrow keys, Enter, Escape, and numbers 1-9 for quick selection
+- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers through the settings window
+- **👁️ Accessibility**: Works with NVDA and Windows Narrator
+- **📦 Portable**: Single .exe file with JSON configuration
+- **🖥️ Clean Interface**: No console window - GUI only
+
+## 🎮 How to Use
+
+### Basic Commands
+
+```cmd
+:: Open without URL
+BrowserSelector.exe
+
+:: Open with URL
+BrowserSelector.exe "https://example.com"
+
+:: Open with local file
+BrowserSelector.exe "file:///C:/Users/Test/Desktop/index.html"
+```
+
+### Keyboard Shortcuts
+
+- **↑/↓** - Navigate through browser list
+- **Enter** - Open URL with selected browser
+- **1-9** - Quick select browser by number
+- **Escape** - Close without action
+- **Tab** - Switch between list and buttons
+- **Any Key** - Cancel auto-open timer
+
+### Auto-Open Timer
+
+The application features an auto-open timer that automatically launches the default browser after a configured wait time:
+
+- **Default time**: 10 seconds
+- **Configurable range**: 1-10 seconds
+- **Visual countdown**: Shows remaining seconds in the main window
+- **Cancel on interaction**: Any user action cancels the timer
+- **Settings**: Configure wait time in the settings window
+
+## ⚙️ Browser Configuration
+
+### Settings Window
+
+Click the **"Settings"** button to access configuration:
+
+- **Add browsers**: Click "Add" to add a new browser
+- **Edit**: Select a browser and click "Edit"
+- **Delete**: Select a browser and click "Delete"
+- **Reorder**: Use "Up"/"Down" to change order
+- **Auto-open time**: Configure `Wait Time` (1-10 seconds)
+
+### Configuration Examples
+
+```json
+{
+  "name": "Chrome Incognito",
+  "command": "chrome.exe",
+  "arguments": "--incognito {url}"
+},
+{
+  "name": "Firefox Private",
+  "command": "firefox.exe",
+  "arguments": "-private-window {url}"
+},
+{
+  "name": "Edge with specific profile",
+  "command": "msedge.exe",
+  "arguments": "--profile-directory=\"Default\" {url}"
+}
+```
+
+### Browser Path Types
+
+- **Program name**: `"chrome.exe"` (if in PATH)
+- **Absolute path**: `"C:\\Program Files\\Mozilla Firefox\\firefox.exe"`
+- **Relative path**: `"..\\browsers\\custom.exe"`
+
+## 🔧 Default Browser Registration
+
+### Registration Process
+
+1. Click the **"Set as Default"** button
+2. Windows Settings will open automatically
+3. Scroll to the **Web browser** section
+4. Click on the current browser name
+5. Select **BrowserSelector** from the list
+6. Close Settings and return to the app
+7. Click "Yes" to confirm the changes
+
+### Button States
+
+- **"Set as Default"** - when the app is not registered or not set as default browser
+- **"Unregister"** - when already set as default browser
+
+### Why Manual Confirmation?
+
+Windows 10/11 requires users to manually confirm default browser changes for security reasons. This applies to ALL browsers, including Firefox, Chrome, and Edge when first installed.
+
+---
+
+## 🛠️ Technical Documentation
+
+### System Requirements
+
+- **Operating System**: Windows 10/11 (x64)
+- **Runtime**: No additional libraries required (statically compiled)
+- **Space**: ~500KB-1MB on disk
+
+### Building from Source
+
+#### Prerequisites
 
 1. **MinGW-w64 GCC** (8.1.0 or newer)
    - Install via MSYS2: `pacman -S mingw-w64-x86_64-gcc`
@@ -25,13 +142,13 @@ A portable Windows desktop application that acts as a browser selector. When a U
 
 3. Add MinGW bin directory to PATH (e.g., `C:\msys64\mingw64\bin`)
 
-### Build Commands
+#### Build Commands
 
 ```cmd
 :: Build the project
 make
 
-:: Build release version (optimized, stripped)
+:: Build release version (optimized)
 make release
 
 :: Build and copy config.json to bin
@@ -40,11 +157,11 @@ make install
 :: Clean build files
 make clean
 
-:: Run the application
+:: Build and run
 make run
 ```
 
-### Manual Build (without Make)
+#### Manual Build (without Make)
 
 ```cmd
 :: Create directories
@@ -70,116 +187,11 @@ gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
     obj/commandeditor.o obj/executor.o obj/registry.o obj/cJSON.o obj/app.res ^
     -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
 
-:: Copy config
+:: Copy configuration
 copy config.json bin\
 ```
 
-## Usage
-
-### Basic Usage
-
-```cmd
-:: Open without URL
-BrowserSelector.exe
-
-:: Open with URL
-BrowserSelector.exe "https://example.com"
-```
-
-### Keyboard Shortcuts
-
-- **↑/↓** - Navigate through browser list
-- **Enter** - Open URL with selected browser
-- **1-9** - Quick select browser by number
-- **Escape** - Close without action
-- **Tab** - Switch between list and buttons
-- **Any Key** - Cancel auto-open timer
-
-### Auto-Open Timer
-
-The application features an auto-open timer that automatically launches the default browser after a configurable wait time:
-
-- **Default wait time**: 10 seconds
-- **Configurable range**: 1-10 seconds
-- **Visual countdown**: Shows remaining seconds in the main window
-- **Cancel on interaction**: Any user action (key press, mouse click) cancels the timer
-- **Settings**: Configure wait time in the Settings dialog
-
-### Browser Registration
-
-To use Browser Selector as your default browser:
-
-1. Click the **Set as Default** button
-2. Windows Settings will open automatically
-3. Scroll to **Web browser** section
-4. Click the current browser name
-5. Select **BrowserSelector** from the list
-6. Close Settings and return to the app
-7. Click "Yes" to verify the change
-
-**Why manual selection?**  
-Windows 10/11 requires users to manually confirm default browser changes for security.  
-This applies to ALL browsers including Firefox, Chrome, and Edge when first installed.  
-[Read more about why](WHY_MANUAL_SETUP.md)
-
-**Button states:**
-- **Set as Default** - when not registered or not set as default
-- **Unregister** - when already set as default browser
-
-To remove Browser Selector, click **Unregister**.
-
-## Configuration
-
-The `config.json` file is stored in the same directory as the executable.
-
-```json
-{
-  "settings": {
-    "defaultCommandIndex": 0,
-    "waitTime": 10
-  },
-  "commands": [
-    {
-      "name": "Chrome",
-      "command": "chrome.exe",
-      "arguments": "{url}"
-    },
-    {
-      "name": "Firefox",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-      "arguments": "{url}"
-    }
-  ]
-}
-```
-
-### Command Configuration
-
-- **name**: Display name in the selector
-- **command**: Path to executable (can be absolute, relative, or just the exe name if in PATH)
-- **arguments**: Command line arguments. Use `{url}` as placeholder for the URL
-
-### Settings Configuration
-
-- **defaultCommandIndex**: Index of the default browser (0-based)
-- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
-
-### Examples
-
-```json
-{
-  "name": "Chrome Incognito",
-  "command": "chrome.exe",
-  "arguments": "--incognito {url}"
-},
-{
-  "name": "Firefox Private",
-  "command": "firefox.exe",
-  "arguments": "-private-window {url}"
-}
-```
-
-## Project Structure
+### Project Structure
 
 ```
 browserselector/
@@ -212,15 +224,48 @@ browserselector/
 └── README.md
 ```
 
-## License
+### Configuration File Format
+
+The `config.json` file is stored in the same directory as the executable:
+
+```json
+{
+  "settings": {
+    "defaultCommandIndex": 0,
+    "waitTime": 10
+  },
+  "commands": [
+    {
+      "name": "Chrome",
+      "command": "chrome.exe",
+      "arguments": "{url}"
+    },
+    {
+      "name": "Firefox",
+      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+      "arguments": "{url}"
+    }
+  ]
+}
+```
+
+#### Field Descriptions
+
+- **name**: Display name in the selector
+- **command**: Path to executable (can be absolute, relative, or just the exe name if in PATH)
+- **arguments**: Command line arguments. Use `{url}` as placeholder for the URL
+- **defaultCommandIndex**: Index of the default browser (0-based)
+- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
+
+## 📄 License
 
 MIT License
 
-## Credits
+## 👏 Credits
 
 - [cJSON](https://github.com/DaveGamble/cJSON) - JSON parsing library
- 
-## Release (git-flow)
+
+## 🚀 Release Creation (git-flow)
 
 Short steps for creating a release using `git-flow` on Windows (CMD / Git Bash / MSYS2).
 
