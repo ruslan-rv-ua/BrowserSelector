@@ -8,7 +8,6 @@
 # Compiled objects and executables
 *.o
 *.obj
-*.exe
 *.dll
 *.lib
 *.a
