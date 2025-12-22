@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2025-12-22
+
+### Added
+- Scoop package manager support and publishing guide
+
 ### Fixed
-- Removed unused static variables to eliminate compiler warnings
+- Removed unused static variables and window class constants to eliminate compiler warnings
 
 ## [0.1.1] - 2024-12-22
 
