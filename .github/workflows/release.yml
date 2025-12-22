@@ -53,8 +53,8 @@ jobs:
           
           # Copy files
           Copy-Item "bin/BrowserSelector.exe" -Destination $packageDir
-          Copy-Item "config.json" -Destination $packageDir
-          Copy-Item "LICENSE" -Destination $packageDir
+          ### Copy-Item "config.json" -Destination $packageDir
+          ### Copy-Item "LICENSE" -Destination $packageDir
           Copy-Item "README.md" -Destination $packageDir
           
           # Create ZIP archive

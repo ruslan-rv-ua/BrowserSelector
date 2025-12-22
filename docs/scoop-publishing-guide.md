@@ -54,7 +54,7 @@
 1. **Розробник** створює тег релізу (наприклад, `v1.0.0`)
 2. **GitHub Actions** в основному репозиторії:
    - Компілює застосунок
-   - Створює ZIP архів з `.exe` та `config.json`
+   - Створює ZIP архів з `.exe`
    - Публікує GitHub Release з архівом
    - Обчислює SHA256 хеш
    - Оновлює маніфест у bucket репозиторії
@@ -302,8 +302,8 @@ jobs:
           
           # Copy files
           Copy-Item "bin/BrowserSelector.exe" -Destination $packageDir
-          Copy-Item "config.json" -Destination $packageDir
-          Copy-Item "LICENSE" -Destination $packageDir
+          ### Copy-Item "config.json" -Destination $packageDir
+          ### Copy-Item "LICENSE" -Destination $packageDir
           Copy-Item "README.md" -Destination $packageDir
           
           # Create ZIP archive
