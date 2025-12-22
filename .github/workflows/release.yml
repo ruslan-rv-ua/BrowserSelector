@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  APP_NAME: BrowserSelector
+  
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            make
+
+      - name: Build Release
+        shell: msys2 {0}
+        run: |
+          make release
+
+      - name: Get version from tag
+        id: get_version
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: Create release package
+        shell: pwsh
+        run: |
+          $version = "${{ steps.get_version.outputs.VERSION }}"
+          $packageDir = "BrowserSelector"
+          $zipName = "BrowserSelector-$version-win64.zip"
+          
+          # Create package directory
+          New-Item -ItemType Directory -Force -Path $packageDir
+          
+          # Copy files
+          Copy-Item "bin/BrowserSelector.exe" -Destination $packageDir
+          Copy-Item "config.json" -Destination $packageDir
+          Copy-Item "LICENSE" -Destination $packageDir
+          Copy-Item "README.md" -Destination $packageDir
+          
+          # Create ZIP archive
+          Compress-Archive -Path $packageDir -DestinationPath $zipName -Force
+          
+          # Calculate SHA256
+          $hash = (Get-FileHash -Path $zipName -Algorithm SHA256).Hash.ToLower()
+          $hash | Out-File -FilePath "$zipName.sha256" -NoNewline -Encoding ascii
+          
+          Write-Host "Package: $zipName"
+          Write-Host "SHA256: $hash"
+          
+          # Store hash for later steps
+          echo "HASH=$hash" >> $env:GITHUB_OUTPUT
+        id: package
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            BrowserSelector-*.zip
+            BrowserSelector-*.zip.sha256
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-alpha') || contains(github.ref, '-beta') || contains(github.ref, '-rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Scoop bucket
+        if: ${{ !contains(github.ref, '-alpha') && !contains(github.ref, '-beta') && !contains(github.ref, '-rc') }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.SCOOP_BUCKET_TOKEN }}
+          repository: ruslan-rv-ua/scoop-bucket
+          event-type: update-manifest
+          client-payload: |
+            {
+              "version": "${{ steps.get_version.outputs.VERSION }}",
+              "hash": "${{ steps.package.outputs.HASH }}",
+              "url": "https://github.com/ruslan-rv-ua/BrowserSelector/releases/download/v${{ steps.get_version.outputs.VERSION }}/BrowserSelector-${{ steps.get_version.outputs.VERSION }}-win64.zip"
+            }
