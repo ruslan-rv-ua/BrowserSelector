@@ -28,7 +28,6 @@ typedef struct {
     BOOL changed;
 } SettingsData;
 
-static const char* SETTINGS_CLASS = "SettingsWindowClass";
 
 static void RefreshSettingsList(SettingsData* data) {
     SendMessage(data->listBox, LB_RESETCONTENT, 0, 0);

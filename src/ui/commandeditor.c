@@ -18,7 +18,6 @@ typedef struct {
     BOOL saved;
 } CommandEditorData;
 
-static const char* CMD_EDITOR_CLASS = "CommandEditorClass";
 
 static void BrowseForExecutable(HWND hwnd, HWND editControl) {
     OPENFILENAMEW ofn;

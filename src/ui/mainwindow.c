@@ -16,7 +16,6 @@
 #define MAIN_WINDOW_WIDTH 480  // Increased from 400 to accommodate wider buttons
 #define MAIN_WINDOW_HEIGHT 320
 
-static const char* MAIN_WINDOW_CLASS = "BrowserSelectorClass";
 static WNDPROC originalListBoxProc = NULL;
 static WNDPROC originalRegisterButtonProc = NULL;
 static WNDPROC originalSettingsButtonProc = NULL;
