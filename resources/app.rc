@@ -8,8 +8,8 @@
 
 // Version information
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     0,1,1,0
-PRODUCTVERSION  0,1,1,0
+FILEVERSION     0,1,2,0
+PRODUCTVERSION  0,1,2,0
 FILEFLAGSMASK   0x3fL
 FILEFLAGS       0x0L
 FILEOS          VOS_NT_WINDOWS32
@@ -23,12 +23,12 @@ BEGIN
             VALUE "CompanyName",      "Ruslan Iskov\0"
             VALUE "Author",           "Ruslan Iskov <ruslan.rv.ua+github@gmail.com>\0"
             VALUE "FileDescription",  "Browser Selector\0"
-            VALUE "FileVersion",      "0.1.1.0\0"
+            VALUE "FileVersion",      "0.1.2.0\0"
             VALUE "InternalName",     "BrowserSelector\0"
             VALUE "LegalCopyright",   "Copyright (C) 2025\0"
             VALUE "OriginalFilename", "BrowserSelector.exe\0"
             VALUE "ProductName",      "Browser Selector\0"
-            VALUE "ProductVersion",   "0.1.1.0\0"
+            VALUE "ProductVersion",   "0.1.2.0\0"
         END
     END
     BLOCK "VarFileInfo"

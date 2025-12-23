@@ -150,13 +150,13 @@ git push origin main
 
 ```json
 {
-    "version": "0.1.1",
-    "description": "Accessible Windows browser selector - choose which browser opens your links",
+    "version": "0.1.2",
+    "description": "A portable Windows application that allows you to choose which browser to open a link with.",
     "homepage": "https://github.com/ruslan-rv-ua/BrowserSelector",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ruslan-rv-ua/BrowserSelector/releases/download/v0.1.1/BrowserSelector-0.1.1-win64.zip",
+            "url": "https://github.com/ruslan-rv-ua/BrowserSelector/releases/download/v0.1.2/BrowserSelector-0.1.2-win64.zip",
             "hash": "SHA256_HASH_HERE"
         }
     },
@@ -199,7 +199,7 @@ git push origin main
 
 ```json
 {
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Accessible Windows browser selector - choose which browser opens your links",
     "homepage": "https://github.com/ruslan-rv-ua/BrowserSelector",
     "license": "MIT",
@@ -209,7 +209,7 @@ git push origin main
     ],
     "architecture": {
         "64bit": {
-            "url": "https://github.com/ruslan-rv-ua/BrowserSelector/releases/download/v0.1.1/BrowserSelector-0.1.1-win64.zip",
+            "url": "https://github.com/ruslan-rv-ua/BrowserSelector/releases/download/v0.1.2/BrowserSelector-0.1.2-win64.zip",
             "hash": "SHA256_HASH_HERE"
         }
     },
@@ -713,13 +713,13 @@ if ($ForceUpdate) {
 ```
 
 Приклади:
-- `BrowserSelector-0.1.1-win64.zip`
-- `BrowserSelector-0.1.1-win32.zip`
+- `BrowserSelector-0.1.2-win64.zip`
+- `BrowserSelector-0.1.2-win32.zip`
 
 ### 8.3. Структура архіву
 
 ```
-BrowserSelector-0.1.1-win64.zip
+BrowserSelector-0.1.2-win64.zip
 └── BrowserSelector/
     ├── BrowserSelector.exe
     ├── config.json
@@ -775,7 +775,7 @@ BrowserSelector-0.1.1-win64.zip
 **Рішення:**
 ```powershell
 # Отримати правильний хеш
-$url = "https://github.com/.../BrowserSelector-0.1.1-win64.zip"
+$url = "https://github.com/.../BrowserSelector-0.1.2-win64.zip"
 $tempFile = "$env:TEMP\test.zip"
 Invoke-WebRequest -Uri $url -OutFile $tempFile
 (Get-FileHash $tempFile -Algorithm SHA256).Hash.ToLower()
