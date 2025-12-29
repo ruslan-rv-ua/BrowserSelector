@@ -159,7 +159,7 @@ browserselector/
   "commands": [
     {
       "name": "Copy to Clipboard",
-      "command": "cmd /c echo {url} | clip"
+      "command": "echo {url} | clip"
     },
     {
       "name": "Chrome Incognito",
@@ -483,7 +483,7 @@ int CreateDefaultConfig(const char* configPath) {
     config.commandCount = 4;
     
     strcpy(config.commands[0].name, "Copy to Clipboard");
-    strcpy(config.commands[0].command, "cmd /c echo {url} | clip");
+    strcpy(config.commands[0].command, "echo {url} | clip");
     
     strcpy(config.commands[1].name, "Chrome Incognito");
     strcpy(config.commands[1].command, "chrome.exe --incognito {url}");
@@ -1030,7 +1030,7 @@ bin\BrowserSelector.exe "https://example.com/search?q=test query"
   "commands": [
     {
       "name": "Copy to Clipboard",
-      "command": "cmd /c echo {url} | clip"
+      "command": "echo {url} | clip"
     },
     {
       "name": "Chrome Incognito (PATH)",

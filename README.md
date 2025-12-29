@@ -106,7 +106,7 @@ Click the **"Settings"** button to access configuration:
 ```json
 {
   "name": "Copy to Clipboard",
-  "command": "cmd /c echo {url} | clip"
+  "command": "echo {url} | clip"
 },
 {
   "name": "Chrome Incognito",
@@ -259,7 +259,7 @@ The `config.json` file is stored in the same directory as the executable:
   "commands": [
     {
       "name": "Copy to Clipboard",
-      "command": "cmd /c echo {url} | clip"
+      "command": "echo {url} | clip"
     },
     {
       "name": "Chrome",

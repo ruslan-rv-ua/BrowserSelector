@@ -5,7 +5,7 @@
 	},
 	"commands":	[{
 			"name":	"Copy to Clipboard",
-			"command":	"cmd /c echo {url} | clip"
+			"command":	"echo {url} | clip"
 		}, {
 			"name":	"Chrome Incognito",
 			"command":	"chrome.exe --incognito {url}"

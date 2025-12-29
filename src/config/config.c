@@ -30,7 +30,7 @@ int CreateDefaultConfig(const char* configPath) {
     // Copy to Clipboard (default)
     cJSON* clipboard = cJSON_CreateObject();
     cJSON_AddStringToObject(clipboard, "name", "Copy to Clipboard");
-    cJSON_AddStringToObject(clipboard, "command", "cmd /c echo {url} | clip");
+    cJSON_AddStringToObject(clipboard, "command", "echo {url} | clip");
     cJSON_AddItemToArray(commands, clipboard);
 
     // Chrome Incognito
