@@ -1,7 +1,7 @@
 {
 	"settings":	{
 		"defaultCommandIndex":	3,
-		"waitTime":	7
+		"waitTime":	10
 	},
 	"commands":	[{
 			"name":	"Copy to Clipboard",
