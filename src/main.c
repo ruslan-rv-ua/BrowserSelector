@@ -63,25 +63,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     
     // Load configuration
     Configuration config;
-    if (!LoadConfig(exePath, &config)) {
+    int loadResult = LoadConfig(exePath, &config);
+    
+    if (loadResult == CONFIG_PARSE_ERROR) {
+        // Config file exists but is corrupted - ask user what to do
+        int result = MessageBoxW(NULL, 
+            I18n_GetStringW(IDS_CONFIG_CORRUPTED_MSG),
+            I18n_GetStringW(IDS_ERROR), 
+            MB_YESNO | MB_ICONERROR);
+        
+        if (result == IDYES) {
+            // User chose to create new config
+            char configPath[MAX_PATH];
+            GetConfigPath(exePath, configPath);
+            if (!CreateDefaultConfig(configPath)) {
+                MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_CREATE_FAILED), 
+                           I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
+                return 1;
+            }
+            // Try loading again
+            loadResult = LoadConfig(exePath, &config);
+            if (loadResult != CONFIG_OK) {
+                MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_LOAD_RETRY_FAIL), 
+                           I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
+                return 1;
+            }
+        } else {
+            // User chose to exit
+            return 1;
+        }
+    } else if (loadResult != CONFIG_OK) {
+        // Other errors (memory, read error, etc.)
         MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_LOAD_FAILED_MSG), 
-                   I18n_GetStringW(IDS_WARNING), MB_OK | MB_ICONWARNING);
-        
-        // Try to create default config
-        char configPath[MAX_PATH];
-        GetConfigPath(exePath, configPath);
-        if (!CreateDefaultConfig(configPath)) {
-            MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_CREATE_FAILED), 
-                       I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
-            return 1;
-        }
-        
-        // Try loading again
-        if (!LoadConfig(exePath, &config)) {
-            MessageBoxW(NULL, I18n_GetStringW(IDS_CONFIG_LOAD_RETRY_FAIL), 
-                       I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
-            return 1;
-        }
+                   I18n_GetStringW(IDS_ERROR), MB_OK | MB_ICONERROR);
+        return 1;
     }
     
     // Check if we have any commands

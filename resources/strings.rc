@@ -93,12 +93,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Failed to load configuration"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Failed to load configuration.\n\nA default config.json will be created."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Failed to load configuration."
     IDS_CONFIG_CREATE_FAILED    "Failed to create default configuration."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Failed to load configuration after creating default."
     IDS_NO_BROWSERS_TITLE       "No Browsers"
     IDS_NO_BROWSERS_MSG         "No browsers configured.\n\nThe settings window will open to add browsers."
     IDS_WINDOW_CREATE_FAILED    "Failed to create main window."
+    IDS_CONFIG_CORRUPTED_MSG    "Configuration file is corrupted and cannot be read.\n\nCreate new default configuration?"
+    IDS_CONFIG_CREATE_BTN       "Create config"
+    IDS_CONFIG_EXIT_BTN         "Exit"
 END
 
 
@@ -191,12 +194,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Не вдалося завантажити конфігурацію"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Не вдалося завантажити конфігурацію.\n\nБуде створено config.json за замовчуванням."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Не вдалося завантажити конфігурацію."
     IDS_CONFIG_CREATE_FAILED    "Не вдалося створити конфігурацію за замовчуванням."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Не вдалося завантажити конфігурацію після створення."
     IDS_NO_BROWSERS_TITLE       "Немає браузерів"
     IDS_NO_BROWSERS_MSG         "Браузери не налаштовані.\n\nВідкриється вікно налаштувань для додавання браузерів."
     IDS_WINDOW_CREATE_FAILED    "Не вдалося створити головне вікно."
+    IDS_CONFIG_CORRUPTED_MSG    "Файл конфігурації пошкоджений і не може бути прочитаний.\n\nСтворити нову конфігурацію за замовчуванням?"
+    IDS_CONFIG_CREATE_BTN       "Створити конфіг"
+    IDS_CONFIG_EXIT_BTN         "Вийти"
 END
 
 
@@ -289,12 +295,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Konfiguration konnte nicht geladen werden"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Konfiguration konnte nicht geladen werden.\n\nEine Standard-config.json wird erstellt."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Konfiguration konnte nicht geladen werden."
     IDS_CONFIG_CREATE_FAILED    "Standardkonfiguration konnte nicht erstellt werden."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Konfiguration konnte nach dem Erstellen nicht geladen werden."
     IDS_NO_BROWSERS_TITLE       "Keine Browser"
     IDS_NO_BROWSERS_MSG         "Keine Browser konfiguriert.\n\nDas Einstellungsfenster wird zum Hinzufügen von Browsern geöffnet."
     IDS_WINDOW_CREATE_FAILED    "Hauptfenster konnte nicht erstellt werden."
+    IDS_CONFIG_CORRUPTED_MSG    "Konfigurationsdatei ist beschädigt und kann nicht gelesen werden.\n\nNeue Standardkonfiguration erstellen?"
+    IDS_CONFIG_CREATE_BTN       "Konfig erstellen"
+    IDS_CONFIG_EXIT_BTN         "Beenden"
 END
 
 
@@ -387,12 +396,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Échec du chargement de la configuration"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Échec du chargement de la configuration.\n\nUn config.json par défaut sera créé."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Échec du chargement de la configuration."
     IDS_CONFIG_CREATE_FAILED    "Échec de la création de la configuration par défaut."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Échec du chargement de la configuration après création."
     IDS_NO_BROWSERS_TITLE       "Aucun navigateur"
     IDS_NO_BROWSERS_MSG         "Aucun navigateur configuré.\n\nLa fenêtre des paramètres s'ouvrira pour ajouter des navigateurs."
     IDS_WINDOW_CREATE_FAILED    "Échec de la création de la fenêtre principale."
+    IDS_CONFIG_CORRUPTED_MSG    "Le fichier de configuration est corrompu et ne peut pas être lu.\n\nCréer une nouvelle configuration par défaut?"
+    IDS_CONFIG_CREATE_BTN       "Créer config"
+    IDS_CONFIG_EXIT_BTN         "Quitter"
 END
 
 
@@ -485,12 +497,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Error al cargar la configuración"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Error al cargar la configuración.\n\nSe creará un config.json predeterminado."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Error al cargar la configuración."
     IDS_CONFIG_CREATE_FAILED    "Error al crear la configuración predeterminada."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Error al cargar la configuración después de crearla."
     IDS_NO_BROWSERS_TITLE       "Sin navegadores"
     IDS_NO_BROWSERS_MSG         "No hay navegadores configurados.\n\nSe abrirá la ventana de configuración para añadir navegadores."
     IDS_WINDOW_CREATE_FAILED    "Error al crear la ventana principal."
+    IDS_CONFIG_CORRUPTED_MSG    "El archivo de configuración está dañado y no se puede leer.\n\n¿Crear nueva configuración predeterminada?"
+    IDS_CONFIG_CREATE_BTN       "Crear config"
+    IDS_CONFIG_EXIT_BTN         "Salir"
 END
 
 
@@ -583,12 +598,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Caricamento configurazione fallito"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Caricamento configurazione fallito.\n\nVerrà creato un config.json predefinito."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Caricamento configurazione fallito."
     IDS_CONFIG_CREATE_FAILED    "Creazione configurazione predefinita fallita."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Caricamento configurazione fallito dopo la creazione."
     IDS_NO_BROWSERS_TITLE       "Nessun browser"
     IDS_NO_BROWSERS_MSG         "Nessun browser configurato.\n\nSi aprirà la finestra impostazioni per aggiungere browser."
     IDS_WINDOW_CREATE_FAILED    "Creazione finestra principale fallita."
+    IDS_CONFIG_CORRUPTED_MSG    "Il file di configurazione è danneggiato e non può essere letto.\n\nCreare nuova configurazione predefinita?"
+    IDS_CONFIG_CREATE_BTN       "Crea config"
+    IDS_CONFIG_EXIT_BTN         "Esci"
 END
 
 
@@ -681,12 +699,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Nie udało się wczytać konfiguracji"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Nie udało się wczytać konfiguracji.\n\nZostanie utworzony domyślny config.json."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Nie udało się wczytać konfiguracji."
     IDS_CONFIG_CREATE_FAILED    "Nie udało się utworzyć domyślnej konfiguracji."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Nie udało się wczytać konfiguracji po utworzeniu."
     IDS_NO_BROWSERS_TITLE       "Brak przeglądarek"
     IDS_NO_BROWSERS_MSG         "Nie skonfigurowano przeglądarek.\n\nOkno ustawień otworzy się aby dodać przeglądarki."
     IDS_WINDOW_CREATE_FAILED    "Nie udało się utworzyć głównego okna."
+    IDS_CONFIG_CORRUPTED_MSG    "Plik konfiguracji jest uszkodzony i nie można go odczytać.\n\nUtwórzyć nową domyślną konfigurację?"
+    IDS_CONFIG_CREATE_BTN       "Utwórz konfig"
+    IDS_CONFIG_EXIT_BTN         "Wyjdź"
 END
 
 
@@ -779,12 +800,15 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Configuratie laden mislukt"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Configuratie laden mislukt.\n\nEen standaard config.json wordt aangemaakt."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Configuratie laden mislukt."
     IDS_CONFIG_CREATE_FAILED    "Standaardconfiguratie aanmaken mislukt."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Configuratie laden mislukt na aanmaken."
     IDS_NO_BROWSERS_TITLE       "Geen browsers"
     IDS_NO_BROWSERS_MSG         "Geen browsers geconfigureerd.\n\nHet instellingenvenster wordt geopend om browsers toe te voegen."
     IDS_WINDOW_CREATE_FAILED    "Hoofdvenster aanmaken mislukt."
+    IDS_CONFIG_CORRUPTED_MSG    "Configuratiebestand is beschadigd en kan niet worden gelezen.\n\nNieuwe standaardconfiguratie aanmaken?"
+    IDS_CONFIG_CREATE_BTN       "Config aanmaken"
+    IDS_CONFIG_EXIT_BTN         "Afsluiten"
 END
 
 
@@ -877,10 +901,13 @@ STRINGTABLE
 BEGIN
     // Main application messages
     IDS_CONFIG_LOAD_FAILED      "Falha ao carregar configuração"
-    IDS_CONFIG_LOAD_FAILED_MSG  "Falha ao carregar configuração.\n\nUm config.json padrão será criado."
+    IDS_CONFIG_LOAD_FAILED_MSG  "Falha ao carregar configuração."
     IDS_CONFIG_CREATE_FAILED    "Falha ao criar configuração padrão."
     IDS_CONFIG_LOAD_RETRY_FAIL  "Falha ao carregar configuração após criação."
     IDS_NO_BROWSERS_TITLE       "Sem navegadores"
     IDS_NO_BROWSERS_MSG         "Nenhum navegador configurado.\n\nA janela de configurações será aberta para adicionar navegadores."
     IDS_WINDOW_CREATE_FAILED    "Falha ao criar janela principal."
+    IDS_CONFIG_CORRUPTED_MSG    "Arquivo de configuração está corrompido e não pode ser lido.\n\nCriar nova configuração padrão?"
+    IDS_CONFIG_CREATE_BTN       "Criar config"
+    IDS_CONFIG_EXIT_BTN         "Sair"
 END

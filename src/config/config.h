@@ -6,6 +6,13 @@
 #define MAX_COMMAND_LENGTH 512
 #define MAX_COMMANDS 50
 
+// LoadConfig return codes
+#define CONFIG_OK               0
+#define CONFIG_FILE_NOT_FOUND   1
+#define CONFIG_PARSE_ERROR      2
+#define CONFIG_READ_ERROR       3
+#define CONFIG_MEMORY_ERROR     4
+
 typedef struct {
     char name[MAX_NAME_LENGTH];
     char command[MAX_COMMAND_LENGTH];

@@ -77,6 +77,9 @@
 #define IDS_NO_BROWSERS_TITLE       604
 #define IDS_NO_BROWSERS_MSG         605
 #define IDS_WINDOW_CREATE_FAILED    606
+#define IDS_CONFIG_CORRUPTED_MSG    607
+#define IDS_CONFIG_CREATE_BTN       608
+#define IDS_CONFIG_EXIT_BTN         609
 
 // Supported languages
 typedef enum {

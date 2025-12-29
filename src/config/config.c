@@ -77,12 +77,12 @@ int LoadConfig(const char* exePath, Configuration* config) {
     // Try to open file
     FILE* file = fopen(configPath, "r");
     if (!file) {
-        // Create default configuration
+        // File doesn't exist - silently create default configuration
         if (CreateDefaultConfig(configPath)) {
             file = fopen(configPath, "r");
-            if (!file) return 0;
+            if (!file) return CONFIG_READ_ERROR;
         } else {
-            return 0;
+            return CONFIG_READ_ERROR;
         }
     }
     
@@ -94,7 +94,7 @@ int LoadConfig(const char* exePath, Configuration* config) {
     char* jsonString = (char*)malloc(fileSize + 1);
     if (!jsonString) {
         fclose(file);
-        return 0;
+        return CONFIG_MEMORY_ERROR;
     }
     
     size_t bytesRead = fread(jsonString, 1, fileSize, file);
@@ -106,7 +106,7 @@ int LoadConfig(const char* exePath, Configuration* config) {
     free(jsonString);
     
     if (!json) {
-        return 0;
+        return CONFIG_PARSE_ERROR;
     }
     
     // Initialize defaults
@@ -161,7 +161,7 @@ int LoadConfig(const char* exePath, Configuration* config) {
         config->settings.defaultCommandIndex = 0;
     }
     
-    return 1;
+    return CONFIG_OK;
 }
 
 int SaveConfig(const char* exePath, const Configuration* config) {
