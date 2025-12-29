@@ -11,25 +11,40 @@
 </p>
 
 <p align="center">
-  <strong>Browser Selector</strong> is <strong>an accessible</strong>, portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application presents a menu with your configured browsers for you to choose from.
+A lightweight, accessible Windows application for selecting which browser opens your links
 </p>
+
+## Overview
+
+Browser Selector is a portable Windows desktop application that intercepts URL opening requests and presents you with a menu to choose which browser or command to use. It's designed to be your default browser, giving you control over how links are opened.
 
 ## Key Features
 
-- **Accessibility first!**: Works with NVDA and Windows Narrator
-- **Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
-- **Clean Interface**
-- **Portable**: Single .exe file with JSON configuration
-- **Quick Navigation**: Use Arrow keys, Enter, Escape, and numbers 1-9 for quick selection
-- **Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
-- **Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
+- **Set as Default Browser**: Register as Windows default browser to intercept all link clicks
+- **Accessibility First**: Full support for NVDA and Windows Narrator screen readers
+- **Multi-Language Interface**: Automatic UI language detection supporting 9 languages
+- **Auto-Open Timer**: Configurable countdown (1-10 seconds) to automatically open your preferred browser
+- **Shell Command Support**: Execute any shell command with URL parameter, including pipes and redirects
+- **Keyboard-Driven**: Navigate with arrow keys, Enter, Escape, Tab, and numbers 1-9
+- **Portable**: Single executable with JSON configuration file
 
-Browser Selector automatically detects your Windows UI language and displays the interface accordingly:
-If your Windows language is not supported the application falls back to English.
+## Supported Languages
+
+- English
+- Ukrainian
+- German
+- French
+- Spanish
+- Italian
+- Polish
+- Dutch
+- Portuguese
+
+The application automatically detects your Windows UI language and displays the interface accordingly. If your language is not supported, it defaults to English.
 
 ## Installation
 
-### Using Scoop
+### Using Scoop (Recommended)
 
 ```cmd
 scoop bucket add ruslan-rv-ua https://github.com/ruslan-rv-ua/scoop-bucket
@@ -38,66 +53,105 @@ scoop install browserselector
 
 ### Manual Installation
 
-**Download** the zip from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page and extract to your desired location.
+1. Download the latest `BrowserSelector-x.x.x-win64.zip` from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page
+2. Extract to your preferred location
+3. Run `BrowserSelector.exe`
 
 ### Building from Source
 
-If you prefer to build from source, see the [Building from Source](#building-from-source) section below.
+**Prerequisites:**
+- MinGW-w64 GCC 8.1.0 or newer
+- Make (optional)
 
-## How to Use
+**Using Make:**
+```cmd
+make              # Build debug version
+make release      # Build optimized release version
+make install      # Build and copy config to bin/
+make clean        # Remove build artifacts
+```
 
-### Basic Commands
+**Manual build:**
+```cmd
+# Create directories
+mkdir obj bin
+
+# Compile sources
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/main.c -o obj/main.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/config/config.c -o obj/config.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/ui/mainwindow.c -o obj/mainwindow.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/ui/settings.c -o obj/settings.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/ui/commandeditor.c -o obj/commandeditor.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/executor/executor.c -o obj/executor.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/registry/registry.c -o obj/registry.o
+gcc -std=c11 -Wall -O2 -Iinclude -DUNICODE -D_UNICODE -c src/i18n/i18n.c -o obj/i18n.o
+gcc -std=c11 -Wall -O2 -Iinclude -c include/cJSON.c -o obj/cJSON.o
+
+# Compile resources
+windres --codepage=65001 -Isrc resources/app.rc -O coff -o obj/app.res
+
+# Link
+gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
+    obj/main.o obj/config.o obj/mainwindow.o obj/settings.o ^
+    obj/commandeditor.o obj/executor.o obj/registry.o obj/i18n.o obj/cJSON.o obj/app.res ^
+    -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
+```
+
+## Usage
+
+### Setting as Default Browser
+
+1. Run `BrowserSelector.exe`
+2. Click the "Set as default browser" button
+3. In the Windows Settings window that opens:
+   - Scroll to "Web browser"
+   - Click on the current browser name
+   - Select "BrowserSelector" from the list
+4. Close Settings and click "Yes" to confirm
+
+The button will change to "Unregister as default" when Browser Selector is set as your default browser.
+
+### Command Line Usage
 
 ```cmd
-:: Open without URL
-BrowserSelector.exe
-
-:: Open with URL
+# Launch with URL
 BrowserSelector.exe "https://example.com"
 
-:: Open with local file
-BrowserSelector.exe "file:///C:/Users/Test/Desktop/index.html"
+# Launch with local file
+BrowserSelector.exe "file:///C:/path/to/file.html"
+
+# Launch without URL (for testing)
+BrowserSelector.exe
 ```
 
 ### Keyboard Shortcuts
 
-- **↑/↓** - Navigate through the browser list
-- **Enter** - Open URL with the selected browser
-- **1-9** - Select browser by number
-- **Escape** - Close Browser Selector without opening any link
-- **Tab** - Switch focus between list and buttons
-- **Any Key** - Pause/Cancel the auto-open timer
+- **Arrow Up/Down**: Navigate browser list
+- **Enter**: Open URL with selected browser
+- **1-9**: Quick select browser by number
+- **Tab**: Cycle focus between list and buttons
+- **Escape**: Close without opening
+- **Any Key**: Cancel auto-open timer
 
 ### Auto-Open Timer
 
-The application features an auto-open timer that automatically launches the default browser after a configured wait time:
+When a URL is opened, Browser Selector displays a countdown timer that automatically launches the default browser after the configured wait time (default: 10 seconds). Any user interaction cancels the timer.
 
-- **Default time**: 10 seconds
-- **Configurable range**: 1-10 seconds
-- **Visual countdown**: Shows remaining seconds in the main window
-- **Cancel on interaction**: Any user action cancels the timer
-- **Settings**: Configure wait time in the settings window
+**Configuring wait time:**
+1. Open Settings
+2. Adjust "Wait Time (1-10 sec)" field
+3. Changes are saved automatically
 
-## Browser Configuration
+## Configuration
 
-### Settings Window
+The `config.json` file is created in the same directory as `BrowserSelector.exe` on first run. You can edit it manually or use the Settings interface.
 
-Click the **"Settings"** button to access configuration:
-
-- **Add browsers**: Click "Add" to add a new browser
-- **Edit**: Select a browser and click "Edit"
-- **Delete**: Select a browser and click "Delete"
-- **Reorder**: Use "Up"/"Down" to change order
-- **Auto-open time**: Configure `Wait Time` (1-10 seconds)
-
-### Configuration File Format
-
-The `config.json` file is stored in the same directory as the executable:
+### Configuration Structure
 
 ```json
 {
   "settings": {
-    "defaultCommandIndex": 1,
+    "defaultCommandIndex": 0,
     "waitTime": 10
   },
   "commands": [
@@ -116,151 +170,88 @@ The `config.json` file is stored in the same directory as the executable:
     {
       "name": "Helium",
       "command": "helium.exe {url}"
-    },
-    {
-      "name": "Firefox Private",
-      "command": "firefox.exe -private-window {url}"
-    },
-    {
-      "name": "Edge with specific profile",
-      "command": "msedge.exe --profile-directory=\"Default\" {url}"
-    },
-    {
-      "name": "Chrome",
-      "command": "chrome.exe {url}"
-    },
-    {
-      "name": "Firefox",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe {url}"
     }
   ]
 }
 ```
 
-#### Field Descriptions
+### Configuration Fields
 
+- **defaultCommandIndex**: Index (0-based) of the default browser to auto-open
+- **waitTime**: Auto-open countdown duration in seconds (1-10)
 - **name**: Display name in the selector
-- **command**: Full command to execute. Use `{url}` as placeholder for the URL. Can include shell commands, pipes, and arguments
-- **defaultCommandIndex**: Index of the default browser (0-based)
-- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
+- **command**: Command to execute. Use `{url}` as placeholder for the URL
 
-## Default Browser Registration
+### Command Format
 
-### Registration Process
+Commands are executed via `cmd.exe /c`, which enables:
+- Shell commands and pipes: `echo {url} | clip`
+- Built-in commands: `start {url}`
+- Executable paths (absolute or in PATH): `chrome.exe --incognito {url}`
+- Complex shell operations: `powershell -Command "Write-Output {url}"`
 
-1. Click the **"Set as Default"** button
-2. Windows Settings will open automatically
-3. Scroll to the **Web browser** section
-4. Click on the current browser name
-5. Select **BrowserSelector** from the list
-6. Close Settings and return to the app
-7. Click "Yes" to confirm the changes
+### Managing Configuration
 
-### Button States
+**Via Settings Interface:**
+1. Click "Settings" button
+2. Use Add/Edit/Delete buttons to manage commands
+3. Use "Move Up"/"Move Down" to reorder
+4. Click "Set Default" to change the auto-open browser
+5. Changes are saved automatically
 
-- **"Set as Default"** - when the app is not registered or not set as default browser
-- **"Unregister"** - when already set as default browser
+**Manual Editing:**
+1. Close Browser Selector if running
+2. Edit `config.json` in a text editor
+3. Save and restart Browser Selector
 
----
-
-## Technical Documentation
+## Technical Details
 
 ### System Requirements
 
-- **Operating System**: Windows 10/11 (x64)
-- **Runtime**: No additional libraries required (statically compiled)
-- **Space**: ~500KB-1MB on disk
+- Windows 10/11 (x64)
+- No additional runtime libraries required (statically compiled)
+- Approximately 500KB-1MB disk space
 
-### Building from Source
+### Architecture
 
-#### Prerequisites
-
-1. **MinGW-w64 GCC** (8.1.0 or newer)
-   - Install via MSYS2: `pacman -S mingw-w64-x86_64-gcc`
-   - Or download from [winlibs.com](https://winlibs.com/)
-
-2. **Make** (optional, for Makefile usage)
-   - Install via MSYS2: `pacman -S mingw-w64-x86_64-make`
-
-3. Add MinGW bin directory to PATH (e.g., `C:\msys64\mingw64\bin`)
-
-#### Build Commands
-
-```cmd
-:: Build the project
-make
-
-:: Build release version (optimized)
-make release
-
-:: Build and copy config.json to bin
-make install
-
-:: Clean build files
-make clean
-
-:: Build and run
-make run
-```
-
-#### Manual Build (without Make)
-
-```cmd
-:: Create directories
-mkdir obj
-mkdir bin
-
-:: Compile source files
-gcc -std=c11 -Wall -O2 -Iinclude -c src/main.c -o obj/main.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/config/config.c -o obj/config.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/ui/mainwindow.c -o obj/mainwindow.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/ui/settings.c -o obj/settings.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/ui/commandeditor.c -o obj/commandeditor.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/executor/executor.c -o obj/executor.o
-gcc -std=c11 -Wall -O2 -Iinclude -c src/registry/registry.c -o obj/registry.o
-gcc -std=c11 -Wall -O2 -Iinclude -c include/cJSON.c -o obj/cJSON.o
-
-:: Compile resources
-windres -i resources/app.rc -o obj/app.res
-
-:: Link
-gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
-    obj/main.o obj/config.o obj/mainwindow.o obj.settings.o ^
-    obj/commandeditor.o obj/executor.o obj.registry.o obj.cJSON.o obj.app.res ^
-    -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
-
-:: Copy configuration
-copy config.json bin\
-```
-
-### Project Structure
-
-- `src/` - Source code
-  - `ui/` - Interface logic (GDI/WinAPI)
-  - `config/` - JSON configuration handling
-  - `registry/` - Windows Registry operations
-  - `i18n/` - Internationalization helper functions
-- `resources/` - Icons, localized strings (`strings.rc`)
-- `include/` - Header files and external libraries (cJSON)
-
-### Adding Translations
-
-Localization is handled via Windows Resource files which allows the app to automatically adapt to the user's OS language. To add a new language:
-
-1. Open `resources/strings.rc`.
-2. Add a new `STRINGTABLE` block with the appropriate `LANGUAGE` identifier.
-3. Translate the string definitions.
-4. Rebuild the project.
+- **Language**: C11
+- **Compiler**: GCC (MinGW-w64)
+- **GUI**: Win32 API with native controls
+- **Configuration**: JSON (cJSON library)
+- **Localization**: Windows String Resources (STRINGTABLE)
+- **Build System**: Makefile
 
 ## Troubleshooting
 
-### Configuration file is corrupted
-If `config.json` becomes invalid or corrupted, the application will detect this on startup. It will attempt to create a new default configuration file. You can also manually delete `config.json` to force a reset.
+### Configuration Issues
 
-### Browser not opening
-- Check if the command in `config.json` is correct.
-- If using just the executable name (e.g., `chrome.exe`), ensure it is available in your system's PATH.
-- Verify that the `{url}` placeholder is present in the command if needed.
+**Corrupted config.json:**
+If the configuration file becomes corrupted, Browser Selector will detect this on startup and offer to create a new default configuration.
+
+**Manually reset configuration:**
+Delete `config.json` from the application directory. A new default configuration will be created automatically on next launch.
+
+### Command Execution Issues
+
+**"Command not found" error:**
+- Verify the command is in your system PATH
+- Use absolute paths: `C:\Program Files\Browser\browser.exe {url}`
+- Check spelling and executable name
+
+**Command doesn't open:**
+- Ensure `{url}` placeholder is included if the command needs the URL
+- Test the command in `cmd.exe` manually
+- Check that the browser/application is installed
+
+### Registration Issues
+
+**Cannot set as default browser:**
+- Try running as Administrator
+- Ensure no antivirus is blocking Registry modifications
+- Manually open Windows Settings and select BrowserSelector
+
+**Button shows wrong state:**
+The button text automatically updates based on actual registration status. If it appears incorrect, try clicking it to refresh the state.
 
 ## Contributing
 
@@ -274,8 +265,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Credits
 
-- [cJSON](https://github.com/DaveGamble/cJSON) - JSON parsing library
+- JSON parsing: [cJSON](https://github.com/DaveGamble/cJSON) by Dave Gamble
+- Inspired by the need for flexible and accessible browser selection on Windows
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
