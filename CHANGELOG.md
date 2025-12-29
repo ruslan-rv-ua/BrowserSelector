@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Removed unused static variables and window class constants to eliminate compiler warnings
 
-## [0.1.1] - 2024-12-22
+## [0.1.1] - 2025-12-22
 
 ### Added
 - Accessibility features including keyboard navigation and screen reader support
