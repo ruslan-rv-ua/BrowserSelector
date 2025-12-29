@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Improved config error handling**: If config file exists but is corrupted/invalid, user is now asked whether to create new default config or exit. If config file doesn't exist, default config is created silently.
 
 ### Added
-- "Copy to Clipboard" as the first default command (`cmd /c echo {url} | clip`)
+- "Copy to Clipboard" as the first command (`cmd /c echo {url} | clip`)
 
 ## [0.1.2] - 2025-12-22
 
