@@ -24,12 +24,15 @@
 - **Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
 - **Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
 
+Browser Selector automatically detects your Windows UI language and displays the interface accordingly:
+If your Windows language is not supported the application falls back to English.
+
 ## Installation
 
 ### Using Scoop
 
 ```cmd
-scoop bucket add ruslan-rv-ua
+scoop bucket add ruslan-rv-ua https://github.com/ruslan-rv-ua/scoop-bucket
 scoop install browserselector
 ```
 
@@ -40,19 +43,6 @@ scoop install browserselector
 ### Building from Source
 
 If you prefer to build from source, see the [Building from Source](#building-from-source) section below.
-
-## Quick Start
-
-1. **Download** `BrowserSelector.exe` from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page
-2. **Run** `BrowserSelector.exe "https://example.com"` or just `BrowserSelector.exe`
-3. **Select** a browser from the list or wait for automatic opening (10 seconds by default)
-
-### How to Set as Default Browser
-
-1. Click the **"Set as Default"** button
-2. In opened Windows Settings window select **BrowserSelector** as the default web browser
-3. Confirm the changes by clicking "Yes" in Browser Selector
-4. Now all links will open through Browser Selector!
 
 ## How to Use
 
@@ -88,24 +78,6 @@ The application features an auto-open timer that automatically launches the defa
 - **Cancel on interaction**: Any user action cancels the timer
 - **Settings**: Configure wait time in the settings window
 
-## Supported Languages
-
-Browser Selector automatically detects your Windows UI language and displays the interface accordingly:
-
-| Language | Code |
-|----------|------|
-| English | en (default) |
-| Ukrainian | uk |
-| German | de |
-| French | fr |
-| Spanish | es |
-| Italian | it |
-| Polish | pl |
-| Dutch | nl |
-| Portuguese | pt |
-
-If your Windows language is not in this list, the application falls back to English.
-
 ## Browser Configuration
 
 ### Settings Window
@@ -118,38 +90,59 @@ Click the **"Settings"** button to access configuration:
 - **Reorder**: Use "Up"/"Down" to change order
 - **Auto-open time**: Configure `Wait Time` (1-10 seconds)
 
-### Configuration Examples
+### Configuration File Format
+
+The `config.json` file is stored in the same directory as the executable:
 
 ```json
 {
-  "name": "Copy to Clipboard",
-  "command": "echo {url} | clip"
-},
-{
-  "name": "Chrome Incognito",
-  "command": "chrome.exe --incognito {url}"
-},
-{
-  "name": "Firefox Profile",
-  "command": "firefox.exe -P default {url}"
-},
-{
-  "name": "Helium",
-  "command": "helium.exe {url}"
-},
-{
-  "name": "Firefox Private",
-  "command": "firefox.exe -private-window {url}"
-},
-{
-  "name": "Edge with specific profile",
-  "command": "msedge.exe --profile-directory=\"Default\" {url}"
+  "settings": {
+    "defaultCommandIndex": 1,
+    "waitTime": 10
+  },
+  "commands": [
+    {
+      "name": "Copy to Clipboard",
+      "command": "echo {url} | clip"
+    },
+    {
+      "name": "Chrome Incognito",
+      "command": "chrome.exe --incognito {url}"
+    },
+    {
+      "name": "Firefox Profile",
+      "command": "firefox.exe -P default {url}"
+    },
+    {
+      "name": "Helium",
+      "command": "helium.exe {url}"
+    },
+    {
+      "name": "Firefox Private",
+      "command": "firefox.exe -private-window {url}"
+    },
+    {
+      "name": "Edge with specific profile",
+      "command": "msedge.exe --profile-directory=\"Default\" {url}"
+    },
+    {
+      "name": "Chrome",
+      "command": "chrome.exe {url}"
+    },
+    {
+      "name": "Firefox",
+      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe {url}"
+    }
+  ]
 }
 ```
 
-### Command Format
+#### Field Descriptions
 
-The `command` field contains the full command to execute, including any arguments. Use `{url}` as a placeholder for the URL that will be opened.
+- **name**: Display name in the selector
+- **command**: Full command to execute. Use `{url}` as placeholder for the URL. Can include shell commands, pipes, and arguments
+- **defaultCommandIndex**: Index of the default browser (0-based)
+- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
 
 ## Default Browser Registration
 
@@ -167,10 +160,6 @@ The `command` field contains the full command to execute, including any argument
 
 - **"Set as Default"** - when the app is not registered or not set as default browser
 - **"Unregister"** - when already set as default browser
-
-### Why Manual Confirmation?
-
-Windows 10 and 11 require users to manually confirm changes to the default browser for security reasons. This applies to **all** browsers, including Firefox, Chrome, and Edge. Only you, the user, can authorize this change.
 
 ---
 
@@ -236,8 +225,8 @@ windres -i resources/app.rc -o obj/app.res
 
 :: Link
 gcc -mwindows -static-libgcc -static -o bin/BrowserSelector.exe ^
-    obj/main.o obj/config.o obj/mainwindow.o obj/settings.o ^
-    obj/commandeditor.o obj/executor.o obj/registry.o obj/cJSON.o obj/app.res ^
+    obj/main.o obj/config.o obj/mainwindow.o obj.settings.o ^
+    obj/commandeditor.o obj/executor.o obj.registry.o obj.cJSON.o obj.app.res ^
     -lcomctl32 -ladvapi32 -lshell32 -luser32 -lgdi32 -lkernel32 -lcomdlg32 -lole32
 
 :: Copy configuration
@@ -262,40 +251,6 @@ Localization is handled via Windows Resource files which allows the app to autom
 2. Add a new `STRINGTABLE` block with the appropriate `LANGUAGE` identifier.
 3. Translate the string definitions.
 4. Rebuild the project.
-
-### Configuration File Format
-
-The `config.json` file is stored in the same directory as the executable:
-
-```json
-{
-  "settings": {
-    "defaultCommandIndex": 1,
-    "waitTime": 10
-  },
-  "commands": [
-    {
-      "name": "Copy to Clipboard",
-      "command": "echo {url} | clip"
-    },
-    {
-      "name": "Chrome",
-      "command": "chrome.exe {url}"
-    },
-    {
-      "name": "Firefox",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe {url}"
-    }
-  ]
-}
-```
-
-#### Field Descriptions
-
-- **name**: Display name in the selector
-- **command**: Full command to execute. Use `{url}` as placeholder for the URL. Can include shell commands, pipes, and arguments
-- **defaultCommandIndex**: Index of the default browser (0-based)
-- **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
 
 ## Troubleshooting
 
@@ -324,4 +279,3 @@ MIT License
 ## Credits
 
 - [cJSON](https://github.com/DaveGamble/cJSON) - JSON parsing library
-
