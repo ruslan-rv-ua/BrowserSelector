@@ -1,19 +1,19 @@
 {
 	"settings":	{
-		"defaultCommandIndex":	0,
+		"defaultCommandIndex":	1,
 		"waitTime":	5
 	},
 	"commands":	[{
+			"name":	"Copy to Clipboard",
+			"command":	"cmd /c echo {url} | clip"
+		}, {
 			"name":	"Chrome",
-			"command":	"chrome.exe",
-			"arguments":	"{url}"
+			"command":	"chrome.exe {url}"
 		}, {
 			"name":	"Firefox",
-			"command":	"firefox.exe",
-			"arguments":	"{url}"
+			"command":	"firefox.exe {url}"
 		}, {
 			"name":	"Edge",
-			"command":	"msedge.exe",
-			"arguments":	"{url}"
+			"command":	"msedge.exe {url}"
 		}]
 }

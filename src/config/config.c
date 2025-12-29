@@ -20,33 +20,36 @@ int CreateDefaultConfig(const char* configPath) {
     
     // Add settings
     cJSON* settings = cJSON_CreateObject();
-    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 0);
+    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 1);  // LibreWolf as default
     cJSON_AddNumberToObject(settings, "waitTime", 10);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add default commands
     cJSON* commands = cJSON_CreateArray();
     
-    // LibreWolf (default, first)
+    // Copy to Clipboard (first)
+    cJSON* clipboard = cJSON_CreateObject();
+    cJSON_AddStringToObject(clipboard, "name", "Copy to Clipboard");
+    cJSON_AddStringToObject(clipboard, "command", "cmd /c echo {url} | clip");
+    cJSON_AddItemToArray(commands, clipboard);
+
+    // LibreWolf (default)
     cJSON* librewolf = cJSON_CreateObject();
     cJSON_AddStringToObject(librewolf, "name", "LibreWolf");
-    cJSON_AddStringToObject(librewolf, "command", "librewolf.exe");
-    cJSON_AddStringToObject(librewolf, "arguments", "{url}");
+    cJSON_AddStringToObject(librewolf, "command", "librewolf.exe {url}");
     cJSON_AddItemToArray(commands, librewolf);
 
     // Chrome (incognito)
     cJSON* chrome = cJSON_CreateObject();
     cJSON_AddStringToObject(chrome, "name", "Chrome");
-    cJSON_AddStringToObject(chrome, "command", "chrome.exe");
     // Launch Chrome in incognito mode by default
-    cJSON_AddStringToObject(chrome, "arguments", "--incognito {url}");
+    cJSON_AddStringToObject(chrome, "command", "chrome.exe --incognito {url}");
     cJSON_AddItemToArray(commands, chrome);
     
     // Helium
     cJSON* helium = cJSON_CreateObject();
     cJSON_AddStringToObject(helium, "name", "Helium");
-    cJSON_AddStringToObject(helium, "command", "helium.exe");
-    cJSON_AddStringToObject(helium, "arguments", "{url}");
+    cJSON_AddStringToObject(helium, "command", "helium.exe {url}");
     cJSON_AddItemToArray(commands, helium);
     
     cJSON_AddItemToObject(json, "commands", commands);
@@ -136,22 +139,16 @@ int LoadConfig(const char* exePath, Configuration* config) {
             
             cJSON* name = cJSON_GetObjectItem(command, "name");
             cJSON* cmd = cJSON_GetObjectItem(command, "command");
-            cJSON* args = cJSON_GetObjectItem(command, "arguments");
             
             if (name && cJSON_IsString(name) && 
-                cmd && cJSON_IsString(cmd) && 
-                args && cJSON_IsString(args)) {
+                cmd && cJSON_IsString(cmd)) {
                 strncpy(config->commands[config->commandCount].name, 
                        name->valuestring, MAX_NAME_LENGTH - 1);
                 config->commands[config->commandCount].name[MAX_NAME_LENGTH - 1] = '\0';
                 
                 strncpy(config->commands[config->commandCount].command, 
-                       cmd->valuestring, MAX_PATH_LENGTH - 1);
-                config->commands[config->commandCount].command[MAX_PATH_LENGTH - 1] = '\0';
-                
-                strncpy(config->commands[config->commandCount].arguments, 
-                       args->valuestring, MAX_PATH_LENGTH - 1);
-                config->commands[config->commandCount].arguments[MAX_PATH_LENGTH - 1] = '\0';
+                       cmd->valuestring, MAX_COMMAND_LENGTH - 1);
+                config->commands[config->commandCount].command[MAX_COMMAND_LENGTH - 1] = '\0';
                 
                 config->commandCount++;
             }
@@ -190,7 +187,6 @@ int SaveConfig(const char* exePath, const Configuration* config) {
         cJSON* command = cJSON_CreateObject();
         cJSON_AddStringToObject(command, "name", config->commands[i].name);
         cJSON_AddStringToObject(command, "command", config->commands[i].command);
-        cJSON_AddStringToObject(command, "arguments", config->commands[i].arguments);
         cJSON_AddItemToArray(commands, command);
     }
     cJSON_AddItemToObject(json, "commands", commands);

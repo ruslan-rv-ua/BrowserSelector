@@ -3,12 +3,12 @@
 
 #define MAX_PATH_LENGTH 260
 #define MAX_NAME_LENGTH 100
+#define MAX_COMMAND_LENGTH 512
 #define MAX_COMMANDS 50
 
 typedef struct {
     char name[MAX_NAME_LENGTH];
-    char command[MAX_PATH_LENGTH];
-    char arguments[MAX_PATH_LENGTH];
+    char command[MAX_COMMAND_LENGTH];
 } Command;
 
 typedef struct {

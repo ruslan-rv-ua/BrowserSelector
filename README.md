@@ -105,27 +105,26 @@ Click the **"Settings"** button to access configuration:
 
 ```json
 {
+  "name": "Copy to Clipboard",
+  "command": "cmd /c echo {url} | clip"
+},
+{
   "name": "Chrome Incognito",
-  "command": "chrome.exe",
-  "arguments": "--incognito {url}"
+  "command": "chrome.exe --incognito {url}"
 },
 {
   "name": "Firefox Private",
-  "command": "firefox.exe",
-  "arguments": "-private-window {url}"
+  "command": "firefox.exe -private-window {url}"
 },
 {
   "name": "Edge with specific profile",
-  "command": "msedge.exe",
-  "arguments": "--profile-directory=\"Default\" {url}"
+  "command": "msedge.exe --profile-directory=\"Default\" {url}"
 }
 ```
 
-### Browser Path Types
+### Command Format
 
-- **Program name**: `"chrome.exe"` (if in PATH)
-- **Absolute path**: `"C:\\Program Files\\Mozilla Firefox\\firefox.exe"`
-- **Relative path**: `"..\\browsers\\custom.exe"`
+The `command` field contains the full command to execute, including any arguments. Use `{url}` as a placeholder for the URL that will be opened.
 
 ## 🔧 Default Browser Registration
 
@@ -246,19 +245,21 @@ The `config.json` file is stored in the same directory as the executable:
 ```json
 {
   "settings": {
-    "defaultCommandIndex": 0,
+    "defaultCommandIndex": 1,
     "waitTime": 10
   },
   "commands": [
     {
+      "name": "Copy to Clipboard",
+      "command": "cmd /c echo {url} | clip"
+    },
+    {
       "name": "Chrome",
-      "command": "chrome.exe",
-      "arguments": "{url}"
+      "command": "chrome.exe {url}"
     },
     {
       "name": "Firefox",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-      "arguments": "{url}"
+      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe {url}"
     }
   ]
 }
@@ -267,8 +268,7 @@ The `config.json` file is stored in the same directory as the executable:
 #### Field Descriptions
 
 - **name**: Display name in the selector
-- **command**: Path to executable (can be absolute, relative, or just the exe name if in PATH)
-- **arguments**: Command line arguments. Use `{url}` as placeholder for the URL
+- **command**: Full command to execute. Use `{url}` as placeholder for the URL. Can include shell commands, pipes, and arguments
 - **defaultCommandIndex**: Index of the default browser (0-based)
 - **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
 
@@ -278,9 +278,9 @@ The `config.json` file is stored in the same directory as the executable:
 If `config.json` becomes invalid or corrupted, the application will detect this on startup. It will attempt to create a new default configuration file. You can also manually delete `config.json` to force a reset.
 
 ### Browser not opening
-- Check if the path in `config.json` is correct.
+- Check if the command in `config.json` is correct.
 - If using just the executable name (e.g., `chrome.exe`), ensure it is available in your system's PATH.
-- Verify that the arguments placeholder `{url}` is present if needed.
+- Verify that the `{url}` placeholder is present in the command if needed.
 
 ## 🤝 Contributing
 

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **BREAKING**: Simplified configuration format - removed `arguments` field, now command and arguments are combined in single `command` field
+  - Old format: `{"name": "Chrome", "command": "chrome.exe", "arguments": "{url}"}`
+  - New format: `{"name": "Chrome", "command": "chrome.exe {url}"}`
+- Commands are now executed via `cmd.exe /c` which enables shell features like pipes and redirects
+
+### Added
+- "Copy to Clipboard" as the first default command (`cmd /c echo {url} | clip`)
+
 ## [0.1.2] - 2025-12-22
 
 ### Added

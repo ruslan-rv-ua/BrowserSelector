@@ -239,7 +239,7 @@ LRESULT CALLBACK SettingsWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                     
                     Command newCmd;
                     ZeroMemory(&newCmd, sizeof(newCmd));
-                    strcpy(newCmd.arguments, "{url}");
+                    strcpy(newCmd.command, "{url}");
                     
                     if (ShowCommandEditor(hwnd, &newCmd, TRUE)) {
                         data->config->commands[data->config->commandCount] = newCmd;
