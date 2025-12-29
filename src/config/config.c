@@ -20,7 +20,7 @@ int CreateDefaultConfig(const char* configPath) {
     
     // Add settings
     cJSON* settings = cJSON_CreateObject();
-    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 0);  // Copy to Clipboard as default
+    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 3);  // Helium as default
     cJSON_AddNumberToObject(settings, "waitTime", 10);
     cJSON_AddItemToObject(json, "settings", settings);
     
