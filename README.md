@@ -24,6 +24,23 @@
 - **Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
 - **Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
 
+## Installation
+
+### Using Scoop
+
+```cmd
+scoop bucket add ruslan-rv-ua
+scoop install browserselector
+```
+
+### Manual Installation
+
+**Download** the zip from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page and extract to your desired location.
+
+### Building from Source
+
+If you prefer to build from source, see the [Building from Source](#building-from-source) section below.
+
 ## Quick Start
 
 1. **Download** `BrowserSelector.exe` from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page
