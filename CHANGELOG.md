@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Old format: `{"name": "Chrome", "command": "chrome.exe", "arguments": "{url}"}`
   - New format: `{"name": "Chrome", "command": "chrome.exe {url}"}`
 - Commands are now executed via `cmd.exe /c` which enables shell features like pipes and redirects
+- **Updated default commands**:
+  1. Copy to Clipboard (default) - `cmd /c echo {url} | clip`
+  2. Chrome Incognito - `chrome.exe --incognito {url}`
+  3. Firefox Profile - `firefox.exe -P default {url}`
+  4. Helium - `helium.exe {url}`
 
 ### Added
 - "Copy to Clipboard" as the first default command (`cmd /c echo {url} | clip`)

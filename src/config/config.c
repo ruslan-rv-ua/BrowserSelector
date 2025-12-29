@@ -20,31 +20,30 @@ int CreateDefaultConfig(const char* configPath) {
     
     // Add settings
     cJSON* settings = cJSON_CreateObject();
-    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 1);  // LibreWolf as default
+    cJSON_AddNumberToObject(settings, "defaultCommandIndex", 0);  // Copy to Clipboard as default
     cJSON_AddNumberToObject(settings, "waitTime", 10);
     cJSON_AddItemToObject(json, "settings", settings);
     
     // Add default commands
     cJSON* commands = cJSON_CreateArray();
     
-    // Copy to Clipboard (first)
+    // Copy to Clipboard (default)
     cJSON* clipboard = cJSON_CreateObject();
     cJSON_AddStringToObject(clipboard, "name", "Copy to Clipboard");
     cJSON_AddStringToObject(clipboard, "command", "cmd /c echo {url} | clip");
     cJSON_AddItemToArray(commands, clipboard);
 
-    // LibreWolf (default)
-    cJSON* librewolf = cJSON_CreateObject();
-    cJSON_AddStringToObject(librewolf, "name", "LibreWolf");
-    cJSON_AddStringToObject(librewolf, "command", "librewolf.exe {url}");
-    cJSON_AddItemToArray(commands, librewolf);
-
-    // Chrome (incognito)
+    // Chrome Incognito
     cJSON* chrome = cJSON_CreateObject();
-    cJSON_AddStringToObject(chrome, "name", "Chrome");
-    // Launch Chrome in incognito mode by default
+    cJSON_AddStringToObject(chrome, "name", "Chrome Incognito");
     cJSON_AddStringToObject(chrome, "command", "chrome.exe --incognito {url}");
     cJSON_AddItemToArray(commands, chrome);
+
+    // Firefox with profile
+    cJSON* firefox = cJSON_CreateObject();
+    cJSON_AddStringToObject(firefox, "name", "Firefox Profile");
+    cJSON_AddStringToObject(firefox, "command", "firefox.exe -P default {url}");
+    cJSON_AddItemToArray(commands, firefox);
     
     // Helium
     cJSON* helium = cJSON_CreateObject();

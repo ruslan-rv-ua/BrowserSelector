@@ -158,25 +158,23 @@ browserselector/
   },
   "commands": [
     {
-      "name": "Chrome",
-      "command": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      "arguments": "{url}"
+      "name": "Copy to Clipboard",
+      "command": "cmd /c echo {url} | clip"
     },
     {
-      "name": "Firefox",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-      "arguments": "{url}"
+      "name": "Chrome Incognito",
+      "command": "chrome.exe --incognito {url}"
     },
     {
-      "name": "Edge",
-      "command": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-      "arguments": "{url}"
+      "name": "Firefox Profile",
+      "command": "firefox.exe -P default {url}"
     },
     {
-      "name": "LibreWolf",
-      "command": "C:\\Program Files\\LibreWolf\\librewolf.exe",
-      "arguments": "{url}"
-    },
+      "name": "Helium",
+      "command": "helium.exe {url}"
+    }
+  ]
+}
     {
       "name": "Opera",
       "command": "C:\\Program Files\\Opera\\launcher.exe",
@@ -482,19 +480,19 @@ int SaveConfig(const char* exePath, const Configuration* config) {
 int CreateDefaultConfig(const char* configPath) {
     Configuration config;
     config.settings.defaultCommandIndex = 0;
-    config.commandCount = 3;
+    config.commandCount = 4;
     
-    strcpy(config.commands[0].name, "Chrome");
-    strcpy(config.commands[0].command, "chrome.exe");
-    strcpy(config.commands[0].arguments, "{url}");
+    strcpy(config.commands[0].name, "Copy to Clipboard");
+    strcpy(config.commands[0].command, "cmd /c echo {url} | clip");
     
-    strcpy(config.commands[1].name, "Firefox");
-    strcpy(config.commands[1].command, "firefox.exe");
-    strcpy(config.commands[1].arguments, "{url}");
+    strcpy(config.commands[1].name, "Chrome Incognito");
+    strcpy(config.commands[1].command, "chrome.exe --incognito {url}");
     
-    strcpy(config.commands[2].name, "Edge");
-    strcpy(config.commands[2].command, "msedge.exe");
-    strcpy(config.commands[2].arguments, "{url}");
+    strcpy(config.commands[2].name, "Firefox Profile");
+    strcpy(config.commands[2].command, "firefox.exe -P default {url}");
+    
+    strcpy(config.commands[3].name, "Helium");
+    strcpy(config.commands[3].command, "helium.exe {url}");
     
     return SaveConfig(configPath, &config);
 }
@@ -1026,23 +1024,25 @@ bin\BrowserSelector.exe "https://example.com/search?q=test query"
 // Тестовий config.json з різними типами шляхів
 {
   "settings": {
-    "defaultCommandIndex": 0
+    "defaultCommandIndex": 0,
+    "waitTime": 10
   },
   "commands": [
     {
-      "name": "Chrome (PATH)",
-      "command": "chrome.exe",
-      "arguments": "{url}"
+      "name": "Copy to Clipboard",
+      "command": "cmd /c echo {url} | clip"
+    },
+    {
+      "name": "Chrome Incognito (PATH)",
+      "command": "chrome.exe --incognito {url}"
     },
     {
       "name": "Firefox (absolute)",
-      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-      "arguments": "{url}"
+      "command": "C:\\Program Files\\Mozilla Firefox\\firefox.exe -P default {url}"
     },
     {
       "name": "Custom (relative)",
-      "command": "..\\browsers\\custom.exe",
-      "arguments": "{url}"
+      "command": "..\\browsers\\custom.exe {url}"
     }
   ]
 }

@@ -1,19 +1,19 @@
 {
 	"settings":	{
-		"defaultCommandIndex":	1,
-		"waitTime":	5
+		"defaultCommandIndex":	0,
+		"waitTime":	7
 	},
 	"commands":	[{
 			"name":	"Copy to Clipboard",
 			"command":	"cmd /c echo {url} | clip"
 		}, {
-			"name":	"Chrome",
-			"command":	"chrome.exe {url}"
+			"name":	"Chrome Incognito",
+			"command":	"chrome.exe --incognito {url}"
 		}, {
-			"name":	"Firefox",
-			"command":	"firefox.exe {url}"
+			"name":	"Firefox Profile",
+			"command":	"firefox.exe -P default {url}"
 		}, {
-			"name":	"Edge",
-			"command":	"msedge.exe {url}"
+			"name":	"Helium",
+			"command":	"helium.exe {url}"
 		}]
 }

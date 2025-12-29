@@ -113,6 +113,14 @@ Click the **"Settings"** button to access configuration:
   "command": "chrome.exe --incognito {url}"
 },
 {
+  "name": "Firefox Profile",
+  "command": "firefox.exe -P default {url}"
+},
+{
+  "name": "Helium",
+  "command": "helium.exe {url}"
+},
+{
   "name": "Firefox Private",
   "command": "firefox.exe -private-window {url}"
 },
