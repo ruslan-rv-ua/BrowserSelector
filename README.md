@@ -14,17 +14,17 @@
   <strong>Browser Selector</strong> is <strong>an accessible</strong>, portable Windows application that allows you to easily choose which browser to open a link with. When you open a URL, the application presents a menu with your configured browsers for you to choose from.
 </p>
 
-## 📱 Key Features
+## Key Features
 
-- **👁️ Accessibility first!**: Works with NVDA and Windows Narrator
-- **🌍 Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
-- **🖥️ Clean Interface**
-- **📦 Portable**: Single .exe file with JSON configuration
-- **⌨️ Quick Navigation**: Use Arrow keys, Enter, Escape, and numbers 1-9 for quick selection
-- **🔄 Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
-- **🎛️ Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
+- **Accessibility first!**: Works with NVDA and Windows Narrator
+- **Multi-language**: Automatic UI language detection (English, Ukrainian, German, French, Spanish, Italian, Polish, Dutch, Portuguese)
+- **Clean Interface**
+- **Portable**: Single .exe file with JSON configuration
+- **Quick Navigation**: Use Arrow keys, Enter, Escape, and numbers 1-9 for quick selection
+- **Auto-Open**: Default browser opens automatically after a configurable countdown (1-10 seconds)
+- **Flexible Configuration**: Add, edit, and reorder browsers visually through the Settings window
 
-## 🚀 Quick Start
+## Quick Start
 
 1. **Download** `BrowserSelector.exe` from the [Releases](https://github.com/ruslan-rv-ua/BrowserSelector/releases) page
 2. **Run** `BrowserSelector.exe "https://example.com"` or just `BrowserSelector.exe`
@@ -37,7 +37,7 @@
 3. Confirm the changes by clicking "Yes" in Browser Selector
 4. Now all links will open through Browser Selector!
 
-## 🎮 How to Use
+## How to Use
 
 ### Basic Commands
 
@@ -71,7 +71,7 @@ The application features an auto-open timer that automatically launches the defa
 - **Cancel on interaction**: Any user action cancels the timer
 - **Settings**: Configure wait time in the settings window
 
-## 🌍 Supported Languages
+## Supported Languages
 
 Browser Selector automatically detects your Windows UI language and displays the interface accordingly:
 
@@ -89,7 +89,7 @@ Browser Selector automatically detects your Windows UI language and displays the
 
 If your Windows language is not in this list, the application falls back to English.
 
-## ⚙️ Browser Configuration
+## Browser Configuration
 
 ### Settings Window
 
@@ -134,7 +134,7 @@ Click the **"Settings"** button to access configuration:
 
 The `command` field contains the full command to execute, including any arguments. Use `{url}` as a placeholder for the URL that will be opened.
 
-## 🔧 Default Browser Registration
+## Default Browser Registration
 
 ### Registration Process
 
@@ -157,7 +157,7 @@ Windows 10 and 11 require users to manually confirm changes to the default brows
 
 ---
 
-## 🛠️ Technical Documentation
+## Technical Documentation
 
 ### System Requirements
 
@@ -280,7 +280,7 @@ The `config.json` file is stored in the same directory as the executable:
 - **defaultCommandIndex**: Index of the default browser (0-based)
 - **waitTime**: Auto-open timer duration in seconds (1-10, default: 10)
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 ### Configuration file is corrupted
 If `config.json` becomes invalid or corrupted, the application will detect this on startup. It will attempt to create a new default configuration file. You can also manually delete `config.json` to force a reset.
@@ -290,7 +290,7 @@ If `config.json` becomes invalid or corrupted, the application will detect this 
 - If using just the executable name (e.g., `chrome.exe`), ensure it is available in your system's PATH.
 - Verify that the `{url}` placeholder is present in the command if needed.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -300,11 +300,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 MIT License
 
-## 👏 Credits
+## Credits
 
 - [cJSON](https://github.com/DaveGamble/cJSON) - JSON parsing library
 
