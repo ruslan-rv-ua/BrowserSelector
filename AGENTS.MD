@@ -175,13 +175,6 @@ browserselector/
     }
   ]
 }
-    {
-      "name": "Opera",
-      "command": "C:\\Program Files\\Opera\\launcher.exe",
-      "arguments": "{url}"
-    }
-  ]
-}
 ```
 
 #### 3.3 Функціональність WaitTime (Автоматичне відкриття)
@@ -247,7 +240,6 @@ const char* str = I18n_GetStringA(IDS_APP_TITLE);
 typedef struct {
     char name[MAX_NAME_LENGTH];
     char command[MAX_PATH_LENGTH];
-    char arguments[MAX_PATH_LENGTH];
 } Command;
 
 typedef struct {
@@ -415,15 +407,12 @@ int LoadConfig(const char* exePath, Configuration* config) {
             
             cJSON* name = cJSON_GetObjectItem(command, "name");
             cJSON* cmd = cJSON_GetObjectItem(command, "command");
-            cJSON* args = cJSON_GetObjectItem(command, "arguments");
             
-            if (name && cmd && args) {
-                strncpy(config->commands[config->commandCount].name, 
+            if (name && cmd) {
+                strncpy(config->commands[config->commandCount].name,
                        name->valuestring, MAX_NAME_LENGTH - 1);
-                strncpy(config->commands[config->commandCount].command, 
+                strncpy(config->commands[config->commandCount].command,
                        cmd->valuestring, MAX_PATH_LENGTH - 1);
-                strncpy(config->commands[config->commandCount].arguments, 
-                       args->valuestring, MAX_PATH_LENGTH - 1);
                 config->commandCount++;
             }
         }
@@ -458,7 +447,6 @@ int SaveConfig(const char* exePath, const Configuration* config) {
         cJSON* command = cJSON_CreateObject();
         cJSON_AddStringToObject(command, "name", config->commands[i].name);
         cJSON_AddStringToObject(command, "command", config->commands[i].command);
-        cJSON_AddStringToObject(command, "arguments", config->commands[i].arguments);
         cJSON_AddItemToArray(commands, command);
     }
     cJSON_AddItemToObject(json, "commands", commands);
@@ -722,22 +710,12 @@ static char* ResolveCommand(const char* command) {
 }
 
 int ExecuteCommand(const Command* command, const char* url) {
-    // Підготувати аргументи
-    char* args = ReplaceUrlPlaceholder(command->arguments, url);
+    // Підготувати повну команду з заміною {url}
+    char* fullCommand = ReplaceUrlPlaceholder(command->command, url);
     
-    // Визначити шлях до команди
-    char* cmdPath = ResolveCommand(command->command);
-    if (!cmdPath) {
-        char error[512];
-        sprintf(error, "Command not found: %s", command->command);
-        MessageBoxA(NULL, error, "Error", MB_OK | MB_ICONERROR);
-        free(args);
-        return 0;
-    }
-    
-    // Підготувати command line
+    // Підготувати command line для cmd.exe /c
     char cmdLine[2048];
-    sprintf(cmdLine, "\"%s\" %s", cmdPath, args);
+    sprintf(cmdLine, "cmd.exe /c \"%s\"", fullCommand);
     
     // Запустити процес
     STARTUPINFOA si = {0};
@@ -762,13 +740,12 @@ int ExecuteCommand(const Command* command, const char* url) {
         CloseHandle(pi.hThread);
     } else {
         char error[512];
-        sprintf(error, "Failed to launch: %s\nError code: %lu", 
+        sprintf(error, "Failed to launch: %s\nError code: %lu",
                 command->command, GetLastError());
         MessageBoxA(NULL, error, "Error", MB_OK | MB_ICONERROR);
     }
     
-    free(cmdPath);
-    free(args);
+    free(fullCommand);
     
     return success;
 }
