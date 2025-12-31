@@ -95,8 +95,9 @@ LRESULT CALLBACK ListBoxSubclassProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         }
         
         switch (wParam) {
-            case VK_RETURN: {
-                // Enter - execute selected command
+            case VK_RETURN:
+            case VK_SPACE: {
+                // Enter or Space - execute selected command
                 int index = (int)SendMessage(hwnd, LB_GETCURSEL, 0, 0);
                 if (index != LB_ERR && index < mainWin->config->commandCount) {
                     ExecuteCommand(&mainWin->config->commands[index], mainWin->url);
